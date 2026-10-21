@@ -3,630 +3,831 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cubo Finanzas — Los Números de la Semana</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Cubo Finanzas - Dashboard & Closing Bell</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2canvas for story export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         cubo: {
-                            navy: '#1A3644',
-                            teal: '#2C4E5E',
-                            mint: '#A0D8C3',
-                            bg: '#F4F7F6',
-                            card: '#FFFFFF'
+                            navy: '#0B192C',
+                            dark: '#1E3E62',
+                            teal: '#008B8B',
+                            light: '#00D8D6',
+                            accent: '#FF6500',
+                            card: '#152C42',
+                            gold: '#FFD700'
                         }
                     }
                 }
             }
         }
     </script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- html2canvas para exportar infografía a PNG -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B192C;
+            color: #E2E8F0;
+        }
+        .story-aspect {
+            width: 360px;
+            height: 640px;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B192C;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E3E62;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #008B8B;
+        }
+    </style>
 </head>
-<body class="bg-cubo-bg text-cubo-navy font-sans antialiased min-h-screen pb-12">
+<body class="min-h-screen pb-12">
 
-    <!-- Navbar Header -->
-    <header class="bg-cubo-navy text-white shadow-md sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
-                <div class="bg-cubo-mint p-2 rounded-lg text-cubo-navy font-bold text-xl">CF</div>
+    <!-- Header / Navbar -->
+    <header class="bg-cubo-card border-b border-gray-800 sticky top-0 z-40 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-cubo-teal to-cubo-light p-2.5 rounded-xl shadow-md">
+                    <i class="fa-solid font-bold fa-cube text-2xl text-cubo-navy"></i>
+                </div>
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight">CUBO FINANZAS</h1>
-                    <p class="text-xs text-cubo-mint font-medium">Dashboard de Mercado & "La Semana en una Idea"</p>
+                    <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        CUBO FINANZAS <span class="text-xs px-2 py-0.5 rounded-full bg-cubo-teal/20 text-cubo-light border border-cubo-teal/40">Advisor</span>
+                    </h1>
+                    <p class="text-xs text-gray-400">Resumen Semanal y Cierre de Mercado</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
-                <button onclick="abrirModalEdicion()" class="flex items-center gap-2 bg-cubo-mint hover:bg-opacity-90 text-cubo-navy px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm">
-                    <i data-lucide="edit-3" class="w-4 h-4"></i> Editar / Ajustar Valores
+
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg border border-gray-700">
+                    <i class="fa-regular fa-calendar mr-1.5 text-cubo-light"></i><span id="header-date">20-10-2026</span>
+                </span>
+                <button onclick="openModal()" class="bg-cubo-dark hover:bg-cubo-teal text-white text-xs font-semibold px-3 py-2 rounded-lg border border-gray-700 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-pen-to-square"></i> Editar Datos
+                </button>
+                <button onclick="switchTab('dashboard')" id="btn-tab-dashboard" class="bg-cubo-teal text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition shadow">
+                    <i class="fa-solid fa-chart-line mr-1"></i> Dashboard
+                </button>
+                <button onclick="switchTab('story')" id="btn-tab-story" class="bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold px-3.5 py-2 rounded-lg transition border border-gray-700">
+                    <i class="fa-solid fa-mobile-screen-button mr-1"></i> Placa 9:16
+                </button>
+                <button onclick="switchTab('export')" id="btn-tab-export" class="bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold px-3.5 py-2 rounded-lg transition border border-gray-700">
+                    <i class="fa-solid fa-file-export mr-1"></i> Exportar
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="max-w-6xl mx-auto px-4 mt-8 space-y-8">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
 
-        <!-- Status & Sources Banner -->
-        <div class="bg-blue-50 border border-blue-200 text-blue-800 text-sm p-4 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div class="flex items-start gap-2">
-                <i data-lucide="shield-check" class="w-5 h-5 text-blue-600 shrink-0 mt-0.5"></i>
-                <div>
-                    <p class="font-bold">Fuentes Públicas Oficiales de Cierre:</p>
-                    <p class="text-xs text-blue-700 mt-0.5">
-                        • <strong>S&P 500:</strong> S&P Dow Jones / Yahoo Finance | 
-                        • <strong>Merval & Acciones:</strong> Rava Bursátil (BYMA) | 
-                        • <strong>Dólar MEP:</strong> ArgentinaDatos API | 
-                        • <strong>Riesgo País:</strong> J.P. Morgan EMBI+
-                    </p>
+        <!-- TAB 1: DASHBOARD PRINCIPAL -->
+        <div id="tab-dashboard" class="space-y-6">
+            
+            <!-- Top Summary Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                <div class="bg-cubo-card p-3.5 rounded-xl border border-gray-800/80 shadow-sm hover:border-cubo-teal/50 transition">
+                    <p class="text-xs font-medium text-gray-400">Riesgo País</p>
+                    <p class="text-xl font-bold text-white mt-1" id="card-riesgo">624 <span class="text-xs font-normal text-gray-400">bps</span></p>
+                    <span class="text-[10px] text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-down mr-0.5"></i>-12 bps</span>
+                </div>
+                <div class="bg-cubo-card p-3.5 rounded-xl border border-gray-800/80 shadow-sm hover:border-cubo-teal/50 transition">
+                    <p class="text-xs font-medium text-gray-400">Dólar MEP</p>
+                    <p class="text-xl font-bold text-white mt-1" id="card-mep">$ 1.544</p>
+                    <span class="text-[10px] text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-0.5"></i>YTD 4%</span>
+                </div>
+                <div class="bg-cubo-card p-3.5 rounded-xl border border-gray-800/80 shadow-sm hover:border-cubo-teal/50 transition">
+                    <p class="text-xs font-medium text-gray-400">Dólar CCL</p>
+                    <p class="text-xl font-bold text-white mt-1" id="card-ccl">$ 1.629</p>
+                    <span class="text-[10px] text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-0.5"></i>YTD 7%</span>
+                </div>
+                <div class="bg-cubo-card p-3.5 rounded-xl border border-gray-800/80 shadow-sm hover:border-cubo-teal/50 transition">
+                    <p class="text-xs font-medium text-gray-400">S&P 500</p>
+                    <p class="text-xl font-bold text-white mt-1" id="card-sp500">7.713</p>
+                    <span class="text-[10px] text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-up mr-0.5"></i>YTD 13%</span>
+                </div>
+                <div class="bg-cubo-card p-3.5 rounded-xl border border-gray-800/80 shadow-sm hover:border-cubo-teal/50 transition">
+                    <p class="text-xs font-medium text-gray-400">Merval (USD)</p>
+                    <p class="text-xl font-bold text-white mt-1" id="card-merval">1.845</p>
+                    <span class="text-[10px] text-rose-400 font-semibold"><i class="fa-solid fa-arrow-down mr-0.5"></i>YTD -10%</span>
+                </div>
+                <div class="bg-cubo-card p-3.5 rounded-xl border border-gray-800/80 shadow-sm hover:border-cubo-teal/50 transition">
+                    <p class="text-xs font-medium text-gray-400">Reservas BCRA</p>
+                    <p class="text-xl font-bold text-white mt-1" id="card-reservas">USD 50.244M</p>
+                    <span class="text-[10px] text-gray-400">Netas Positivas</span>
                 </div>
             </div>
-            <span class="text-xs bg-blue-100 font-bold px-2.5 py-1 rounded-md text-blue-900 shrink-0 self-start sm:self-center">
-                Enteros Sin Decimales
-            </span>
+
+            <!-- Main Tables Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- Left Column: Macro & Dólares -->
+                <div class="space-y-6">
+                    <!-- Banner Info / Cierre -->
+                    <div class="bg-gradient-to-r from-cubo-card to-cubo-dark p-4 rounded-xl border border-cubo-teal/30 flex justify-between items-center shadow-md">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-cubo-light font-bold">Cierre de Mercado</span>
+                            <h2 class="text-lg font-bold text-white" id="main-date-display">20-10-2026</h2>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-400 block">Agente Asesor Global</span>
+                            <span class="text-xs text-cubo-gold font-mono font-bold">N° 1.117</span>
+                        </div>
+                    </div>
+
+                    <!-- Macro Bloque -->
+                    <div class="bg-cubo-card rounded-xl border border-gray-800 overflow-hidden shadow">
+                        <div class="bg-gray-800/60 px-4 py-2.5 border-b border-gray-800 flex justify-between items-center">
+                            <h3 class="font-bold text-sm text-cubo-light flex items-center gap-2">
+                                <i class="fa-solid fa-gauge-high"></i> Macro & Inflación
+                            </h3>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <div class="flex justify-between items-center pb-2 border-b border-gray-800/60">
+                                <span class="text-sm text-gray-300">Riesgo País</span>
+                                <span class="text-base font-bold text-white font-mono" id="val-riesgo">624 bps</span>
+                            </div>
+                            <div class="flex justify-between items-center pb-2 border-b border-gray-800/60">
+                                <span class="text-sm text-gray-300">Inflación Mensual</span>
+                                <span class="text-sm font-semibold text-white font-mono" id="val-infla-m">2%</span>
+                            </div>
+                            <div class="flex justify-between items-center pb-2 border-b border-gray-800/60">
+                                <span class="text-sm text-gray-300">Inflación Acumulada</span>
+                                <span class="text-sm font-semibold text-white font-mono" id="val-infla-acu">21%</span>
+                            </div>
+                            <div class="flex justify-between items-center pb-2 border-b border-gray-800/60">
+                                <span class="text-sm text-gray-300">Inflación Interanual</span>
+                                <span class="text-sm font-semibold text-white font-mono" id="val-infla-ia">33%</span>
+                            </div>
+                            <div class="flex justify-between items-center pt-1">
+                                <span class="text-sm text-gray-300">Reservas BCRA</span>
+                                <span class="text-sm font-bold text-cubo-light font-mono" id="val-reservas">USD 50.244 M</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tasa de Caución -->
+                    <div class="bg-cubo-card rounded-xl border border-gray-800 overflow-hidden shadow">
+                        <div class="bg-gray-800/60 px-4 py-2.5 border-b border-gray-800">
+                            <h3 class="font-bold text-sm text-cubo-gold flex items-center gap-2">
+                                <i class="fa-solid fa-percent"></i> Tasas de Caución (TNA)
+                            </h3>
+                        </div>
+                        <div class="p-4 grid grid-cols-3 gap-2 text-center">
+                            <div class="bg-gray-800/40 p-2.5 rounded-lg border border-gray-700/50">
+                                <p class="text-[11px] text-gray-400 uppercase">3 Días</p>
+                                <p class="text-base font-bold text-white font-mono mt-0.5" id="val-cau-3">23%</p>
+                            </div>
+                            <div class="bg-gray-800/40 p-2.5 rounded-lg border border-gray-700/50">
+                                <p class="text-[11px] text-gray-400 uppercase">7 Días</p>
+                                <p class="text-base font-bold text-white font-mono mt-0.5" id="val-cau-7">23%</p>
+                            </div>
+                            <div class="bg-gray-800/40 p-2.5 rounded-lg border border-gray-700/50">
+                                <p class="text-[11px] text-gray-400 uppercase">30 Días</p>
+                                <p class="text-base font-bold text-white font-mono mt-0.5" id="val-cau-30">24%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cotizaciones Dólares -->
+                    <div class="bg-cubo-card rounded-xl border border-gray-800 overflow-hidden shadow">
+                        <div class="bg-gray-800/60 px-4 py-2.5 border-b border-gray-800">
+                            <h3 class="font-bold text-sm text-emerald-400 flex items-center gap-2">
+                                <i class="fa-solid fa-dollar-sign"></i> Monedas / Dólares
+                            </h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-gray-400 bg-gray-800/30 uppercase border-b border-gray-800">
+                                    <tr>
+                                        <th class="px-3 py-2">Tipo</th>
+                                        <th class="px-3 py-2 text-right">Cierre</th>
+                                        <th class="px-3 py-2 text-right">Diario</th>
+                                        <th class="px-3 py-2 text-right">Anual</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-800/60 font-mono text-xs" id="table-dolares">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Middle Column: Bonos Soberanos -->
+                <div class="space-y-6">
+                    <div class="bg-cubo-card rounded-xl border border-gray-800 overflow-hidden shadow h-full flex flex-col">
+                        <div class="bg-gray-800/60 px-4 py-2.5 border-b border-gray-800 flex justify-between items-center">
+                            <h3 class="font-bold text-sm text-cubo-light flex items-center gap-2">
+                                <i class="fa-solid fa-file-contract"></i> Bonos Soberanos en USD
+                            </h3>
+                            <span class="text-[10px] bg-cubo-teal/20 text-cubo-light px-2 py-0.5 rounded">Hard Dollar</span>
+                        </div>
+                        <div class="overflow-x-auto flex-1">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-gray-400 bg-gray-800/30 uppercase border-b border-gray-800">
+                                    <tr>
+                                        <th class="px-3 py-2.5">Bono</th>
+                                        <th class="px-3 py-2.5 text-right">Precio</th>
+                                        <th class="px-3 py-2.5 text-right">Diario</th>
+                                        <th class="px-3 py-2.5 text-right">TIR</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-800/60 font-mono text-xs" id="table-bonos">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Índices y Globales -->
+                <div class="space-y-6">
+                    <div class="bg-cubo-card rounded-xl border border-gray-800 overflow-hidden shadow h-full flex flex-col">
+                        <div class="bg-gray-800/60 px-4 py-2.5 border-b border-gray-800 flex justify-between items-center">
+                            <h3 class="font-bold text-sm text-cubo-gold flex items-center gap-2">
+                                <i class="fa-solid fa-chart-pie"></i> Índices & Mercados
+                            </h3>
+                            <span class="text-[10px] bg-cubo-gold/20 text-cubo-gold px-2 py-0.5 rounded">Global</span>
+                        </div>
+                        <div class="overflow-x-auto flex-1">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-gray-400 bg-gray-800/30 uppercase border-b border-gray-800">
+                                    <tr>
+                                        <th class="px-3 py-2.5">Índice</th>
+                                        <th class="px-3 py-2.5 text-right">Cierre</th>
+                                        <th class="px-3 py-2.5 text-right">Diario</th>
+                                        <th class="px-3 py-2.5 text-right">Anual</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-800/60 font-mono text-xs" id="table-indices">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
-        <!-- 1. Los Números de la Semana (Dashboard Cards) -->
-        <section>
-            <div class="flex justify-between items-end mb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-cubo-navy flex items-center gap-2">
-                        <i data-lucide="bar-chart-2" class="w-5 h-5 text-cubo-teal"></i>
-                        Los Números de la Semana
-                    </h2>
-                    <p class="text-sm text-gray-600">Precios reales de cierre formateados en enteros</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <!-- Card 1: Merval USD -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Merval en USD</span>
-                        <span class="p-1.5 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="trending-up" class="w-4 h-4"></i></span>
-                    </div>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-merval">USD 1.766</div>
-                    <div class="flex items-center gap-2 text-xs font-bold">
-                        <span id="sem-merval" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +3% Sem.</span>
-                        <span id="ytd-merval" class="text-rose-600 bg-rose-50 px-2 py-0.5 rounded">▼ -14% YTD</span>
-                    </div>
-                </div>
-
-                <!-- Card 2: S&P 500 -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-gray-500">S&P 500</span>
-                        <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="globe" class="w-4 h-4"></i></span>
-                    </div>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-sp500">USD 7.713</div>
-                    <div class="flex items-center gap-2 text-xs font-bold">
-                        <span id="sem-sp500" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +1% Sem.</span>
-                        <span id="ytd-sp500" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +15% YTD</span>
-                    </div>
-                </div>
-
-                <!-- Card 3: Dólar MEP -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Dólar MEP</span>
-                        <span class="p-1.5 bg-emerald-50 text-emerald-600 rounded-lg"><i data-lucide="dollar-sign" class="w-4 h-4"></i></span>
-                    </div>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-mep">$ 1.545</div>
-                    <div class="flex items-center gap-2 text-xs font-bold">
-                        <span id="sem-mep" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +1% Sem.</span>
-                        <span id="ytd-mep" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +5% YTD</span>
-                    </div>
-                </div>
-
-                <!-- Card 4: Riesgo País -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition border-l-4 border-l-cubo-teal">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Riesgo País (EMBI+)</span>
-                        <span class="p-1.5 bg-amber-50 text-amber-600 rounded-lg"><i data-lucide="activity" class="w-4 h-4"></i></span>
-                    </div>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-riesgo">672 bps</div>
-                    <div class="flex items-center gap-2 text-xs font-bold">
-                        <span id="sem-riesgo" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +0% Sem.</span>
-                        <span id="ytd-riesgo" class="text-rose-600 bg-rose-50 px-2 py-0.5 rounded">▼ -5% YTD</span>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- 1.2 Principales Subas de Acciones -->
-        <section>
-            <div class="flex justify-between items-end mb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-cubo-navy flex items-center gap-2">
-                        <i data-lucide="trending-up" class="w-5 h-5 text-cubo-teal"></i>
-                        Principales Subas de Acciones Líderes
-                    </h2>
-                    <p class="text-sm text-gray-600">Rendimiento semanal de las acciones más importantes</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="stocks-container">
-                <!-- Generado dinámicamente -->
-            </div>
-        </section>
-
-        <!-- 2. Generador de Infografía para Historias (9:16 con YTD + Acciones) -->
-        <section class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h3 class="text-lg font-bold text-cubo-navy flex items-center gap-2">
-                        <i data-lucide="image" class="w-5 h-5 text-cubo-teal"></i>
-                        Infografía para Historias (Instagram / LinkedIn 9:16)
-                    </h3>
-                    <p class="text-xs text-gray-500">Imagen vertical con macro, acciones líderes y variaciones YTD lista para descargar</p>
-                </div>
-                <button onclick="descargarInfografia()" class="bg-cubo-navy hover:bg-cubo-teal text-white px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow">
-                    <i data-lucide="download" class="w-4 h-4"></i> Descargar Imagen PNG
+        <!-- TAB 2: PLACA 9:16 PARA HISTORIAS -->
+        <div id="tab-story" class="hidden flex flex-col items-center justify-center space-y-4 py-4">
+            <div class="flex items-center gap-3 mb-2">
+                <button onclick="downloadStory()" class="bg-cubo-teal hover:bg-cubo-light text-cubo-navy font-bold text-sm px-4 py-2 rounded-xl shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i> Descargar Imagen (PNG 9:16)
                 </button>
+                <span class="text-xs text-gray-400">Formato optimizado para Instagram / Stories</span>
             </div>
 
-            <!-- Canvas de la Infografía (Format: 9:16) -->
-            <div class="flex justify-center bg-gray-100 p-6 rounded-xl border overflow-x-auto">
-                <div id="story-infographic" class="w-[360px] h-[640px] bg-cubo-navy text-white p-5 rounded-2xl flex flex-col justify-between shadow-2xl relative overflow-hidden">
-                    
-                    <!-- Decoración visual -->
-                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-cubo-teal rounded-full blur-2xl opacity-40"></div>
-                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-cubo-mint rounded-full blur-2xl opacity-20"></div>
+            <!-- Story Canvas Container 9:16 -->
+            <div id="story-card" class="story-aspect bg-gradient-to-b from-[#0B192C] via-[#152C42] to-[#0B192C] text-white p-5 rounded-2xl shadow-2xl border border-cubo-teal/30 flex flex-col justify-between relative overflow-hidden">
+                <!-- Background Accent Elements -->
+                <div class="absolute -top-12 -right-12 w-40 h-40 bg-cubo-teal/20 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-cubo-accent/10 rounded-full blur-2xl pointer-events-none"></div>
 
-                    <!-- Encabezado -->
-                    <div class="relative z-10 border-b border-gray-700/80 pb-3">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="bg-cubo-mint text-cubo-navy text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full">
-                                CUBO FINANZAS
-                            </span>
-                            <span class="text-[10px] text-gray-300 font-medium">REPORTE SEMANAL</span>
-                        </div>
-                        <h4 class="text-base font-black tracking-tight text-white">NÚMEROS DE LA SEMANA</h4>
-                    </div>
-
-                    <!-- Grid Macro (2x2) -->
-                    <div class="relative z-10 grid grid-cols-2 gap-2 my-1">
-                        
-                        <!-- Merval -->
-                        <div class="bg-white/10 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <span class="text-[9px] font-bold text-gray-300 uppercase tracking-wider block">Merval USD</span>
-                            <div class="text-base font-black text-white" id="story-merval-val">USD 1.766</div>
-                            <div class="flex flex-col gap-0.2 mt-1 text-[8px] font-bold">
-                                <span class="text-cubo-mint" id="story-merval-sem">▲ +3% Sem.</span>
-                                <span class="text-rose-300" id="story-merval-ytd">▼ -14% YTD</span>
-                            </div>
-                        </div>
-
-                        <!-- S&P 500 -->
-                        <div class="bg-white/10 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <span class="text-[9px] font-bold text-gray-300 uppercase tracking-wider block">S&P 500</span>
-                            <div class="text-base font-black text-white" id="story-sp500-val">USD 7.713</div>
-                            <div class="flex flex-col gap-0.2 mt-1 text-[8px] font-bold">
-                                <span class="text-cubo-mint" id="story-sp500-sem">▲ +1% Sem.</span>
-                                <span class="text-cubo-mint" id="story-sp500-ytd">▲ +15% YTD</span>
-                            </div>
-                        </div>
-
-                        <!-- Dólar MEP -->
-                        <div class="bg-white/10 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <span class="text-[9px] font-bold text-gray-300 uppercase tracking-wider block">Dólar MEP</span>
-                            <div class="text-base font-black text-white" id="story-mep-val">$ 1.545</div>
-                            <div class="flex flex-col gap-0.2 mt-1 text-[8px] font-bold">
-                                <span class="text-cubo-mint" id="story-mep-sem">▲ +1% Sem.</span>
-                                <span class="text-cubo-mint" id="story-mep-ytd">▲ +5% YTD</span>
-                            </div>
-                        </div>
-
-                        <!-- Riesgo País -->
-                        <div class="bg-white/10 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <span class="text-[9px] font-bold text-gray-300 uppercase tracking-wider block">Riesgo País</span>
-                            <div class="text-base font-black text-white" id="story-riesgo-val">672 bps</div>
-                            <div class="flex flex-col gap-0.2 mt-1 text-[8px] font-bold">
-                                <span class="text-cubo-mint" id="story-riesgo-sem">▲ +0% Sem.</span>
-                                <span class="text-rose-300" id="story-riesgo-ytd">▼ -5% YTD</span>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Sección Acciones Líderes en Historia -->
-                    <div class="relative z-10 bg-white/5 border border-white/10 p-2.5 rounded-xl">
-                        <span class="text-[9px] font-extrabold uppercase tracking-widest text-cubo-mint block mb-1">
-                            PRINCIPALES SUBAS DE ACCIONES
-                        </span>
-                        <div class="grid grid-cols-2 gap-1.5 text-[9px]" id="story-stocks-grid">
-                            <!-- Inyectado por JS -->
-                        </div>
-                    </div>
-
-                    <!-- Bloque La Semana en una Idea -->
-                    <div class="relative z-10 bg-cubo-teal/60 border border-cubo-mint/30 p-2.5 rounded-xl">
-                        <span class="text-[8px] font-extrabold uppercase tracking-widest text-cubo-mint block mb-0.5">
-                            LA SEMANA EN UNA IDEA
-                        </span>
-                        <p class="text-[10px] font-bold leading-tight text-white">
-                            "Solidez sobre narrativa: Cuando el mercado deja las promesas y exige números reales."
-                        </p>
-                    </div>
-
-                    <!-- Pie de la Infografía -->
-                    <div class="relative z-10 border-t border-gray-700/80 pt-2 flex justify-between items-center text-[9px] text-gray-400">
-                        <span>cubofinanzas.substack.com</span>
-                        <span class="font-bold text-cubo-mint">@cubofinanzas</span>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. Herramientas para Substack -->
-        <section class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <!-- Header -->
                 <div>
-                    <h3 class="text-lg font-bold text-cubo-navy flex items-center gap-2">
-                        <i data-lucide="file-text" class="w-5 h-5 text-cubo-teal"></i>
-                        Generador de Tabla para Substack
-                    </h3>
-                    <p class="text-xs text-gray-500">Texto limpio listo para pegar en el borrador de Substack</p>
+                    <div class="flex justify-between items-start border-b border-gray-700/60 pb-3">
+                        <div class="flex items-center gap-2">
+                            <div class="bg-cubo-teal p-1.5 rounded-lg text-cubo-navy font-black text-sm">
+                                <i class="fa-solid fa-cube"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-black text-base tracking-wider text-white">CUBO FINANZAS</h4>
+                                <p class="text-[9px] text-cubo-light tracking-widest uppercase">Closing Bell Advisory</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] text-gray-400 block font-mono" id="story-date">20-10-2026</span>
+                            <span class="text-[9px] bg-cubo-teal/20 text-cubo-light px-1.5 py-0.5 rounded border border-cubo-teal/40">Resumen Semanal</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="copiarTablaMarkdown()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5">
-                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Texto/Markdown
-                    </button>
-                    <button onclick="descargarCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5">
-                        <i data-lucide="download" class="w-3.5 h-3.5"></i> Exportar CSV
-                    </button>
-                </div>
-            </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left border-collapse">
-                    <thead>
-                        <tr class="bg-cubo-navy text-white text-xs uppercase">
-                            <th class="p-3 rounded-l-lg">Indicador</th>
-                            <th class="p-3 text-right">Valor Cierre</th>
-                            <th class="p-3 text-right">Var. Semanal (%)</th>
-                            <th class="p-3 text-right rounded-r-lg">Var. Anual YTD (%)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100 font-medium text-gray-700" id="tabla-body">
-                    </tbody>
-                </table>
+                <!-- Key Metrics Grid -->
+                <div class="space-y-2 my-auto py-2">
+                    <!-- Riesgo Pais Hero Card -->
+                    <div class="bg-gray-900/80 p-3 rounded-xl border border-cubo-teal/40 flex justify-between items-center shadow-inner">
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wider">Riesgo País</p>
+                            <p class="text-2xl font-black text-white font-mono" id="story-riesgo">624 <span class="text-xs font-normal text-gray-400">bps</span></p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20"><i class="fa-solid fa-arrow-down mr-1"></i>Baja Riesgo</span>
+                        </div>
+                    </div>
+
+                    <!-- Dolares Row -->
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <div class="bg-gray-800/60 p-2 rounded-lg text-center border border-gray-700/50">
+                            <p class="text-[9px] text-gray-400">MEP</p>
+                            <p class="text-xs font-bold font-mono text-white" id="story-mep">$ 1.544</p>
+                            <p class="text-[8px] text-emerald-400">YTD 4%</p>
+                        </div>
+                        <div class="bg-gray-800/60 p-2 rounded-lg text-center border border-gray-700/50">
+                            <p class="text-[9px] text-gray-400">CCL</p>
+                            <p class="text-xs font-bold font-mono text-white" id="story-ccl">$ 1.629</p>
+                            <p class="text-[8px] text-emerald-400">YTD 7%</p>
+                        </div>
+                        <div class="bg-gray-800/60 p-2 rounded-lg text-center border border-gray-700/50">
+                            <p class="text-[9px] text-gray-400">BLUE</p>
+                            <p class="text-xs font-bold font-mono text-white" id="story-blue">$ 1.570</p>
+                            <p class="text-[8px] text-emerald-400">YTD 3%</p>
+                        </div>
+                    </div>
+
+                    <!-- Wall Street & Merval -->
+                    <div class="bg-gray-800/40 p-2.5 rounded-xl border border-gray-700/60 space-y-1.5">
+                        <p class="text-[9px] font-bold text-cubo-gold uppercase tracking-wider flex justify-between">
+                            <span>Mercados & Índices</span>
+                            <span class="text-gray-400">Rendimiento YTD</span>
+                        </p>
+                        <div class="flex justify-between items-center text-xs border-b border-gray-800 pb-1">
+                            <span class="text-gray-300 font-medium">S&P 500</span>
+                            <span class="font-mono text-white font-bold" id="story-sp500">7.713</span>
+                            <span class="text-emerald-400 font-bold font-mono text-[11px]">+13%</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs border-b border-gray-800 pb-1">
+                            <span class="text-gray-300 font-medium">Nasdaq</span>
+                            <span class="font-mono text-white font-bold" id="story-nasdaq">26.425</span>
+                            <span class="text-emerald-400 font-bold font-mono text-[11px]">+14%</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs border-b border-gray-800 pb-1">
+                            <span class="text-gray-300 font-medium">Dow Jones</span>
+                            <span class="font-mono text-white font-bold" id="story-dow">52.496</span>
+                            <span class="text-emerald-400 font-bold font-mono text-[11px]">+9%</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-gray-300 font-medium">Merval (USD)</span>
+                            <span class="font-mono text-white font-bold" id="story-merval">1.845</span>
+                            <span class="text-rose-400 font-bold font-mono text-[11px]">-10%</span>
+                        </div>
+                    </div>
+
+                    <!-- Top Destacados -->
+                    <div class="bg-gradient-to-r from-cubo-teal/20 to-transparent p-2 rounded-xl border border-cubo-teal/30">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-cubo-light font-bold uppercase"><i class="fa-solid fa-trophy mr-1"></i>EWZ Brasil YTD</span>
+                            <span class="text-xs font-bold text-emerald-400 font-mono">+44%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Story Footer -->
+                <div class="border-t border-gray-700/60 pt-2 flex justify-between items-center text-[9px] text-gray-400">
+                    <span>@cubofinanzas</span>
+                    <span class="text-cubo-light">www.cubofinanzas.com</span>
+                </div>
             </div>
-        </section>
+        </div>
+
+        <!-- TAB 3: EXPORTADOR DE DATOS Y SUBSTACK -->
+        <div id="tab-export" class="hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Substack Markdown Box -->
+                <div class="bg-cubo-card p-5 rounded-xl border border-gray-800 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white text-base flex items-center gap-2">
+                            <i class="fa-solid fa-newspaper text-cubo-gold"></i> Tabla Markdown para Substack
+                        </h3>
+                        <button onclick="copyMarkdown()" class="bg-cubo-teal hover:bg-cubo-light text-cubo-navy text-xs font-bold px-3 py-1.5 rounded transition">
+                            <i class="fa-regular fa-copy mr-1"></i> Copiar Tabla
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-400">Formato listo para pegar directamente en tu Newsletter de Substack o Blog.</p>
+                    <textarea id="markdown-output" readonly class="w-full h-80 bg-gray-900 text-emerald-400 font-mono text-xs p-3 rounded-lg border border-gray-800 focus:outline-none focus:border-cubo-teal resize-none"></textarea>
+                </div>
+
+                <!-- Export CSV & Options -->
+                <div class="bg-cubo-card p-5 rounded-xl border border-gray-800 space-y-4">
+                    <h3 class="font-bold text-white text-base flex items-center gap-2">
+                        <i class="fa-solid fa-file-csv text-cubo-light"></i> Descargar Datos CSV
+                    </h3>
+                    <p class="text-xs text-gray-400">Exporta los indicadores de la jornada a un archivo CSV compatible con Excel y Google Sheets.</p>
+                    
+                    <button onclick="downloadCSV()" class="w-full bg-cubo-dark hover:bg-cubo-teal text-white font-bold text-sm py-3 px-4 rounded-xl border border-gray-700 transition flex items-center justify-center gap-2 shadow">
+                        <i class="fa-solid fa-download"></i> Descargar Reporte CSV
+                    </button>
+
+                    <div class="pt-4 border-t border-gray-800 space-y-2">
+                        <h4 class="text-xs font-bold text-gray-300 uppercase">Resumen de Parámetros</h4>
+                        <ul class="text-xs text-gray-400 space-y-1 font-mono">
+                            <li>- Formato de enteros sin decimales.</li>
+                            <li>- Fecha de Cierre: 20-10-2026</li>
+                            <li>- Agente Asesor Global: N° 1.117</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
     </main>
 
-    <!-- Modal de Edición Manual (Con Scroll Interno Reparado) -->
-    <div id="modal-edicion" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 space-y-4 max-h-[85vh] flex flex-col">
-            <div class="flex justify-between items-center border-b pb-3 shrink-0">
-                <h3 class="font-bold text-lg text-cubo-navy">Editar Números de la Semana</h3>
-                <button onclick="cerrarModalEdicion()" class="text-gray-400 hover:text-gray-600 font-bold">✕</button>
+    <!-- MODAL INTERACTIVO PARA EDITAR DATOS -->
+    <div id="modal-editor" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cubo-card border border-cubo-teal/40 rounded-2xl w-full max-w-3xl max-h-[85vh] overflow-y-auto shadow-2xl flex flex-col">
+            
+            <!-- Modal Header -->
+            <div class="p-4 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-cubo-card z-10">
+                <h3 class="font-bold text-lg text-white flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-cubo-teal"></i> Editar Indicadores de Mercado
+                </h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
 
-            <!-- Contenedor con scroll vertical fluido -->
-            <div class="overflow-y-auto pr-2 space-y-4 text-sm flex-grow">
-                
-                <div class="font-bold text-xs text-cubo-teal uppercase tracking-wider">Indicadores Macro</div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Merval (USD)</label>
-                        <input type="number" id="input-val-merval" value="1766" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Sem. (%)</label>
-                        <input type="number" id="input-sem-merval" value="3" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">YTD (%)</label>
-                        <input type="number" id="input-ytd-merval" value="-14" class="w-full border p-1.5 rounded text-sm">
+            <!-- Modal Form Body -->
+            <div class="p-5 space-y-6">
+
+                <!-- Fecha y Macro general -->
+                <div>
+                    <h4 class="text-xs font-bold text-cubo-light uppercase tracking-wider mb-3">General & Macro</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">Fecha</label>
+                            <input type="text" id="edit-fecha" value="20-10-2026" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">Riesgo País (bps)</label>
+                            <input type="number" id="edit-riesgo" value="624" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">Reservas BCRA (USD M)</label>
+                            <input type="number" id="edit-reservas" value="50244" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white">
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-gray-500">S&P 500</label>
-                        <input type="number" id="input-val-sp500" value="7713" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Sem. (%)</label>
-                        <input type="number" id="input-sem-sp500" value="1" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">YTD (%)</label>
-                        <input type="number" id="input-ytd-sp500" value="15" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Dólar MEP ($)</label>
-                        <input type="number" id="input-val-mep" value="1545" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Sem. (%)</label>
-                        <input type="number" id="input-sem-mep" value="1" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">YTD (%)</label>
-                        <input type="number" id="input-ytd-mep" value="5" class="w-full border p-1.5 rounded text-sm">
+                <!-- Inflación -->
+                <div>
+                    <h4 class="text-xs font-bold text-cubo-gold uppercase tracking-wider mb-3">Inflación (%)</h4>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">Mensual</label>
+                            <input type="number" id="edit-infla-m" value="2" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">Acumulada</label>
+                            <input type="number" id="edit-infla-acu" value="21" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">Interanual</label>
+                            <input type="number" id="edit-infla-ia" value="33" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white">
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-2 border-b pb-3">
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Riesgo País</label>
-                        <input type="number" id="input-val-riesgo" value="672" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Sem. (%)</label>
-                        <input type="number" id="input-sem-riesgo" value="0" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">YTD (%)</label>
-                        <input type="number" id="input-ytd-riesgo" value="-5" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                </div>
-
-                <!-- Acciones Líderes Edición -->
-                <div class="font-bold text-xs text-cubo-teal uppercase tracking-wider">Principales Acciones Líderes</div>
-                
-                <!-- Stock 1 -->
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Ticker 1</label>
-                        <input type="text" id="input-stock-0-name" value="YPF" class="w-full border p-1.5 rounded text-sm uppercase">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Precio ($/USD)</label>
-                        <input type="number" id="input-stock-0-val" value="38500" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Var Sem (%)</label>
-                        <input type="number" id="input-stock-0-sem" value="8" class="w-full border p-1.5 rounded text-sm">
+                <!-- Dólares -->
+                <div>
+                    <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-3">Dólares ($ y % YTD)</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-gray-900/50 p-2.5 rounded border border-gray-800">
+                            <span class="text-xs font-bold text-white block mb-2">Dólar MEP</span>
+                            <div class="space-y-1.5">
+                                <input type="number" id="edit-mep-val" value="1544" placeholder="Precio" class="w-full bg-gray-900 border border-gray-700 rounded p-1.5 text-xs text-white">
+                                <input type="number" id="edit-mep-ytd" value="4" placeholder="% YTD" class="w-full bg-gray-900 border border-gray-700 rounded p-1.5 text-xs text-white">
+                            </div>
+                        </div>
+                        <div class="bg-gray-900/50 p-2.5 rounded border border-gray-800">
+                            <span class="text-xs font-bold text-white block mb-2">Dólar CCL</span>
+                            <div class="space-y-1.5">
+                                <input type="number" id="edit-ccl-val" value="1629" placeholder="Precio" class="w-full bg-gray-900 border border-gray-700 rounded p-1.5 text-xs text-white">
+                                <input type="number" id="edit-ccl-ytd" value="7" placeholder="% YTD" class="w-full bg-gray-900 border border-gray-700 rounded p-1.5 text-xs text-white">
+                            </div>
+                        </div>
+                        <div class="bg-gray-900/50 p-2.5 rounded border border-gray-800">
+                            <span class="text-xs font-bold text-white block mb-2">Dólar Blue</span>
+                            <div class="space-y-1.5">
+                                <input type="number" id="edit-blue-val" value="1570" placeholder="Precio" class="w-full bg-gray-900 border border-gray-700 rounded p-1.5 text-xs text-white">
+                                <input type="number" id="edit-blue-ytd" value="3" placeholder="% YTD" class="w-full bg-gray-900 border border-gray-700 rounded p-1.5 text-xs text-white">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Stock 2 -->
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Ticker 2</label>
-                        <input type="text" id="input-stock-1-name" value="GGAL" class="w-full border p-1.5 rounded text-sm uppercase">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Precio ($/USD)</label>
-                        <input type="number" id="input-stock-1-val" value="54200" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Var Sem (%)</label>
-                        <input type="number" id="input-stock-1-sem" value="6" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                </div>
-
-                <!-- Stock 3 -->
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Ticker 3</label>
-                        <input type="text" id="input-stock-2-name" value="PAMP" class="w-full border p-1.5 rounded text-sm uppercase">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Precio ($/USD)</label>
-                        <input type="number" id="input-stock-2-val" value="3100" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Var Sem (%)</label>
-                        <input type="number" id="input-stock-2-sem" value="5" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                </div>
-
-                <!-- Stock 4 -->
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Ticker 4</label>
-                        <input type="text" id="input-stock-3-name" value="MELI" class="w-full border p-1.5 rounded text-sm uppercase">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Precio ($/USD)</label>
-                        <input type="number" id="input-stock-3-val" value="2150" class="w-full border p-1.5 rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Var Sem (%)</label>
-                        <input type="number" id="input-stock-3-sem" value="4" class="w-full border p-1.5 rounded text-sm">
+                <!-- Índices Globales -->
+                <div>
+                    <h4 class="text-xs font-bold text-cubo-light uppercase tracking-wider mb-3">Índices Principales (Valor y % YTD)</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="bg-gray-900/50 p-2 rounded border border-gray-800">
+                            <span class="text-xs font-bold text-white block mb-1">S&P 500</span>
+                            <input type="number" id="edit-sp-val" value="7713" class="w-full bg-gray-900 border border-gray-700 rounded p-1 text-xs text-white mb-1">
+                            <input type="number" id="edit-sp-ytd" value="13" class="w-full bg-gray-900 border border-gray-700 rounded p-1 text-xs text-white">
+                        </div>
+                        <div class="bg-gray-900/50 p-2 rounded border border-gray-800">
+                            <span class="text-xs font-bold text-white block mb-1">Nasdaq</span>
+                            <input type="number" id="edit-nasdaq-val" value="26425" class="w-full bg-gray-900 border border-gray-700 rounded p-1 text-xs text-white mb-1">
+                            <input type="number" id="edit-nasdaq-ytd" value="14" class="w-full bg-gray-900 border border-gray-700 rounded p-1 text-xs text-white">
+                        </div>
+                        <div class="bg-gray-900/50 p-2 rounded border border-gray-800">
+                            <span class="text-xs font-bold text-white block mb-1">Dow Jones</span>
+                            <input type="number" id="edit-dow-val" value="52496" class="w-full bg-gray-900 border border-gray-700 rounded p-1 text-xs text-white mb-1">
+                            <input type="number" id="edit-dow-ytd" value="9" class="w-full bg-gray-900 border border-gray-700 rounded p-1 text-xs text-white">
+                        </div>
+                        <div class="bg-gray-900/50 p-2 rounded border border-gray-800">
+                            <span class="text-xs font-bold text-white block mb-1">Merval (USD)</span>
+                            <input type="number" id="edit-merval-val" value="1845" class="w-full bg-gray-900 border border-gray-700 rounded p-1 text-xs text-white mb-1">
+                            <input type="number" id="edit-merval-ytd" value="-10" class="w-full bg-gray-900 border border-gray-700 rounded p-1 text-xs text-white">
+                        </div>
                     </div>
                 </div>
 
             </div>
 
-            <div class="flex justify-end gap-2 border-t pt-3 shrink-0">
-                <button onclick="cerrarModalEdicion()" class="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Cancelar</button>
-                <button onclick="guardarEdicionManual()" class="px-4 py-2 text-sm font-semibold bg-cubo-navy text-white hover:bg-cubo-teal rounded-lg">Guardar Cambios</button>
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-gray-800 bg-cubo-card sticky bottom-0 z-10 flex justify-end gap-3">
+                <button onclick="closeModal()" class="px-4 py-2 text-xs font-semibold text-gray-400 hover:text-white">Cancelar</button>
+                <button onclick="saveData()" class="bg-cubo-teal hover:bg-cubo-light text-cubo-navy font-bold px-5 py-2 rounded-lg text-xs transition shadow">
+                    Guardar Cambios
+                </button>
             </div>
+
         </div>
     </div>
 
-    <!-- JavaScript Local -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        let marketData = {
-            merval: { val: 1766, sem: 3, ytd: -14, unit: 'USD' },
-            sp500:  { val: 7713, sem: 1, ytd: 15,  unit: 'USD' },
-            mep:    { val: 1545, sem: 1, ytd: 5,   unit: 'ARS' },
-            riesgo: { val: 672,  sem: 0, ytd: -5,  unit: 'bps' },
-            stocks: [
-                { name: 'YPF', val: 38500, sem: 8 },
-                { name: 'GGAL', val: 54200, sem: 6 },
-                { name: 'PAMP', val: 3100, sem: 5 },
-                { name: 'MELI', val: 2150, sem: 4 }
+        // State Store based on Closing Bell Advisors 20-10-2026 sheet
+        let store = {
+            fecha: "20-10-2026",
+            riesgoPais: 624,
+            reservasBCRA: 50244,
+            inflacion: { mensual: 2, acumulada: 21, interanual: 33 },
+            caucion: { d3: 23, d7: 23, d30: 24 },
+            dolares: [
+                { tipo: "Oficial com 3500", cierre: 1525, diario: 0, mensual: 1, anual: 5 },
+                { tipo: "CCL", cierre: 1629, diario: 0, mensual: 1, anual: 7 },
+                { tipo: "MEP", cierre: 1544, diario: 0, mensual: 0, anual: 4 },
+                { tipo: "BLUE", cierre: 1570, diario: 1, mensual: 1, anual: 3 }
+            ],
+            bonos: [
+                { bono: "AO27", precio: 104, diario: 0, tir: 3 },
+                { bono: "AO28", precio: 93, diario: 0, tir: 11 },
+                { bono: "AN29", precio: 88, diario: 1, tir: 13 },
+                { bono: "AL30", precio: 55, diario: 0, tir: 10 },
+                { bono: "GD30", precio: 57, diario: 0, tir: 8 },
+                { bono: "GD35", precio: 74, diario: 0, tir: 11 },
+                { bono: "AE38", precio: 73, diario: 1, tir: 13 }
+            ],
+            indices: [
+                { nombre: "Merval ARS", cierre: 2848945, diario: 0, mensual: 1, anual: -7 },
+                { nombre: "Merval USD", cierre: 1845, diario: 0, mensual: 1, anual: -10 },
+                { nombre: "Dow Jones", cierre: 52496, diario: 1, mensual: 3, anual: 9 },
+                { nombre: "S&P 500", cierre: 7713, diario: 0, mensual: 1, anual: 13 },
+                { nombre: "Nasdaq", cierre: 26425, diario: 0, mensual: -2, anual: 14 },
+                { nombre: "EWZ - Brasil", cierre: 43, diario: 3, mensual: 16, anual: 44 },
+                { nombre: "GLD - Oro", cierre: 378, diario: 0, mensual: 0, anual: 2 }
             ]
         };
 
-        document.addEventListener("DOMContentLoaded", () => {
-            lucide.createIcons();
-            actualizarInterfaz();
-        });
-
-        function actualizarInterfaz() {
-            // Dashboard Web Macro
-            document.getElementById('val-merval').innerText = `USD ${Math.round(marketData.merval.val).toLocaleString('es-AR')}`;
-            document.getElementById('sem-merval').innerText = `${marketData.merval.sem >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.merval.sem)}% Sem.`;
-            document.getElementById('ytd-merval').innerText = `${marketData.merval.ytd >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.merval.ytd)}% YTD`;
-
-            document.getElementById('val-sp500').innerText = `USD ${Math.round(marketData.sp500.val).toLocaleString('es-AR')}`;
-            document.getElementById('sem-sp500').innerText = `${marketData.sp500.sem >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.sp500.sem)}% Sem.`;
-            document.getElementById('ytd-sp500').innerText = `${marketData.sp500.ytd >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.sp500.ytd)}% YTD`;
-
-            document.getElementById('val-mep').innerText = `$ ${Math.round(marketData.mep.val).toLocaleString('es-AR')}`;
-            document.getElementById('sem-mep').innerText = `${marketData.mep.sem >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.mep.sem)}% Sem.`;
-            document.getElementById('ytd-mep').innerText = `${marketData.mep.ytd >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.mep.ytd)}% YTD`;
-
-            document.getElementById('val-riesgo').innerText = `${Math.round(marketData.riesgo.val)} bps`;
-            document.getElementById('sem-riesgo').innerText = `${marketData.riesgo.sem >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.riesgo.sem)}% Sem.`;
-            document.getElementById('ytd-riesgo').innerText = `${marketData.riesgo.ytd >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.riesgo.ytd)}% YTD`;
-
-            // Dashboard Web Acciones
-            const stocksContainer = document.getElementById('stocks-container');
-            stocksContainer.innerHTML = marketData.stocks.map(st => `
-                <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition flex justify-between items-center">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Acción Líder</span>
-                        <div class="text-xl font-black text-cubo-navy">${st.name}</div>
-                        <div class="text-xs text-gray-600 font-semibold">$ ${Math.round(st.val).toLocaleString('es-AR')}</div>
-                    </div>
-                    <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">
-                        ▲ +${Math.round(st.sem)}% Sem.
-                    </span>
-                </div>
-            `).join('');
-
-            // Infografía Story Macro
-            document.getElementById('story-merval-val').innerText = `USD ${Math.round(marketData.merval.val).toLocaleString('es-AR')}`;
-            document.getElementById('story-merval-sem').innerText = `${marketData.merval.sem >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.merval.sem)}% Sem.`;
-            document.getElementById('story-merval-ytd').innerText = `${marketData.merval.ytd >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.merval.ytd)}% YTD`;
-
-            document.getElementById('story-sp500-val').innerText = `USD ${Math.round(marketData.sp500.val).toLocaleString('es-AR')}`;
-            document.getElementById('story-sp500-sem').innerText = `${marketData.sp500.sem >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.sp500.sem)}% Sem.`;
-            document.getElementById('story-sp500-ytd').innerText = `${marketData.sp500.ytd >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.sp500.ytd)}% YTD`;
-
-            document.getElementById('story-mep-val').innerText = `$ ${Math.round(marketData.mep.val).toLocaleString('es-AR')}`;
-            document.getElementById('story-mep-sem').innerText = `${marketData.mep.sem >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.mep.sem)}% Sem.`;
-            document.getElementById('story-mep-ytd').innerText = `${marketData.mep.ytd >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.mep.ytd)}% YTD`;
-
-            document.getElementById('story-riesgo-val').innerText = `${Math.round(marketData.riesgo.val)} bps`;
-            document.getElementById('story-riesgo-sem').innerText = `${marketData.riesgo.sem >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.riesgo.sem)}% Sem.`;
-            document.getElementById('story-riesgo-ytd').innerText = `${marketData.riesgo.ytd >= 0 ? '▲ +' : '▼ '}${Math.round(marketData.riesgo.ytd)}% YTD`;
-
-            // Infografía Story Acciones
-            const storyStocksGrid = document.getElementById('story-stocks-grid');
-            storyStocksGrid.innerHTML = marketData.stocks.map(st => `
-                <div class="bg-white/10 p-1.5 rounded border border-white/10 flex justify-between items-center">
-                    <span class="font-bold text-white">${st.name}</span>
-                    <span class="text-cubo-mint font-bold">▲ +${Math.round(st.sem)}%</span>
-                </div>
-            `).join('');
-
-            renderizarTablaSubstack();
+        // Utility: Format numbers as whole integers
+        function fmtInt(val) {
+            return Math.round(val).toLocaleString('es-AR');
         }
 
-        function renderizarTablaSubstack() {
-            const tbody = document.getElementById('tabla-body');
-            const items = [
-                { nombre: 'Merval en USD', val: `USD ${Math.round(marketData.merval.val).toLocaleString('es-AR')}`, sem: `${marketData.merval.sem}%`, ytd: `${marketData.merval.ytd}%`, isPos: marketData.merval.sem >= 0 },
-                { nombre: 'S&P 500', val: `USD ${Math.round(marketData.sp500.val).toLocaleString('es-AR')}`, sem: `${marketData.sp500.sem}%`, ytd: `${marketData.sp500.ytd}%`, isPos: marketData.sp500.sem >= 0 },
-                { nombre: 'Dólar MEP', val: `$ ${Math.round(marketData.mep.val).toLocaleString('es-AR')}`, sem: `${marketData.mep.sem}%`, ytd: `${marketData.mep.ytd}%`, isPos: marketData.mep.sem >= 0 },
-                { nombre: 'Riesgo País (EMBI+)', val: `${Math.round(marketData.riesgo.val)} bps`, sem: `${marketData.riesgo.sem}%`, ytd: `${marketData.riesgo.ytd}%`, isPos: marketData.riesgo.sem >= 0 }
-            ];
+        // Render Dashboard UI
+        function renderDashboard() {
+            // Dates
+            document.getElementById('header-date').innerText = store.fecha;
+            document.getElementById('main-date-display').innerText = store.fecha;
+            document.getElementById('story-date').innerText = store.fecha;
 
-            tbody.innerHTML = items.map(item => `
-                <tr class="hover:bg-gray-50 border-b border-gray-100">
-                    <td class="p-3 font-bold text-cubo-navy">${item.nombre}</td>
-                    <td class="p-3 text-right font-semibold">${item.val}</td>
-                    <td class="p-3 text-right font-bold ${item.isPos ? 'text-emerald-600' : 'text-rose-600'}">${item.sem}</td>
-                    <td class="p-3 text-right font-bold ${item.ytd.startsWith('-') ? 'text-rose-600' : 'text-emerald-600'}">${item.ytd}</td>
+            // Top Cards
+            document.getElementById('card-riesgo').innerHTML = `${fmtInt(store.riesgoPais)} <span class="text-xs font-normal text-gray-400">bps</span>`;
+            document.getElementById('card-mep').innerText = `$ ${fmtInt(store.dolares.find(d => d.tipo === 'MEP').cierre)}`;
+            document.getElementById('card-ccl').innerText = `$ ${fmtInt(store.dolares.find(d => d.tipo === 'CCL').cierre)}`;
+            document.getElementById('card-sp500').innerText = fmtInt(store.indices.find(i => i.nombre === 'S&P 500').cierre);
+            document.getElementById('card-merval').innerText = fmtInt(store.indices.find(i => i.nombre === 'Merval USD').cierre);
+            document.getElementById('card-reservas').innerText = `USD ${fmtInt(store.reservasBCRA)}M`;
+
+            // Macro
+            document.getElementById('val-riesgo').innerText = `${fmtInt(store.riesgoPais)} bps`;
+            document.getElementById('val-infla-m').innerText = `${fmtInt(store.inflacion.mensual)}%`;
+            document.getElementById('val-infla-acu').innerText = `${fmtInt(store.inflacion.acumulada)}%`;
+            document.getElementById('val-infla-ia').innerText = `${fmtInt(store.inflacion.interanual)}%`;
+            document.getElementById('val-reservas').innerText = `USD ${fmtInt(store.reservasBCRA)} M`;
+
+            // Cauciones
+            document.getElementById('val-cau-3').innerText = `${fmtInt(store.caucion.d3)}%`;
+            document.getElementById('val-cau-7').innerText = `${fmtInt(store.caucion.d7)}%`;
+            document.getElementById('val-cau-30').innerText = `${fmtInt(store.caucion.d30)}%`;
+
+            // Table Dolares
+            const tblDolares = document.getElementById('table-dolares');
+            tblDolares.innerHTML = store.dolares.map(d => `
+                <tr class="hover:bg-gray-800/40">
+                    <td class="px-3 py-2 font-sans font-medium text-gray-200">${d.tipo}</td>
+                    <td class="px-3 py-2 text-right font-bold text-white">$ ${fmtInt(d.cierre)}</td>
+                    <td class="px-3 py-2 text-right ${d.diario >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fmtInt(d.diario)}%</td>
+                    <td class="px-3 py-2 text-right ${d.anual >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fmtInt(d.anual)}%</td>
                 </tr>
             `).join('');
+
+            // Table Bonos
+            const tblBonos = document.getElementById('table-bonos');
+            tblBonos.innerHTML = store.bonos.map(b => `
+                <tr class="hover:bg-gray-800/40">
+                    <td class="px-3 py-2.5 font-sans font-bold text-cubo-light">${b.bono}</td>
+                    <td class="px-3 py-2.5 text-right font-bold text-white">USD ${fmtInt(b.precio)}</td>
+                    <td class="px-3 py-2.5 text-right ${b.diario >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fmtInt(b.diario)}%</td>
+                    <td class="px-3 py-2.5 text-right text-gray-200">${fmtInt(b.tir)}%</td>
+                </tr>
+            `).join('');
+
+            // Table Indices
+            const tblIndices = document.getElementById('table-indices');
+            tblIndices.innerHTML = store.indices.map(i => `
+                <tr class="hover:bg-gray-800/40">
+                    <td class="px-3 py-2.5 font-sans font-medium text-gray-200">${i.nombre}</td>
+                    <td class="px-3 py-2.5 text-right font-bold text-white">${i.nombre.includes('ARS') ? '$ ' : 'USD '}${fmtInt(i.cierre)}</td>
+                    <td class="px-3 py-2.5 text-right ${i.diario >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fmtInt(i.diario)}%</td>
+                    <td class="px-3 py-2.5 text-right ${i.anual >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fmtInt(i.anual)}%</td>
+                </tr>
+            `).join('');
+
+            // Render Story elements
+            document.getElementById('story-riesgo').innerHTML = `${fmtInt(store.riesgoPais)} <span class="text-xs font-normal text-gray-400">bps</span>`;
+            document.getElementById('story-mep').innerText = `$ ${fmtInt(store.dolares.find(d => d.tipo === 'MEP').cierre)}`;
+            document.getElementById('story-ccl').innerText = `$ ${fmtInt(store.dolares.find(d => d.tipo === 'CCL').cierre)}`;
+            document.getElementById('story-blue').innerText = `$ ${fmtInt(store.dolares.find(d => d.tipo === 'BLUE').cierre)}`;
+            document.getElementById('story-sp500').innerText = fmtInt(store.indices.find(i => i.nombre === 'S&P 500').cierre);
+            document.getElementById('story-nasdaq').innerText = fmtInt(store.indices.find(i => i.nombre === 'Nasdaq').cierre);
+            document.getElementById('story-dow').innerText = fmtInt(store.indices.find(i => i.nombre === 'Dow Jones').cierre);
+            document.getElementById('story-merval').innerText = fmtInt(store.indices.find(i => i.nombre === 'Merval USD').cierre);
+
+            // Generate Substack Markdown
+            generateMarkdown();
         }
 
-        function descargarInfografia() {
-            const element = document.getElementById('story-infographic');
-            html2canvas(element, { scale: 2 }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'Numeros_de_la_Semana_Cubo_Finanzas.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+        // Generate Substack Markdown Output
+        function generateMarkdown() {
+            let md = `### 📊 Cubo Finanzas - Resumen de Mercado (${store.fecha})\n\n`;
+            md += `**Riesgo País:** ${fmtInt(store.riesgoPais)} bps | **Reservas BCRA:** USD ${fmtInt(store.reservasBCRA)}M\n\n`;
+            
+            md += `#### 💵 Dólares\n`;
+            md += `| Tipo | Cierre | Diario | Anual (YTD) |\n| :--- | :---: | :---: | :---: |\n`;
+            store.dolares.forEach(d => {
+                md += `| ${d.tipo} | $ ${fmtInt(d.cierre)} | ${fmtInt(d.diario)}% | ${fmtInt(d.anual)}% |\n`;
             });
-        }
 
-        function copiarTablaMarkdown() {
-            const texto = `
-📊 LOS NÚMEROS DE LA SEMANA — CUBO FINANZAS
-
-• Merval en USD: USD ${Math.round(marketData.merval.val)} (${marketData.merval.sem >= 0 ? '+' : ''}${Math.round(marketData.merval.sem)}% Semanal | YTD: ${Math.round(marketData.merval.ytd)}%)
-• S&P 500: USD ${Math.round(marketData.sp500.val)} (${marketData.sp500.sem >= 0 ? '+' : ''}${Math.round(marketData.sp500.sem)}% Semanal | YTD: +${Math.round(marketData.sp500.ytd)}%)
-• Dólar MEP: $${Math.round(marketData.mep.val)} (${marketData.mep.sem >= 0 ? '+' : ''}${Math.round(marketData.mep.sem)}% Semanal | YTD: +${Math.round(marketData.mep.ytd)}%)
-• Riesgo País: ${Math.round(marketData.riesgo.val)} bps (${marketData.riesgo.sem >= 0 ? '+' : ''}${Math.round(marketData.riesgo.sem)}% Semanal | YTD: ${Math.round(marketData.riesgo.ytd)}%)
-
-💡 Leé el análisis completo en: cubofinanzas.substack.com
-            `.trim();
-
-            navigator.clipboard.writeText(texto).then(() => {
-                alert("¡Tabla copiada al portapapeles!");
+            md += `\n#### 📈 Índices Globales\n`;
+            md += `| Índice | Cierre | Diario | Anual (YTD) |\n| :--- | :---: | :---: | :---: |\n`;
+            store.indices.forEach(i => {
+                md += `| ${i.nombre} | ${fmtInt(i.cierre)} | ${fmtInt(i.diario)}% | ${fmtInt(i.anual)}% |\n`;
             });
+
+            document.getElementById('markdown-output').value = md;
         }
 
-        function descargarCSV() {
-            const csvContent = "data:text/csv;charset=utf-8," 
-                + "Indicador,Valor,Var_Semanal,Var_Anual_YTD\n"
-                + `Merval en USD,${Math.round(marketData.merval.val)},${Math.round(marketData.merval.sem)}%,${Math.round(marketData.merval.ytd)}%\n`
-                + `SP500,${Math.round(marketData.sp500.val)},${Math.round(marketData.sp500.sem)}%,${Math.round(marketData.sp500.ytd)}%\n`
-                + `USD MEP,${Math.round(marketData.mep.val)},${Math.round(marketData.mep.sem)}%,${Math.round(marketData.mep.ytd)}%\n`
-                + `Riesgo Pais,${Math.round(marketData.riesgo.val)},${Math.round(marketData.riesgo.sem)}%,${Math.round(marketData.riesgo.ytd)}%\n`;
+        // Navigation Tabs
+        function switchTab(tab) {
+            document.getElementById('tab-dashboard').classList.add('hidden');
+            document.getElementById('tab-story').classList.add('hidden');
+            document.getElementById('tab-export').classList.add('hidden');
+
+            document.getElementById('btn-tab-dashboard').className = "bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold px-3.5 py-2 rounded-lg transition border border-gray-700";
+            document.getElementById('btn-tab-story').className = "bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold px-3.5 py-2 rounded-lg transition border border-gray-700";
+            document.getElementById('btn-tab-export').className = "bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold px-3.5 py-2 rounded-lg transition border border-gray-700";
+
+            if (tab === 'dashboard') {
+                document.getElementById('tab-dashboard').classList.remove('hidden');
+                document.getElementById('btn-tab-dashboard').className = "bg-cubo-teal text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition shadow";
+            } else if (tab === 'story') {
+                document.getElementById('tab-story').classList.remove('hidden');
+                document.getElementById('btn-tab-story').className = "bg-cubo-teal text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition shadow";
+            } else if (tab === 'export') {
+                document.getElementById('tab-export').classList.remove('hidden');
+                document.getElementById('btn-tab-export').className = "bg-cubo-teal text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition shadow";
+            }
+        }
+
+        // Modal Handlers
+        function openModal() {
+            document.getElementById('modal-editor').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-editor').classList.add('hidden');
+        }
+
+        function saveData() {
+            store.fecha = document.getElementById('edit-fecha').value;
+            store.riesgoPais = parseInt(document.getElementById('edit-riesgo').value) || 0;
+            store.reservasBCRA = parseInt(document.getElementById('edit-reservas').value) || 0;
+
+            store.inflacion.mensual = parseInt(document.getElementById('edit-infla-m').value) || 0;
+            store.inflacion.acumulada = parseInt(document.getElementById('edit-infla-acu').value) || 0;
+            store.inflacion.interanual = parseInt(document.getElementById('edit-infla-ia').value) || 0;
+
+            // Dolares
+            const mep = store.dolares.find(d => d.tipo === 'MEP');
+            if(mep) {
+                mep.cierre = parseInt(document.getElementById('edit-mep-val').value) || mep.cierre;
+                mep.anual = parseInt(document.getElementById('edit-mep-ytd').value) || mep.anual;
+            }
+            const ccl = store.dolares.find(d => d.tipo === 'CCL');
+            if(ccl) {
+                ccl.cierre = parseInt(document.getElementById('edit-ccl-val').value) || ccl.cierre;
+                ccl.anual = parseInt(document.getElementById('edit-ccl-ytd').value) || ccl.anual;
+            }
+            const blue = store.dolares.find(d => d.tipo === 'BLUE');
+            if(blue) {
+                blue.cierre = parseInt(document.getElementById('edit-blue-val').value) || blue.cierre;
+                blue.anual = parseInt(document.getElementById('edit-blue-ytd').value) || blue.anual;
+            }
+
+            // Indices
+            const sp = store.indices.find(i => i.nombre === 'S&P 500');
+            if(sp) {
+                sp.cierre = parseInt(document.getElementById('edit-sp-val').value) || sp.cierre;
+                sp.anual = parseInt(document.getElementById('edit-sp-ytd').value) || sp.anual;
+            }
+            const nasdaq = store.indices.find(i => i.nombre === 'Nasdaq');
+            if(nasdaq) {
+                nasdaq.cierre = parseInt(document.getElementById('edit-nasdaq-val').value) || nasdaq.cierre;
+                nasdaq.anual = parseInt(document.getElementById('edit-nasdaq-ytd').value) || nasdaq.anual;
+            }
+            const dow = store.indices.find(i => i.nombre === 'Dow Jones');
+            if(dow) {
+                dow.cierre = parseInt(document.getElementById('edit-dow-val').value) || dow.cierre;
+                dow.anual = parseInt(document.getElementById('edit-dow-ytd').value) || dow.anual;
+            }
+            const merval = store.indices.find(i => i.nombre === 'Merval USD');
+            if(merval) {
+                merval.cierre = parseInt(document.getElementById('edit-merval-val').value) || merval.cierre;
+                merval.anual = parseInt(document.getElementById('edit-merval-ytd').value) || merval.anual;
+            }
+
+            renderDashboard();
+            closeModal();
+        }
+
+        // Copy Markdown Function
+        function copyMarkdown() {
+            const textarea = document.getElementById('markdown-output');
+            textarea.select();
+            document.execCommand('copy');
+            alert('¡Tabla Markdown copiada al portapapeles!');
+        }
+
+        // Download CSV
+        function downloadCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,Categoria,Activo/Indicador,Cierre,Variacion_Diaria,Variacion_Anual_YTD\n";
+            csvContent += `Macro,Riesgo Pais,${store.riesgoPais},,,\n`;
+            csvContent += `Macro,Reservas BCRA,${store.reservasBCRA},,,\n`;
+            
+            store.dolares.forEach(d => {
+                csvContent += `Dolares,${d.tipo},${d.cierre},${d.diario}%,${d.anual}%\n`;
+            });
+            store.indices.forEach(i => {
+                csvContent += `Indices,${i.nombre},${i.cierre},${i.diario}%,${i.anual}%\n`;
+            });
 
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Numeros_Semana_Cubo_Finanzas.csv");
+            link.setAttribute("download", `Cubo_Finanzas_Cierre_${store.fecha}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        function abrirModalEdicion() {
-            document.getElementById('modal-edicion').classList.remove('hidden');
+        // Download 9:16 Story Image
+        function downloadStory() {
+            const card = document.getElementById('story-card');
+            html2canvas(card, {
+                scale: 3, // High DPI resolution
+                backgroundColor: null
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Cubo_Finanzas_Story_${store.fecha}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
         }
-        function cerrarModalEdicion() {
-            document.getElementById('modal-edicion').classList.add('hidden');
-        }
-        function guardarEdicionManual() {
-            marketData.merval.val = parseFloat(document.getElementById('input-val-merval').value);
-            marketData.merval.sem = parseFloat(document.getElementById('input-sem-merval').value);
-            marketData.merval.ytd = parseFloat(document.getElementById('input-ytd-merval').value);
 
-            marketData.sp500.val  = parseFloat(document.getElementById('input-val-sp500').value);
-            marketData.sp500.sem  = parseFloat(document.getElementById('input-sem-sp500').value);
-            marketData.sp500.ytd  = parseFloat(document.getElementById('input-ytd-sp500').value);
-
-            marketData.mep.val    = parseFloat(document.getElementById('input-val-mep').value);
-            marketData.mep.sem    = parseFloat(document.getElementById('input-sem-mep').value);
-            marketData.mep.ytd    = parseFloat(document.getElementById('input-ytd-mep').value);
-
-            marketData.riesgo.val = parseFloat(document.getElementById('input-val-riesgo').value);
-            marketData.riesgo.sem = parseFloat(document.getElementById('input-sem-riesgo').value);
-            marketData.riesgo.ytd = parseFloat(document.getElementById('input-ytd-riesgo').value);
-
-            for (let i = 0; i < 4; i++) {
-                marketData.stocks[i].name = document.getElementById(`input-stock-${i}-name`).value.toUpperCase();
-                marketData.stocks[i].val  = parseFloat(document.getElementById(`input-stock-${i}-val`).value);
-                marketData.stocks[i].sem  = parseFloat(document.getElementById(`input-stock-${i}-sem`).value);
-            }
-
-            actualizarInterfaz();
-            cerrarModalEdicion();
+        // Initialize on load
+        window.onload = function() {
+            renderDashboard();
         }
     </script>
 </body>
