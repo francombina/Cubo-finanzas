@@ -95,11 +95,16 @@
                 </div>
 
                 <div>
+                    <label class="block font-bold text-gray-700 mb-1">URL API Tasas de Caución</label>
+                    <input type="text" id="cfg-api-caucion" class="w-full border p-2 rounded text-xs font-mono bg-gray-50">
+                </div>
+
+                <div>
                     <label class="block font-bold text-gray-700 mb-1">URL API / Endpoint Merval USD</label>
                     <input type="text" id="cfg-api-merval" class="w-full border p-2 rounded text-xs font-mono bg-gray-50">
                 </div>
 
-                <div>
+                <div class="md:col-span-2">
                     <label class="block font-bold text-gray-700 mb-1">URL API / Endpoint S&P 500</label>
                     <input type="text" id="cfg-api-sp500" class="w-full border p-2 rounded text-xs font-mono bg-gray-50">
                 </div>
@@ -427,6 +432,7 @@
             oficial: "https://api.argentinadatos.com/v1/cotizaciones/dolares/oficial",
             riesgo: "https://api.argentinadatos.com/v1/finanzas/indices/riesgo-pais",
             reservas: "https://api.bcra.gob.ar/estadisticas/v1.0/principalesvariables",
+            caucion: "https://data912.apidocs.ar/",
             merval: "https://data912.apidocs.ar/",
             sp500: "https://query1.finance.yahoo.com/v8/finance/chart/^GSPC"
         };
@@ -461,6 +467,7 @@
             document.getElementById('cfg-api-oficial').value = config.oficial;
             document.getElementById('cfg-api-riesgo').value = config.riesgo;
             document.getElementById('cfg-api-reservas').value = config.reservas;
+            document.getElementById('cfg-api-caucion').value = config.caucion || "https://data912.apidocs.ar/";
             document.getElementById('cfg-api-merval').value = config.merval;
             document.getElementById('cfg-api-sp500').value = config.sp500;
         }
@@ -476,6 +483,7 @@
                 oficial: document.getElementById('cfg-api-oficial').value,
                 riesgo: document.getElementById('cfg-api-riesgo').value,
                 reservas: document.getElementById('cfg-api-reservas').value,
+                caucion: document.getElementById('cfg-api-caucion').value,
                 merval: document.getElementById('cfg-api-merval').value,
                 sp500: document.getElementById('cfg-api-sp500').value
             };
