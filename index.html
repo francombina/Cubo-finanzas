@@ -92,7 +92,7 @@
                 <span class="p-2 bg-cubo-navy text-cubo-mint rounded-lg"><i data-lucide="activity" class="w-5 h-5"></i></span>
                 <div>
                     <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Origen de Datos</p>
-                    <p class="text-xs text-cubo-teal font-medium mt-0.5">Sincronización exacta de porcentajes desde Google Sheets</p>
+                    <p class="text-xs text-cubo-teal font-medium mt-0.5">Sincronización exacta de porcentajes desde Google Sheets[cite: 4, 5]</p>
                 </div>
             </div>
             <span id="badge-estado" class="text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5">
@@ -106,9 +106,9 @@
                 <div>
                     <h2 class="text-xl font-bold text-cubo-navy flex items-center gap-2">
                         <i data-lucide="bar-chart-2" class="w-5 h-5 text-cubo-teal"></i>
-                        Indicadores Principales de Mercado
+                        Indicadores Principales de Mercado[cite: 5]
                     </h2>
-                    <p class="text-sm text-gray-600">Valores y porcentajes sincronizados desde la planilla</p>
+                    <p class="text-sm text-gray-600">Valores y porcentajes sincronizados desde la planilla[cite: 5]</p>
                 </div>
             </div>
 
@@ -202,7 +202,7 @@
                     <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Google Sheets</span>
                 </div>
                 <p class="text-xs text-gray-600 leading-relaxed pt-1">
-                    Lectura directa de celdas respetando signos, porcentajes y comas decimales originales.
+                    Lectura directa de celdas respetando signos, porcentajes y comas decimales originales[cite: 4, 5].
                 </p>
             </div>
 
@@ -422,7 +422,6 @@
             try { if (window.lucide) lucide.createIcons(); } catch (e) {}
             cargarSheetURLGuardada();
             
-            // Cargar frase inicial en textarea
             const ideaElem = document.getElementById('story-idea-text');
             if (ideaElem) {
                 document.getElementById('input-idea-semana').value = ideaElem.innerText.replace(/^"|"$/g, '');
@@ -573,7 +572,6 @@
             document.getElementById('story-merval-ars-ytd').innerText = `YTD: ${marketData.mervalArs.ytd}`;
         }
 
-        // Lógica de Ocultar / Mostrar Activos en la Infografía
         function actualizarVisibilidadActivos() {
             const mappings = [
                 { chk: 'chk-merval-usd', card: 'card-story-merval-usd' },
@@ -596,7 +594,6 @@
             });
         }
 
-        // Lógica de Edición del Texto de la Idea
         function actualizarTextoIdea() {
             const val = document.getElementById('input-idea-semana').value;
             document.getElementById('story-idea-text').innerText = `"${val}"`;
@@ -604,11 +601,42 @@
 
         function descargarInfografia() {
             const element = document.getElementById('story-infographic');
-            html2canvas(element, { scale: 2 }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'Cierre_de_la_semana_francombina7.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+            
+            html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+                if (isMobile) {
+                    const imageWin = window.open("", "_blank");
+                    if (imageWin) {
+                        imageWin.document.write(`
+                            <html>
+                                <head>
+                                    <title>Guardar Imagen</title>
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                    <style>
+                                        body { margin: 0; background: #1A3644; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; color: white; text-align: center; padding: 20px; box-sizing: border-box; }
+                                        img { max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+                                        p { margin-top: 15px; font-size: 14px; color: #A0D8C3; font-weight: bold; }
+                                    </style>
+                                </head>
+                                <body>
+                                    <img src="${canvas.toDataURL('image/png')}" />
+                                    <p>💡 Mantené pulsada la imagen y seleccioná "Guardar en Fotos" / "Agregar a Fotos"</p>
+                                </body>
+                            </html>
+                        `);
+                    } else {
+                        const link = document.createElement('a');
+                        link.download = 'Cierre_de_la_semana_francombina7.png';
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                    }
+                } else {
+                    const link = document.createElement('a');
+                    link.download = 'Cierre_de_la_semana_francombina7.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }
             });
         }
 
