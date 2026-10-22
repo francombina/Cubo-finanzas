@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cubo Finanzas — Dashboard & Configuración de APIs</title>
+    <title>Cubo Finanzas — Dashboard & Historias</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -23,7 +23,7 @@
             }
         }
     </script>
-    <!-- Lucide Icons -->
+    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- html2canvas para exportar la infografía a PNG -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -44,13 +44,13 @@
             </div>
             
             <div class="flex items-center gap-2 flex-wrap">
-                <button onclick="sincronizarTodasLasAPIs()" class="flex items-center gap-1.5 bg-cubo-teal hover:bg-opacity-90 text-white px-3 py-2 rounded-lg text-xs font-bold transition shadow-sm">
-                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Sincronizar
+                <button onclick="sincronizarConSheet()" class="flex items-center gap-1.5 bg-cubo-teal hover:bg-opacity-90 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow-sm">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Sincronizar Sheet
                 </button>
-                <button onclick="toggleConfigPanel()" class="flex items-center gap-1.5 bg-cubo-mint hover:bg-opacity-90 text-cubo-navy px-3 py-2 rounded-lg text-xs font-bold transition shadow-sm">
-                    <i data-lucide="settings" class="w-4 h-4"></i> Configurar Fuentes
+                <button onclick="toggleConfigPanel()" class="flex items-center gap-1.5 bg-cubo-mint hover:bg-opacity-90 text-cubo-navy px-3.5 py-2 rounded-lg text-xs font-bold transition shadow-sm">
+                    <i data-lucide="settings" class="w-4 h-4"></i> Link de Google Sheet
                 </button>
-                <button onclick="abrirModalEdicion()" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg text-xs font-bold transition shadow-sm">
+                <button onclick="abrirModalEdicion()" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow-sm">
                     <i data-lucide="edit-3" class="w-4 h-4"></i> Edición Manual
                 </button>
             </div>
@@ -58,64 +58,30 @@
     </header>
 
     <!-- Contenido Principal -->
-    <main class="max-w-6xl mx-auto px-4 mt-8 space-y-8">
+    <main class="max-w-6xl mx-auto px-4 mt-6 space-y-8">
 
-        <!-- PANEL DE CONFIGURACIÓN DE APIS (DESPLEGABLE) -->
+        <!-- PANEL DE CONFIGURACIÓN DE URL DE GOOGLE SHEETS -->
         <section id="panel-configuracion" class="bg-white border-2 border-cubo-teal p-6 rounded-2xl shadow-lg hidden space-y-4">
             <div class="flex justify-between items-center border-b pb-3">
                 <div class="flex items-center gap-2">
-                    <span class="p-2 bg-cubo-navy text-cubo-mint rounded-lg"><i data-lucide="sliders" class="w-5 h-5"></i></span>
+                    <span class="p-2 bg-cubo-navy text-cubo-mint rounded-lg"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></span>
                     <div>
-                        <h3 class="font-extrabold text-lg text-cubo-navy">Configuración de Fuentes & Endpoints APIs</h3>
-                        <p class="text-xs text-gray-500">Ingresá la URL pública de la API de donde querés que la web obtenga cada dato.</p>
+                        <h3 class="font-extrabold text-lg text-cubo-navy">Vinculación con Google Sheets</h3>
+                        <p class="text-xs text-gray-500">Ingresá el enlace publicado de tu planilla (CSV).</p>
                     </div>
                 </div>
                 <button onclick="toggleConfigPanel()" class="text-gray-400 hover:text-gray-600 font-bold text-sm">✕ Cerrar</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                <div>
-                    <label class="block font-bold text-gray-700 mb-1">URL API Dólar MEP</label>
-                    <input type="text" id="cfg-api-mep" class="w-full border p-2 rounded text-xs font-mono bg-gray-50">
-                </div>
-
-                <div>
-                    <label class="block font-bold text-gray-700 mb-1">URL API Dólar Oficial</label>
-                    <input type="text" id="cfg-api-oficial" class="w-full border p-2 rounded text-xs font-mono bg-gray-50">
-                </div>
-
-                <div>
-                    <label class="block font-bold text-gray-700 mb-1">URL API Riesgo País</label>
-                    <input type="text" id="cfg-api-riesgo" class="w-full border p-2 rounded text-xs font-mono bg-gray-50">
-                </div>
-
-                <div>
-                    <label class="block font-bold text-gray-700 mb-1">URL API Reservas BCRA</label>
-                    <input type="text" id="cfg-api-reservas" class="w-full border p-2 rounded text-xs font-mono bg-gray-50">
-                </div>
-
-                <div>
-                    <label class="block font-bold text-gray-700 mb-1">URL API Tasas de Caución</label>
-                    <input type="text" id="cfg-api-caucion" class="w-full border p-2 rounded text-xs font-mono bg-gray-50">
-                </div>
-
-                <div>
-                    <label class="block font-bold text-gray-700 mb-1">URL API / Endpoint Merval USD</label>
-                    <input type="text" id="cfg-api-merval" class="w-full border p-2 rounded text-xs font-mono bg-gray-50">
-                </div>
-
-                <div class="md:col-span-2">
-                    <label class="block font-bold text-gray-700 mb-1">URL API / Endpoint S&P 500</label>
-                    <input type="text" id="cfg-api-sp500" class="w-full border p-2 rounded text-xs font-mono bg-gray-50">
-                </div>
+            <div>
+                <label class="block font-bold text-gray-700 text-xs mb-1">URL de la Planilla Publicada</label>
+                <input type="text" id="cfg-sheet-url" class="w-full border p-2.5 rounded-lg text-xs font-mono bg-gray-50 border-gray-300">
             </div>
 
             <div class="flex justify-between items-center border-t pt-4">
-                <button onclick="restaurarConfiguracionPorDefecto()" class="text-xs text-rose-600 hover:underline font-bold">
-                    Restaurar Fuentes por Defecto
-                </button>
-                <button onclick="guardarConfiguracionAPIs()" class="bg-cubo-navy hover:bg-cubo-teal text-white px-5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2">
-                    <i data-lucide="save" class="w-4 h-4"></i> Guardar y Consultar APIs
+                <span class="text-[11px] text-gray-500">Se guarda en el navegador para futuras sesiones.</span>
+                <button onclick="guardarSheetURL()" class="bg-cubo-navy hover:bg-cubo-teal text-white px-5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow">
+                    <i data-lucide="save" class="w-4 h-4"></i> Guardar y Sincronizar
                 </button>
             </div>
         </section>
@@ -123,190 +89,128 @@
         <!-- Estado de Conexión -->
         <div class="bg-white border border-gray-200 p-4 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex items-center gap-3">
-                <span class="p-2 bg-cubo-navy text-cubo-mint rounded-lg"><i data-lucide="network" class="w-5 h-5"></i></span>
+                <span class="p-2 bg-cubo-navy text-cubo-mint rounded-lg"><i data-lucide="activity" class="w-5 h-5"></i></span>
                 <div>
-                    <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Estado de Conexión de Fuentes</p>
-                    <p class="text-xs text-cubo-teal font-medium mt-0.5" id="api-status">
-                        • ArgentinaDatos • Data912 • BCRA API • Yahoo Finance
+                    <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Origen de Datos</p>
+                    <p class="text-xs text-cubo-teal font-medium mt-0.5" id="api-status-text">
+                        Sincronización exacta de porcentajes desde Google Sheets[cite: 4, 5]
                     </p>
                 </div>
             </div>
-            <span id="badge-estado" class="text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1 rounded-lg border border-emerald-200 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Datos en Línea
+            <span id="badge-estado" class="text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Google Sheet Vinculado
             </span>
         </div>
 
-        <!-- 1. TARJETAS PRINCIPALES (NÚMEROS DE LA SEMANA) -->
+        <!-- 1. TARJETAS PRINCIPALES (MÉTRICAS CLAVE) -->
         <section>
             <div class="flex justify-between items-end mb-4">
                 <div>
                     <h2 class="text-xl font-bold text-cubo-navy flex items-center gap-2">
                         <i data-lucide="bar-chart-2" class="w-5 h-5 text-cubo-teal"></i>
-                        Los Números de la Semana
+                        Indicadores Principales de Mercado[cite: 5]
                     </h2>
-                    <p class="text-sm text-gray-600">Valores de cierre en enteros sin decimales</p>
+                    <p class="text-sm text-gray-600">Valores y porcentajes sincronizados desde la planilla[cite: 5]</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 
-                <!-- Merval USD -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                    <span class="text-xs font-bold uppercase text-gray-500 block mb-1">Merval en USD</span>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-merval">USD 1.845</div>
-                    <div class="flex items-center gap-2 text-xs font-bold">
-                        <span id="sem-merval" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +1% Sem.</span>
-                        <span id="ytd-merval" class="text-rose-600 bg-rose-50 px-2 py-0.5 rounded">▼ -11% YTD</span>
+                <!-- S&P Merval USD -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
+                    <span class="text-xs font-bold uppercase text-gray-500 block mb-1">S&P Merval en USD</span>
+                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-merval-usd">$1.739,28</div>
+                    <div class="flex items-center gap-1 text-[11px] font-bold flex-wrap">
+                        <span id="sem-merval-usd" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Sem: -0,76%</span>
+                        <span id="ytd-merval-usd" class="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">YTD: -13,18%</span>
                     </div>
                 </div>
 
-                <!-- S&P 500 -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                <!-- SP500 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
                     <span class="text-xs font-bold uppercase text-gray-500 block mb-1">S&P 500</span>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-sp500">USD 7.713</div>
-                    <div class="flex items-center gap-2 text-xs font-bold">
-                        <span id="sem-sp500" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +1% Sem.</span>
-                        <span id="ytd-sp500" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +13% YTD</span>
+                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-sp500">$7.663,43</div>
+                    <div class="flex items-center gap-1 text-[11px] font-bold flex-wrap">
+                        <span id="sem-sp500" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Sem: +0,05%</span>
+                        <span id="ytd-sp500" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">YTD: +11,95%</span>
                     </div>
                 </div>
 
                 <!-- Dólar MEP -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
                     <span class="text-xs font-bold uppercase text-gray-500 block mb-1">Dólar MEP</span>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-mep">$ 1.544</div>
-                    <div class="flex items-center gap-2 text-xs font-bold">
-                        <span id="sem-mep" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +0% Sem.</span>
-                        <span id="ytd-mep" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +4% YTD</span>
+                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-mep">$1.553,80</div>
+                    <div class="flex items-center gap-1 text-[11px] font-bold flex-wrap">
+                        <span id="sem-mep" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Sem: +0,73%</span>
+                        <span id="ytd-mep" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">YTD: +4,57%</span>
                     </div>
                 </div>
 
                 <!-- Riesgo País -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm border-l-4 border-l-cubo-teal">
-                    <span class="text-xs font-bold uppercase text-gray-500 block mb-1">Riesgo País (EMBI)</span>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-riesgo">624 bps</div>
-                    <div class="flex items-center gap-2 text-xs font-bold">
-                        <span id="sem-riesgo" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">▲ +0% Sem.</span>
-                        <span id="ytd-riesgo" class="text-rose-600 bg-rose-50 px-2 py-0.5 rounded">▼ -5% YTD</span>
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition border-l-4 border-l-cubo-teal">
+                    <span class="text-xs font-bold uppercase text-gray-500 block mb-1">Riesgo País</span>
+                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-riesgo">674</div>
+                    <div class="flex items-center gap-1 text-[11px] font-bold flex-wrap">
+                        <span id="sem-riesgo" class="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">Sem: -0,15%</span>
+                        <span id="ytd-riesgo" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">YTD: +18,04%</span>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- 2. RESUMEN MACRO, DIVISAS & RESERVAS -->
+        <!-- 2. BLOQUE DE DIVISAS, CRIPTO & MERVAL ARS -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <!-- Cauciones -->
-            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
+            <!-- S&P Merval ARS -->
+            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2">
                 <div class="flex justify-between items-center border-b pb-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tasas de Caución</span>
-                    <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">TNA Promedio</span>
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">S&P Merval (ARS)</span>
+                    <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Local</span>
                 </div>
-                <div class="grid grid-cols-3 gap-2 text-center text-xs">
-                    <div class="border p-2 rounded-lg">
-                        <span class="text-[10px] text-gray-400 font-bold block">1 DÍA</span>
-                        <span class="font-black text-cubo-navy text-sm" id="cau-1">23%</span>
-                    </div>
-                    <div class="border p-2 rounded-lg">
-                        <span class="text-[10px] text-gray-400 font-bold block">7 DÍAS</span>
-                        <span class="font-black text-cubo-navy text-sm" id="cau-7">23%</span>
-                    </div>
-                    <div class="border p-2 rounded-lg">
-                        <span class="text-[10px] text-gray-400 font-bold block">30 DÍAS</span>
-                        <span class="font-black text-cubo-navy text-sm" id="cau-30">24%</span>
+                <div class="pt-1">
+                    <span class="text-2xl font-black text-cubo-navy" id="val-merval-ars">$2.848.945,20</span>
+                    <div class="flex gap-2 text-xs font-bold mt-2">
+                        <span class="text-emerald-600" id="merval-ars-sem">Sem: +0,74%</span>
+                        <span class="text-gray-500" id="merval-ars-ytd">YTD: -6,64%</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Dólares -->
+            <!-- Dólar CCL & BTC -->
             <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
                 <div class="flex justify-between items-center border-b pb-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Divisas Mercado</span>
-                    <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Cotizaciones</span>
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">CCL & Cripto</span>
+                    <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Referencias</span>
                 </div>
                 <div class="grid grid-cols-2 gap-2 text-xs">
-                    <div class="bg-cubo-bg p-2.5 rounded-lg flex justify-between items-center">
-                        <span class="font-bold text-gray-600">Dólar MEP:</span>
-                        <span class="font-black text-cubo-navy text-sm" id="div-mep">$ 1.544</span>
+                    <div class="bg-cubo-bg p-2 rounded-lg">
+                        <span class="text-[10px] text-gray-500 font-bold block">DÓLAR CCL</span>
+                        <span class="font-black text-cubo-navy text-sm" id="val-ccl">$1.638,00</span>
+                        <span class="text-[10px] text-emerald-600 font-bold block mt-0.5" id="ccl-sem">Sem: +1,08%</span>
                     </div>
-                    <div class="bg-cubo-bg p-2.5 rounded-lg flex justify-between items-center">
-                        <span class="font-bold text-gray-600">Oficial:</span>
-                        <span class="font-black text-cubo-navy text-sm" id="div-oficial">$ 1.525</span>
+                    <div class="bg-cubo-bg p-2 rounded-lg">
+                        <span class="text-[10px] text-gray-500 font-bold block">BTC</span>
+                        <span class="font-black text-cubo-navy text-sm" id="val-btc">$81.085,87</span>
+                        <span class="text-[10px] text-rose-600 font-bold block mt-0.5" id="btc-sem">Sem: -0,94%</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Reservas BCRA -->
+            <!-- Resumen de Variaciones Generales -->
             <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
                 <div class="flex justify-between items-center border-b pb-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Reservas BCRA</span>
-                    <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Internacionales</span>
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Estado de Lectura</span>
+                    <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Google Sheets</span>
                 </div>
-                <div class="flex justify-between items-center pt-1">
-                    <div>
-                        <span class="text-2xl font-black text-cubo-navy" id="val-reservas">USD 50.244 M</span>
-                        <p class="text-[10px] text-gray-400 mt-0.5">Consulta Directa API</p>
-                    </div>
-                    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
-                        <i data-lucide="landmark" class="w-6 h-6"></i>
-                    </div>
-                </div>
+                <p class="text-xs text-gray-600 leading-relaxed pt-1">
+                    Lectura directa de celdas respetando signos, porcentajes y comas decimales originales[cite: 4, 5].
+                </p>
             </div>
 
         </section>
 
-        <!-- 3. ACCIONES LÍDERES & SUBAS DESTACADAS -->
-        <section>
-            <div class="flex justify-between items-end mb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-cubo-navy flex items-center gap-2">
-                        <i data-lucide="trending-up" class="w-5 h-5 text-cubo-teal"></i>
-                        Principales Subas de Acciones Líderes
-                    </h2>
-                    <p class="text-sm text-gray-600">Rendimiento semanal destacado</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="stocks-container">
-                <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex justify-between items-center">
-                    <div>
-                        <span class="text-xs font-bold uppercase text-gray-500">Acción Líder</span>
-                        <div class="text-xl font-black text-cubo-navy">YPF</div>
-                        <div class="text-xs text-gray-600 font-semibold">$ 38.500</div>
-                    </div>
-                    <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">▲ +8% Sem.</span>
-                </div>
-
-                <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex justify-between items-center">
-                    <div>
-                        <span class="text-xs font-bold uppercase text-gray-500">Acción Líder</span>
-                        <div class="text-xl font-black text-cubo-navy">GGAL</div>
-                        <div class="text-xs text-gray-600 font-semibold">$ 54.200</div>
-                    </div>
-                    <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">▲ +6% Sem.</span>
-                </div>
-
-                <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex justify-between items-center">
-                    <div>
-                        <span class="text-xs font-bold uppercase text-gray-500">Acción Líder</span>
-                        <div class="text-xl font-black text-cubo-navy">PAMP</div>
-                        <div class="text-xs text-gray-600 font-semibold">$ 3.100</div>
-                    </div>
-                    <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">▲ +5% Sem.</span>
-                </div>
-
-                <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex justify-between items-center">
-                    <div>
-                        <span class="text-xs font-bold uppercase text-gray-500">Acción Líder</span>
-                        <div class="text-xl font-black text-cubo-navy">MELI</div>
-                        <div class="text-xs text-gray-600 font-semibold">$ 2.150</div>
-                    </div>
-                    <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">▲ +4% Sem.</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. GENERADOR DE INFOGRAFÍA PARA HISTORIAS (9:16) -->
+        <!-- 3. GENERADOR DE INFOGRAFÍA PARA HISTORIAS (9:16) -->
         <section class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-6">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -314,7 +218,7 @@
                         <i data-lucide="image" class="w-5 h-5 text-cubo-teal"></i>
                         Infografía para Historias (Instagram / LinkedIn 9:16)
                     </h3>
-                    <p class="text-xs text-gray-500">Formato vertical de alta resolución listo para descargar</p>
+                    <p class="text-xs text-gray-500">Plantilla vertical con porcentajes sincronizados</p>
                 </div>
                 <button onclick="descargarInfografia()" class="bg-cubo-navy hover:bg-cubo-teal text-white px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow">
                     <i data-lucide="download" class="w-4 h-4"></i> Descargar Imagen PNG
@@ -334,45 +238,69 @@
                             <span class="bg-cubo-mint text-cubo-navy text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full">
                                 CUBO FINANZAS
                             </span>
-                            <span class="text-[10px] text-gray-300 font-medium">REPORTE SEMANAL</span>
+                            <span class="text-[10px] text-gray-300 font-medium">CIERRE DE MERCADO</span>
                         </div>
-                        <h4 class="text-base font-black tracking-tight text-white">LOS NÚMEROS DE LA SEMANA</h4>
+                        <h4 class="text-base font-black tracking-tight text-white">INDICADORES CLAVE</h4>
                     </div>
 
-                    <!-- Grid Macro -->
+                    <!-- Grid Story 2x2 -->
                     <div class="relative z-10 grid grid-cols-2 gap-2 my-auto">
-                        <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10">
+                        <div class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
                             <span class="text-[9px] font-bold text-gray-300 uppercase block">Merval USD</span>
-                            <div class="text-base font-black text-white" id="story-merval">USD 1.845</div>
-                            <span class="text-[8px] font-bold text-cubo-mint block mt-1">▲ +1% Semanal</span>
+                            <div class="text-sm font-black text-white" id="story-merval-usd">$1.739,28</div>
+                            <div class="flex justify-between text-[8px] font-bold mt-1">
+                                <span class="text-cubo-mint" id="story-merval-sem">Sem: -0,76%</span>
+                                <span class="text-rose-300" id="story-merval-ytd">YTD: -13,18%</span>
+                            </div>
                         </div>
 
-                        <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10">
+                        <div class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
                             <span class="text-[9px] font-bold text-gray-300 uppercase block">S&P 500</span>
-                            <div class="text-base font-black text-white" id="story-sp500">USD 7.713</div>
-                            <span class="text-[8px] font-bold text-cubo-mint block mt-1">▲ +1% Semanal</span>
+                            <div class="text-sm font-black text-white" id="story-sp500">$7.663,43</div>
+                            <div class="flex justify-between text-[8px] font-bold mt-1">
+                                <span class="text-cubo-mint" id="story-sp500-sem">Sem: +0,05%</span>
+                                <span class="text-cubo-mint" id="story-sp500-ytd">YTD: +11,95%</span>
+                            </div>
                         </div>
 
-                        <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10">
+                        <div class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
                             <span class="text-[9px] font-bold text-gray-300 uppercase block">Dólar MEP</span>
-                            <div class="text-base font-black text-white" id="story-mep">$ 1.544</div>
-                            <span class="text-[8px] font-bold text-cubo-mint block mt-1">▲ +0% Semanal</span>
+                            <div class="text-sm font-black text-white" id="story-mep">$1.553,80</div>
+                            <div class="flex justify-between text-[8px] font-bold mt-1">
+                                <span class="text-cubo-mint" id="story-mep-sem">Sem: +0,73%</span>
+                                <span class="text-cubo-mint" id="story-mep-ytd">YTD: +4,57%</span>
+                            </div>
                         </div>
 
-                        <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10">
+                        <div class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
                             <span class="text-[9px] font-bold text-gray-300 uppercase block">Riesgo País</span>
-                            <div class="text-base font-black text-white" id="story-riesgo">624 bps</div>
-                            <span class="text-[8px] font-bold text-cubo-mint block mt-1">EMBI+ Cierre</span>
+                            <div class="text-sm font-black text-white" id="story-riesgo">674</div>
+                            <div class="flex justify-between text-[8px] font-bold mt-1">
+                                <span class="text-rose-300" id="story-riesgo-sem">Sem: -0,15%</span>
+                                <span class="text-cubo-mint" id="story-riesgo-ytd">YTD: +18,04%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Extra Info Story -->
+                    <div class="relative z-10 bg-white/10 border border-white/10 p-2.5 rounded-xl flex justify-between items-center text-[10px]">
+                        <div>
+                            <span class="text-gray-300 block font-bold">Dólar CCL</span>
+                            <span class="font-black text-white" id="story-ccl">$1.638,00</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-300 block font-bold">Bitcoin (BTC)</span>
+                            <span class="font-black text-white" id="story-btc">$81.085,87</span>
                         </div>
                     </div>
 
                     <!-- Idea Card -->
-                    <div class="relative z-10 bg-cubo-teal/60 border border-cubo-mint/30 p-3 rounded-xl">
+                    <div class="relative z-10 bg-cubo-teal/60 border border-cubo-mint/30 p-2.5 rounded-xl">
                         <span class="text-[8px] font-extrabold uppercase tracking-widest text-cubo-mint block mb-0.5">
-                            LA SEMANA EN UNA IDEA
+                            ANÁLISIS DE MERCADO
                         </span>
                         <p class="text-[10px] font-bold leading-tight text-white">
-                            "Solidez sobre narrativa: Cuando el mercado deja las promesas y exige números reales."
+                            "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
                         </p>
                     </div>
 
@@ -392,31 +320,27 @@
     <div id="modal-edicion" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 space-y-4 max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center border-b pb-3 shrink-0">
-                <h3 class="font-bold text-lg text-cubo-navy">Editar Números Manualmente</h3>
+                <h3 class="font-bold text-lg text-cubo-navy">Edición Manual de Contingencia</h3>
                 <button onclick="cerrarModalEdicion()" class="text-gray-400 hover:text-gray-600 font-bold">✕</button>
             </div>
-
-            <div class="overflow-y-auto pr-2 space-y-4 text-sm flex-grow">
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Merval (USD)</label>
-                        <input type="number" id="input-val-merval" value="1845" class="w-full border p-1.5 rounded">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">S&P 500</label>
-                        <input type="number" id="input-val-sp500" value="7713" class="w-full border p-1.5 rounded">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Dólar MEP ($)</label>
-                        <input type="number" id="input-val-mep" value="1544" class="w-full border p-1.5 rounded">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-gray-500">Riesgo País (bps)</label>
-                        <input type="number" id="input-val-riesgo" value="624" class="w-full border p-1.5 rounded">
-                    </div>
+            <div class="overflow-y-auto pr-2 space-y-3 text-sm flex-grow">
+                <div>
+                    <label class="block text-[11px] text-gray-500 font-bold">S&P Merval en USD</label>
+                    <input type="text" id="input-merval-usd" value="$1.739,28" class="w-full border p-1.5 rounded text-sm">
+                </div>
+                <div>
+                    <label class="block text-[11px] text-gray-500 font-bold">S&P 500</label>
+                    <input type="text" id="input-sp500" value="$7.663,43" class="w-full border p-1.5 rounded text-sm">
+                </div>
+                <div>
+                    <label class="block text-[11px] text-gray-500 font-bold">Dólar MEP</label>
+                    <input type="text" id="input-mep" value="$1.553,80" class="w-full border p-1.5 rounded text-sm">
+                </div>
+                <div>
+                    <label class="block text-[11px] text-gray-500 font-bold">Riesgo País</label>
+                    <input type="text" id="input-riesgo" value="674" class="w-full border p-1.5 rounded text-sm">
                 </div>
             </div>
-
             <div class="flex justify-end gap-2 border-t pt-3 shrink-0">
                 <button onclick="cerrarModalEdicion()" class="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Cancelar</button>
                 <button onclick="guardarEdicionManual()" class="px-4 py-2 text-sm font-semibold bg-cubo-navy text-white hover:bg-cubo-teal rounded-lg">Guardar Cambios</button>
@@ -424,179 +348,180 @@
         </div>
     </div>
 
-    <!-- JavaScript Lógica de Mapeo y Configuración de APIs -->
+    <!-- JavaScript con Parser CSV Adaptado a Comillas -->
     <script>
-        // URLs por Defecto
-        const DEFAULT_CONFIG = {
-            mep: "https://api.argentinadatos.com/v1/cotizaciones/dolares/bolsa",
-            oficial: "https://api.argentinadatos.com/v1/cotizaciones/dolares/oficial",
-            riesgo: "https://api.argentinadatos.com/v1/finanzas/indices/riesgo-pais",
-            reservas: "https://api.bcra.gob.ar/estadisticas/v1.0/principalesvariables",
-            caucion: "https://data912.apidocs.ar/",
-            merval: "https://data912.apidocs.ar/",
-            sp500: "https://query1.finance.yahoo.com/v8/finance/chart/^GSPC"
-        };
+        const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
 
-        // Estado Global de Datos
         let marketData = {
-            mervalUSD: 1845,
-            sp500: 7713,
-            dolarMEP: 1544,
-            dolarOficial: 1525,
-            riesgoPais: 624,
-            reservas: 50244,
-            caucion: { c1: 23, c7: 23, c30: 24 }
+            mervalArs: { val: "$2.848.945,20", sem: "+0,74%", ytd: "-6,64%" },
+            mervalUsd: { val: "$1.739,28", sem: "-0,76%", ytd: "-13,18%" },
+            sp500:     { val: "$7.663,43", sem: "+0,05%", ytd: "+11,95%" },
+            btc:       { val: "$81.085,87", sem: "-0,94%" },
+            mep:       { val: "$1.553,80", sem: "+0,73%", ytd: "+4,57%" },
+            ccl:       { val: "$1.638,00", sem: "+1,08%" },
+            riesgo:    { val: "674", sem: "-0,15%", ytd: "+18,04%" }
         };
 
         document.addEventListener("DOMContentLoaded", () => {
-            try {
-                if (window.lucide) lucide.createIcons();
-            } catch (e) { console.warn(e); }
-
-            cargarConfiguracionInputs();
-            sincronizarTodasLasAPIs();
+            try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+            cargarSheetURLGuardada();
+            sincronizarConSheet();
         });
 
         function toggleConfigPanel() {
             document.getElementById('panel-configuracion').classList.toggle('hidden');
         }
 
-        function cargarConfiguracionInputs() {
-            const config = obtenerConfiguracionActual();
-            document.getElementById('cfg-api-mep').value = config.mep;
-            document.getElementById('cfg-api-oficial').value = config.oficial;
-            document.getElementById('cfg-api-riesgo').value = config.riesgo;
-            document.getElementById('cfg-api-reservas').value = config.reservas;
-            document.getElementById('cfg-api-caucion').value = config.caucion || "https://data912.apidocs.ar/";
-            document.getElementById('cfg-api-merval').value = config.merval;
-            document.getElementById('cfg-api-sp500').value = config.sp500;
+        function cargarSheetURLGuardada() {
+            const savedUrl = localStorage.getItem('cubo_sheet_csv_url') || DEFAULT_SHEET_URL;
+            document.getElementById('cfg-sheet-url').value = savedUrl;
         }
 
-        function obtenerConfiguracionActual() {
-            const saved = localStorage.getItem('cubo_api_config');
-            return saved ? JSON.parse(saved) : DEFAULT_CONFIG;
-        }
-
-        function guardarConfiguracionAPIs() {
-            const config = {
-                mep: document.getElementById('cfg-api-mep').value,
-                oficial: document.getElementById('cfg-api-oficial').value,
-                riesgo: document.getElementById('cfg-api-riesgo').value,
-                reservas: document.getElementById('cfg-api-reservas').value,
-                caucion: document.getElementById('cfg-api-caucion').value,
-                merval: document.getElementById('cfg-api-merval').value,
-                sp500: document.getElementById('cfg-api-sp500').value
-            };
-            localStorage.setItem('cubo_api_config', JSON.stringify(config));
+        function guardarSheetURL() {
+            let url = document.getElementById('cfg-sheet-url').value.trim();
+            if (url.includes("/pubhtml")) url = url.replace("/pubhtml", "/pub?output=csv");
+            localStorage.setItem('cubo_sheet_csv_url', url);
             toggleConfigPanel();
-            sincronizarTodasLasAPIs();
+            sincronizarConSheet();
         }
 
-        function restaurarConfiguracionPorDefecto() {
-            localStorage.removeItem('cubo_api_config');
-            cargarConfiguracionInputs();
-            sincronizarTodasLasAPIs();
-        }
+        async function sincronizarConSheet() {
+            let url = localStorage.getItem('cubo_sheet_csv_url') || DEFAULT_SHEET_URL;
+            if (url.includes("/pubhtml")) url = url.replace("/pubhtml", "/pub?output=csv");
 
-        async function sincronizarTodasLasAPIs() {
-            const config = obtenerConfiguracionActual();
             const badge = document.getElementById('badge-estado');
-            badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span> Consultando APIs...`;
+            badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span> Leyendo Google Sheet...`;
 
-            let errores = 0;
-
-            // 1. Dólar MEP
             try {
-                let res = await fetch(config.mep);
-                let json = await res.json();
-                if (Array.isArray(json) && json.length > 0) {
-                    marketData.dolarMEP = Math.round(json[json.length - 1].venta);
-                }
-            } catch (e) { errores++; }
+                let response = await fetch(url);
+                let csvText = await response.text();
 
-            // 2. Dólar Oficial
-            try {
-                let res = await fetch(config.oficial);
-                let json = await res.json();
-                if (Array.isArray(json) && json.length > 0) {
-                    marketData.dolarOficial = Math.round(json[json.length - 1].venta);
-                }
-            } catch (e) { errores++; }
+                parsearCSVConComillas(csvText);
+                actualizarInterfaz();
 
-            // 3. Riesgo País
-            try {
-                let res = await fetch(config.riesgo);
-                let json = await res.json();
-                if (Array.isArray(json) && json.length > 0) {
-                    marketData.riesgoPais = Math.round(json[json.length - 1].valor);
-                }
-            } catch (e) { errores++; }
+                badge.className = "text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5";
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Sheet Sincronizado`;
 
-            // 4. BCRA Reservas
-            try {
-                let res = await fetch(config.reservas);
-                let json = await res.json();
-                if (json && json.results) {
-                    let resObj = json.results.find(v => v.idVariable === 1);
-                    if (resObj) marketData.reservas = Math.round(resObj.valor);
-                }
-            } catch (e) { errores++; }
-
-            actualizarInterfazUI();
-
-            if (errores === 0) {
-                badge.className = "text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1 rounded-lg border border-emerald-200 flex items-center gap-1.5";
-                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Fuentes Conectadas`;
-            } else {
-                badge.className = "text-xs bg-amber-50 text-amber-800 font-bold px-3 py-1 rounded-lg border border-amber-200 flex items-center gap-1.5";
-                badge.innerHTML = `⚠️ Conectado parcialmente`;
+            } catch (err) {
+                console.error("Error leyendo CSV:", err);
+                badge.className = "text-xs bg-rose-50 text-rose-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5";
+                badge.innerHTML = `⚠️ Error al leer Sheet`;
             }
         }
 
-        function actualizarInterfazUI() {
-            document.getElementById('val-merval').innerText = `USD ${Math.round(marketData.mervalUSD).toLocaleString('es-AR')}`;
-            document.getElementById('val-sp500').innerText = `USD ${Math.round(marketData.sp500).toLocaleString('es-AR')}`;
-            document.getElementById('val-mep').innerText = `$ ${Math.round(marketData.dolarMEP).toLocaleString('es-AR')}`;
-            document.getElementById('val-riesgo').innerText = `${Math.round(marketData.riesgoPais)} bps`;
+        // Parsea líneas CSV respetando comillas dobles (para no romper números con comas decimales)
+        function parsearCSVConComillas(text) {
+            let lines = text.split("\n");
+            lines.forEach(line => {
+                let cols = [];
+                let current = '';
+                let inQuotes = false;
+                for (let i = 0; i < line.length; i++) {
+                    let char = line[i];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        cols.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                cols.push(current.trim());
+                cols = cols.map(c => c.replace(/^"|"$/g, '').trim());
 
-            document.getElementById('div-mep').innerText = `$ ${Math.round(marketData.dolarMEP).toLocaleString('es-AR')}`;
-            document.getElementById('div-oficial').innerText = `$ ${Math.round(marketData.dolarOficial).toLocaleString('es-AR')}`;
-            document.getElementById('val-reservas').innerText = `USD ${Math.round(marketData.reservas).toLocaleString('es-AR')} M`;
+                if (cols.length >= 2) {
+                    let nombre = cols[0].toUpperCase();
+                    let valor = cols[1];
+                    let sem = cols[3] || "";
+                    let ytd = cols[5] || "";
 
-            document.getElementById('cau-1').innerText = `${Math.round(marketData.caucion.c1)}%`;
-            document.getElementById('cau-7').innerText = `${Math.round(marketData.caucion.c7)}%`;
-            document.getElementById('cau-30').innerText = `${Math.round(marketData.caucion.c30)}%`;
+                    if (nombre.includes("MERVAL EN USD")) {
+                        marketData.mervalUsd = { val: valor, sem, ytd };
+                    } else if (nombre.includes("S&P MERVAL")) {
+                        marketData.mervalArs = { val: valor, sem, ytd };
+                    } else if (nombre.includes("SP500")) {
+                        marketData.sp500 = { val: valor, sem, ytd };
+                    } else if (nombre.includes("BTC")) {
+                        marketData.btc = { val: valor, sem };
+                    } else if (nombre.includes("DÓLAR MEP") || nombre.includes("DOLAR MEP")) {
+                        marketData.mep = { val: valor, sem, ytd };
+                    } else if (nombre.includes("DÓLAR CCL") || nombre.includes("DOLAR CCL")) {
+                        marketData.ccl = { val: valor, sem };
+                    } else if (nombre.includes("RIESGO")) {
+                        marketData.riesgo = { val: valor, sem, ytd };
+                    }
+                }
+            });
+        }
 
-            // Infografía Story 9:16
-            document.getElementById('story-merval').innerText = `USD ${Math.round(marketData.mervalUSD).toLocaleString('es-AR')}`;
-            document.getElementById('story-sp500').innerText = `USD ${Math.round(marketData.sp500).toLocaleString('es-AR')}`;
-            document.getElementById('story-mep').innerText = `$ ${Math.round(marketData.dolarMEP).toLocaleString('es-AR')}`;
-            document.getElementById('story-riesgo').innerText = `${Math.round(marketData.riesgoPais)} bps`;
+        function actualizarInterfaz() {
+            // Web Dashboard
+            document.getElementById('val-merval-usd').innerText = marketData.mervalUsd.val;
+            document.getElementById('sem-merval-usd').innerText = `Sem: ${marketData.mervalUsd.sem}`;
+            document.getElementById('ytd-merval-usd').innerText = `YTD: ${marketData.mervalUsd.ytd}`;
+
+            document.getElementById('val-sp500').innerText = marketData.sp500.val;
+            document.getElementById('sem-sp500').innerText = `Sem: ${marketData.sp500.sem}`;
+            document.getElementById('ytd-sp500').innerText = `YTD: ${marketData.sp500.ytd}`;
+
+            document.getElementById('val-mep').innerText = marketData.mep.val;
+            document.getElementById('sem-mep').innerText = `Sem: ${marketData.mep.sem}`;
+            document.getElementById('ytd-mep').innerText = `YTD: ${marketData.mep.ytd}`;
+
+            document.getElementById('val-riesgo').innerText = marketData.riesgo.val;
+            document.getElementById('sem-riesgo').innerText = `Sem: ${marketData.riesgo.sem}`;
+            document.getElementById('ytd-riesgo').innerText = `YTD: ${marketData.riesgo.ytd}`;
+
+            document.getElementById('val-merval-ars').innerText = marketData.mervalArs.val;
+            document.getElementById('merval-ars-sem').innerText = `Sem: ${marketData.mervalArs.sem}`;
+            document.getElementById('merval-ars-ytd').innerText = `YTD: ${marketData.mervalArs.ytd}`;
+
+            document.getElementById('val-ccl').innerText = marketData.ccl.val;
+            document.getElementById('ccl-sem').innerText = `Sem: ${marketData.ccl.sem}`;
+
+            document.getElementById('val-btc').innerText = marketData.btc.val;
+            document.getElementById('btc-sem').innerText = `Sem: ${marketData.btc.sem}`;
+
+            // Story 9:16
+            document.getElementById('story-merval-usd').innerText = marketData.mervalUsd.val;
+            document.getElementById('story-merval-sem').innerText = `Sem: ${marketData.mervalUsd.sem}`;
+            document.getElementById('story-merval-ytd').innerText = `YTD: ${marketData.mervalUsd.ytd}`;
+
+            document.getElementById('story-sp500').innerText = marketData.sp500.val;
+            document.getElementById('story-sp500-sem').innerText = `Sem: ${marketData.sp500.sem}`;
+            document.getElementById('story-sp500-ytd').innerText = `YTD: ${marketData.sp500.ytd}`;
+
+            document.getElementById('story-mep').innerText = marketData.mep.val;
+            document.getElementById('story-mep-sem').innerText = `Sem: ${marketData.mep.sem}`;
+            document.getElementById('story-mep-ytd').innerText = `YTD: ${marketData.mep.ytd}`;
+
+            document.getElementById('story-riesgo').innerText = marketData.riesgo.val;
+            document.getElementById('story-riesgo-sem').innerText = `Sem: ${marketData.riesgo.sem}`;
+            document.getElementById('story-riesgo-ytd').innerText = `YTD: ${marketData.riesgo.ytd}`;
+
+            document.getElementById('story-ccl').innerText = marketData.ccl.val;
+            document.getElementById('story-btc').innerText = marketData.btc.val;
         }
 
         function descargarInfografia() {
             const element = document.getElementById('story-infographic');
             html2canvas(element, { scale: 2 }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'Numeros_de_la_Semana_Cubo_Finanzas.png';
+                link.download = 'Cubo_Finanzas_Cierre.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
         }
 
-        function abrirModalEdicion() {
-            document.getElementById('modal-edicion').classList.remove('hidden');
-        }
-        function cerrarModalEdicion() {
-            document.getElementById('modal-edicion').classList.add('hidden');
-        }
+        function abrirModalEdicion() { document.getElementById('modal-edicion').classList.remove('hidden'); }
+        function cerrarModalEdicion() { document.getElementById('modal-edicion').classList.add('hidden'); }
         function guardarEdicionManual() {
-            marketData.mervalUSD = parseFloat(document.getElementById('input-val-merval').value);
-            marketData.sp500 = parseFloat(document.getElementById('input-val-sp500').value);
-            marketData.dolarMEP = parseFloat(document.getElementById('input-val-mep').value);
-            marketData.riesgoPais = parseFloat(document.getElementById('input-val-riesgo').value);
-
-            actualizarInterfazUI();
+            marketData.mervalUsd.val = document.getElementById('input-merval-usd').value;
+            marketData.sp500.val = document.getElementById('input-sp500').value;
+            marketData.mep.val = document.getElementById('input-mep').value;
+            marketData.riesgo.val = document.getElementById('input-riesgo').value;
+            actualizarInterfaz();
             cerrarModalEdicion();
         }
     </script>
