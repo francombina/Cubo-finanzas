@@ -92,9 +92,7 @@
                 <span class="p-2 bg-cubo-navy text-cubo-mint rounded-lg"><i data-lucide="activity" class="w-5 h-5"></i></span>
                 <div>
                     <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Origen de Datos</p>
-                    <p class="text-xs text-cubo-teal font-medium mt-0.5" id="api-status-text">
-                        Sincronización exacta de porcentajes desde Google Sheets[cite: 4, 5]
-                    </p>
+                    <p class="text-xs text-cubo-teal font-medium mt-0.5">Sincronización exacta de porcentajes desde Google Sheets[cite: 4, 5]</p>
                 </div>
             </div>
             <span id="badge-estado" class="text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5">
@@ -232,15 +230,12 @@
                     <div class="absolute -top-10 -right-10 w-40 h-40 bg-cubo-teal rounded-full blur-2xl opacity-40"></div>
                     <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-cubo-mint rounded-full blur-2xl opacity-20"></div>
 
-                    <!-- Header -->
-                    <div class="relative z-10 border-b border-gray-700/80 pb-3">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="bg-cubo-mint text-cubo-navy text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full">
-                                CUBO FINANZAS
-                            </span>
-                            <span class="text-[10px] text-gray-300 font-medium">CIERRE DE MERCADO</span>
-                        </div>
-                        <h4 class="text-base font-black tracking-tight text-white">INDICADORES CLAVE</h4>
+                    <!-- Header con solo "Cierre de la semana" -->
+                    <div class="relative z-10 border-b border-gray-700/80 pb-3 flex justify-between items-center">
+                        <span class="bg-cubo-mint text-cubo-navy text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full">
+                            CUBO FINANZAS
+                        </span>
+                        <span class="text-[11px] font-extrabold text-white tracking-wider uppercase">CIERRE DE LA SEMANA</span>
                     </div>
 
                     <!-- Grid Story 2x2 -->
@@ -294,20 +289,17 @@
                         </div>
                     </div>
 
-                    <!-- Idea Card -->
-                    <div class="relative z-10 bg-cubo-teal/60 border border-cubo-mint/30 p-2.5 rounded-xl">
-                        <span class="text-[8px] font-extrabold uppercase tracking-widest text-cubo-mint block mb-0.5">
-                            ANÁLISIS DE MERCADO
-                        </span>
-                        <p class="text-[10px] font-bold leading-tight text-white">
+                    <!-- Idea Card (Limpiada de título secundario) -->
+                    <div class="relative z-10 bg-cubo-teal/60 border border-cubo-mint/30 p-3 rounded-xl text-center">
+                        <p class="text-[11px] font-bold leading-snug text-white">
                             "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
                         </p>
                     </div>
 
-                    <!-- Footer -->
+                    <!-- Footer con @francombina7 -->
                     <div class="relative z-10 border-t border-gray-700/80 pt-2 flex justify-between items-center text-[9px] text-gray-400">
                         <span>cubofinanzas.substack.com</span>
-                        <span class="font-bold text-cubo-mint">@cubofinanzas</span>
+                        <span class="font-bold text-cubo-mint">@francombina7</span>
                     </div>
 
                 </div>
@@ -348,7 +340,7 @@
         </div>
     </div>
 
-    <!-- JavaScript con Parser CSV Adaptado a Comillas -->
+    <!-- JavaScript Parser CSV y Sincronización -->
     <script>
         const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
 
@@ -404,12 +396,11 @@
 
             } catch (err) {
                 console.error("Error leyendo CSV:", err);
-                badge.className = "text-xs bg-rose-50 text-rose-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5";
+                badge.className = "text-xs bg-rose-50 text-rose-700 font-bold px-3 py-1.5 rounded-lg border border-rose-200 flex items-center gap-1.5";
                 badge.innerHTML = `⚠️ Error al leer Sheet`;
             }
         }
 
-        // Parsea líneas CSV respetando comillas dobles (para no romper números con comas decimales)
         function parsearCSVConComillas(text) {
             let lines = text.split("\n");
             lines.forEach(line => {
