@@ -271,7 +271,7 @@
                 </div>
             </div>
 
-            <!-- Canvas 9:16 (Altura compacta de 460px con textos perfectamente ajustados) -->
+            <!-- Canvas 9:16 (Altura compacta de 460px con estructura unificada de Sem y YTD) -->
             <div class="flex justify-center bg-gray-100 p-6 rounded-xl border overflow-x-auto">
                 <div id="story-infographic" class="w-[360px] h-[460px] bg-cubo-navy text-white p-3.5 rounded-2xl flex flex-col justify-between shadow-2xl relative overflow-hidden">
                     
@@ -283,7 +283,7 @@
                         <span class="text-[11px] font-extrabold text-white tracking-widest uppercase">CIERRE DE LA SEMANA</span>
                     </div>
 
-                    <!-- Grid Dinámica de Activos (Letras escaladas y números enteros) -->
+                    <!-- Grid Dinámica de Activos (Todas con Sem y YTD uniformes) -->
                     <div id="story-grid-container" class="relative z-10 grid grid-cols-2 gap-1.5 my-auto">
                         <!-- Merval USD -->
                         <div id="card-story-merval-usd" class="bg-white/15 backdrop-blur-md p-1.5 px-2 rounded-xl border border-white/10">
@@ -325,21 +325,23 @@
                             </div>
                         </div>
 
-                        <!-- Dólar CCL -->
+                        <!-- Dólar CCL (Con YTD habilitado) -->
                         <div id="card-story-ccl" class="bg-white/15 backdrop-blur-md p-1.5 px-2 rounded-xl border border-white/10">
                             <span class="text-[7.5px] font-bold text-gray-300 uppercase block tracking-tight">Dólar CCL</span>
                             <div class="text-[11px] font-black text-white leading-tight" id="story-ccl">$1.638</div>
                             <div class="flex justify-between text-[7.5px] font-bold mt-0.5">
                                 <span class="text-cubo-mint" id="story-ccl-sem">Sem: +1,1%</span>
+                                <span class="text-cubo-mint" id="story-ccl-ytd">YTD: +5,0%</span>
                             </div>
                         </div>
 
-                        <!-- Bitcoin -->
+                        <!-- Bitcoin (Con YTD habilitado) -->
                         <div id="card-story-btc" class="bg-white/15 backdrop-blur-md p-1.5 px-2 rounded-xl border border-white/10">
                             <span class="text-[7.5px] font-bold text-gray-300 uppercase block tracking-tight">Bitcoin (BTC)</span>
                             <div class="text-[11px] font-black text-white leading-tight" id="story-btc">$81.086</div>
                             <div class="flex justify-between text-[7.5px] font-bold mt-0.5">
                                 <span class="text-rose-300" id="story-btc-sem">Sem: -0,9%</span>
+                                <span class="text-cubo-mint" id="story-btc-ytd">YTD: +25,4%</span>
                             </div>
                         </div>
 
@@ -404,7 +406,7 @@
         </div>
     </div>
 
-    <!-- JavaScript Parser CSV, Personalización e Interfaz con redondeo -->
+    <!-- JavaScript Parser CSV, Personalización e Interfaz con redondeo y YTD para CCL/BTC -->
     <script>
         const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
 
@@ -412,9 +414,9 @@
             mervalArs: { val: "$2.848.945", sem: "+0,7%", ytd: "-6,6%" },
             mervalUsd: { val: "$1.739", sem: "-0,8%", ytd: "-13,2%" },
             sp500:     { val: "$7.663", sem: "+0,1%", ytd: "+12,0%" },
-            btc:       { val: "$81.086", sem: "-0,9%" },
+            btc:       { val: "$81.086", sem: "-0,9%", ytd: "+25,4%" },
             mep:       { val: "$1.554", sem: "+0,7%", ytd: "+4,6%" },
-            ccl:       { val: "$1.638", sem: "+1,1%" },
+            ccl:       { val: "$1.638", sem: "+1,1%", ytd: "+5,0%" },
             riesgo:    { val: "674", sem: "-0,2%", ytd: "+18,0%" }
         };
 
@@ -473,7 +475,6 @@
 
         function redondearValor(str) {
             if (!str) return "";
-            // Intenta limpiar decimales si es un número monetario o porcentaje
             let limpio = str.replace('$', '').replace(/\./g, '').replace(',', '.').trim();
             let num = parseFloat(limpio);
             if (!isNaN(num) && str.includes('$')) {
@@ -518,11 +519,11 @@
                     } else if (nombre.includes("SP500")) {
                         marketData.sp500 = { val: valor, sem, ytd };
                     } else if (nombre.includes("BTC")) {
-                        marketData.btc = { val: valor, sem };
+                        marketData.btc = { val: valor, sem, ytd };
                     } else if (nombre.includes("DÓLAR MEP") || nombre.includes("DOLAR MEP")) {
                         marketData.mep = { val: valor, sem, ytd };
                     } else if (nombre.includes("DÓLAR CCL") || nombre.includes("DOLAR CCL")) {
-                        marketData.ccl = { val: valor, sem };
+                        marketData.ccl = { val: valor, sem, ytd };
                     } else if (nombre.includes("RIESGO")) {
                         marketData.riesgo = { val: valor, sem, ytd };
                     }
@@ -577,9 +578,11 @@
 
             document.getElementById('story-ccl').innerText = marketData.ccl.val;
             document.getElementById('story-ccl-sem').innerText = `Sem: ${marketData.ccl.sem}`;
+            document.getElementById('story-ccl-ytd').innerText = marketData.ccl.ytd ? `YTD: ${marketData.ccl.ytd}` : "";
 
             document.getElementById('story-btc').innerText = marketData.btc.val;
             document.getElementById('story-btc-sem').innerText = `Sem: ${marketData.btc.sem}`;
+            document.getElementById('story-btc-ytd').innerText = marketData.btc.ytd ? `YTD: ${marketData.btc.ytd}` : "";
 
             document.getElementById('story-merval-ars').innerText = marketData.mervalArs.val;
             document.getElementById('story-merval-ars-sem').innerText = `Sem: ${marketData.mervalArs.sem}`;
