@@ -230,12 +230,9 @@
                     <div class="absolute -top-10 -right-10 w-40 h-40 bg-cubo-teal rounded-full blur-2xl opacity-40"></div>
                     <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-cubo-mint rounded-full blur-2xl opacity-20"></div>
 
-                    <!-- Header con solo "Cierre de la semana" -->
-                    <div class="relative z-10 border-b border-gray-700/80 pb-3 flex justify-between items-center">
-                        <span class="bg-cubo-mint text-cubo-navy text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full">
-                            CUBO FINANZAS
-                        </span>
-                        <span class="text-[11px] font-extrabold text-white tracking-wider uppercase">CIERRE DE LA SEMANA</span>
+                    <!-- Header con solo "CIERRE DE LA SEMANA" -->
+                    <div class="relative z-10 border-b border-gray-700/80 pb-3 flex justify-center items-center">
+                        <span class="text-sm font-extrabold text-white tracking-widest uppercase">CIERRE DE LA SEMANA</span>
                     </div>
 
                     <!-- Grid Story 2x2 -->
@@ -289,16 +286,15 @@
                         </div>
                     </div>
 
-                    <!-- Idea Card (Limpiada de título secundario) -->
+                    <!-- Idea Card -->
                     <div class="relative z-10 bg-cubo-teal/60 border border-cubo-mint/30 p-3 rounded-xl text-center">
                         <p class="text-[11px] font-bold leading-snug text-white">
                             "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
                         </p>
                     </div>
 
-                    <!-- Footer con @francombina7 -->
-                    <div class="relative z-10 border-t border-gray-700/80 pt-2 flex justify-between items-center text-[9px] text-gray-400">
-                        <span>cubofinanzas.substack.com</span>
+                    <!-- Footer con @francombina7 al final -->
+                    <div class="relative z-10 border-t border-gray-700/80 pt-2 flex justify-end items-center text-[10px] text-gray-400">
                         <span class="font-bold text-cubo-mint">@francombina7</span>
                     </div>
 
@@ -499,7 +495,7 @@
             const element = document.getElementById('story-infographic');
             html2canvas(element, { scale: 2 }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'Cubo_Finanzas_Cierre.png';
+                link.download = 'Cierre_de_la_semana_francombina7.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
