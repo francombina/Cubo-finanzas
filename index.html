@@ -92,7 +92,7 @@
                 <span class="p-2 bg-cubo-navy text-cubo-mint rounded-lg"><i data-lucide="activity" class="w-5 h-5"></i></span>
                 <div>
                     <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Origen de Datos</p>
-                    <p class="text-xs text-cubo-teal font-medium mt-0.5">Sincronización exacta de porcentajes desde Google Sheets[cite: 4, 5]</p>
+                    <p class="text-xs text-cubo-teal font-medium mt-0.5">Sincronización exacta de porcentajes desde Google Sheets</p>
                 </div>
             </div>
             <span id="badge-estado" class="text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5">
@@ -106,9 +106,9 @@
                 <div>
                     <h2 class="text-xl font-bold text-cubo-navy flex items-center gap-2">
                         <i data-lucide="bar-chart-2" class="w-5 h-5 text-cubo-teal"></i>
-                        Indicadores Principales de Mercado[cite: 5]
+                        Indicadores Principales de Mercado
                     </h2>
-                    <p class="text-sm text-gray-600">Valores y porcentajes sincronizados desde la planilla[cite: 5]</p>
+                    <p class="text-sm text-gray-600">Valores y porcentajes sincronizados desde la planilla</p>
                 </div>
             </div>
 
@@ -202,7 +202,7 @@
                     <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Google Sheets</span>
                 </div>
                 <p class="text-xs text-gray-600 leading-relaxed pt-1">
-                    Lectura directa de celdas respetando signos, porcentajes y comas decimales originales[cite: 4, 5].
+                    Lectura directa de celdas respetando signos, porcentajes y comas decimales originales.
                 </p>
             </div>
 
@@ -210,17 +210,65 @@
 
         <!-- 3. GENERADOR DE INFOGRAFÍA PARA HISTORIAS (9:16) -->
         <section class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-4">
                 <div>
                     <h3 class="text-lg font-bold text-cubo-navy flex items-center gap-2">
                         <i data-lucide="image" class="w-5 h-5 text-cubo-teal"></i>
-                        Infografía para Historias (Instagram / LinkedIn 9:16)
+                        Infografía para Historias (9:16)
                     </h3>
-                    <p class="text-xs text-gray-500">Plantilla vertical con porcentajes sincronizados</p>
+                    <p class="text-xs text-gray-500">Personalizá qué activos mostrar y la frase de la semana antes de exportar</p>
                 </div>
                 <button onclick="descargarInfografia()" class="bg-cubo-navy hover:bg-cubo-teal text-white px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow">
                     <i data-lucide="download" class="w-4 h-4"></i> Descargar Imagen PNG
                 </button>
+            </div>
+
+            <!-- PANEL DE PERSONALIZACIÓN DE LA INFOGRAFÍA -->
+            <div class="bg-cubo-bg p-4 rounded-xl border border-gray-200 space-y-4">
+                <h4 class="text-xs font-extrabold uppercase tracking-wider text-cubo-navy flex items-center gap-1.5">
+                    <i data-lucide="sliders" class="w-4 h-4 text-cubo-teal"></i> Personalizar Contenido de la Imagen
+                </h4>
+
+                <!-- Checkboxes de Selección de Activos -->
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-600 mb-2">Activos a incluir en la grilla principal:</label>
+                    <div class="flex flex-wrap gap-3 text-xs">
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
+                            <input type="checkbox" id="chk-merval-usd" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
+                            <span class="font-semibold text-cubo-navy">Merval USD</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
+                            <input type="checkbox" id="chk-sp500" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
+                            <span class="font-semibold text-cubo-navy">S&P 500</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
+                            <input type="checkbox" id="chk-mep" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
+                            <span class="font-semibold text-cubo-navy">Dólar MEP</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
+                            <input type="checkbox" id="chk-riesgo" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
+                            <span class="font-semibold text-cubo-navy">Riesgo País</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
+                            <input type="checkbox" id="chk-ccl" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
+                            <span class="font-semibold text-cubo-navy">Dólar CCL</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
+                            <input type="checkbox" id="chk-btc" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
+                            <span class="font-semibold text-cubo-navy">Bitcoin (BTC)</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
+                            <input type="checkbox" id="chk-merval-ars" onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
+                            <span class="font-semibold text-cubo-navy">Merval ARS</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Textarea para Frase de la Semana -->
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-600 mb-1">Frase / Idea de la Semana:</label>
+                    <textarea id="input-idea-semana" oninput="actualizarTextoIdea()" rows="2" class="w-full border border-gray-300 p-2 rounded-lg text-xs text-cubo-navy bg-white focus:ring-1 focus:ring-cubo-teal focus:outline-none" placeholder="Escribí acá tu reflexión o síntesis del mercado..."></textarea>
+                </div>
             </div>
 
             <!-- Canvas 9:16 -->
@@ -235,9 +283,10 @@
                         <span class="text-sm font-extrabold text-white tracking-widest uppercase">CIERRE DE LA SEMANA</span>
                     </div>
 
-                    <!-- Grid Story 2x2 -->
-                    <div class="relative z-10 grid grid-cols-2 gap-2 my-auto">
-                        <div class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
+                    <!-- Grid Dinámica de Activos -->
+                    <div id="story-grid-container" class="relative z-10 grid grid-cols-2 gap-2 my-auto">
+                        <!-- Merval USD -->
+                        <div id="card-story-merval-usd" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
                             <span class="text-[9px] font-bold text-gray-300 uppercase block">Merval USD</span>
                             <div class="text-sm font-black text-white" id="story-merval-usd">$1.739,28</div>
                             <div class="flex justify-between text-[8px] font-bold mt-1">
@@ -246,7 +295,8 @@
                             </div>
                         </div>
 
-                        <div class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
+                        <!-- S&P 500 -->
+                        <div id="card-story-sp500" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
                             <span class="text-[9px] font-bold text-gray-300 uppercase block">S&P 500</span>
                             <div class="text-sm font-black text-white" id="story-sp500">$7.663,43</div>
                             <div class="flex justify-between text-[8px] font-bold mt-1">
@@ -255,7 +305,8 @@
                             </div>
                         </div>
 
-                        <div class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
+                        <!-- Dólar MEP -->
+                        <div id="card-story-mep" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
                             <span class="text-[9px] font-bold text-gray-300 uppercase block">Dólar MEP</span>
                             <div class="text-sm font-black text-white" id="story-mep">$1.553,80</div>
                             <div class="flex justify-between text-[8px] font-bold mt-1">
@@ -264,7 +315,8 @@
                             </div>
                         </div>
 
-                        <div class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
+                        <!-- Riesgo País -->
+                        <div id="card-story-riesgo" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
                             <span class="text-[9px] font-bold text-gray-300 uppercase block">Riesgo País</span>
                             <div class="text-sm font-black text-white" id="story-riesgo">674</div>
                             <div class="flex justify-between text-[8px] font-bold mt-1">
@@ -272,28 +324,44 @@
                                 <span class="text-cubo-mint" id="story-riesgo-ytd">YTD: +18,04%</span>
                             </div>
                         </div>
+
+                        <!-- Dólar CCL -->
+                        <div id="card-story-ccl" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
+                            <span class="text-[9px] font-bold text-gray-300 uppercase block">Dólar CCL</span>
+                            <div class="text-sm font-black text-white" id="story-ccl">$1.638,00</div>
+                            <div class="flex justify-between text-[8px] font-bold mt-1">
+                                <span class="text-cubo-mint" id="story-ccl-sem">Sem: +1,08%</span>
+                            </div>
+                        </div>
+
+                        <!-- Bitcoin -->
+                        <div id="card-story-btc" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
+                            <span class="text-[9px] font-bold text-gray-300 uppercase block">Bitcoin (BTC)</span>
+                            <div class="text-sm font-black text-white" id="story-btc">$81.085,87</div>
+                            <div class="flex justify-between text-[8px] font-bold mt-1">
+                                <span class="text-rose-300" id="story-btc-sem">Sem: -0,94%</span>
+                            </div>
+                        </div>
+
+                        <!-- Merval ARS -->
+                        <div id="card-story-merval-ars" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10 hidden">
+                            <span class="text-[9px] font-bold text-gray-300 uppercase block">Merval ARS</span>
+                            <div class="text-sm font-black text-white" id="story-merval-ars">$2.848.945</div>
+                            <div class="flex justify-between text-[8px] font-bold mt-1">
+                                <span class="text-cubo-mint" id="story-merval-ars-sem">Sem: +0,74%</span>
+                                <span class="text-rose-300" id="story-merval-ars-ytd">YTD: -6,64%</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Extra Info Story -->
-                    <div class="relative z-10 bg-white/10 border border-white/10 p-2.5 rounded-xl flex justify-between items-center text-[10px]">
-                        <div>
-                            <span class="text-gray-300 block font-bold">Dólar CCL</span>
-                            <span class="font-black text-white" id="story-ccl">$1.638,00</span>
-                        </div>
-                        <div>
-                            <span class="text-gray-300 block font-bold">Bitcoin (BTC)</span>
-                            <span class="font-black text-white" id="story-btc">$81.085,87</span>
-                        </div>
-                    </div>
-
-                    <!-- Idea Card -->
+                    <!-- Idea Card Dinámica -->
                     <div class="relative z-10 bg-cubo-teal/60 border border-cubo-mint/30 p-3 rounded-xl text-center">
-                        <p class="text-[11px] font-bold leading-snug text-white">
+                        <p id="story-idea-text" class="text-[11px] font-bold leading-snug text-white">
                             "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
                         </p>
                     </div>
 
-                    <!-- Footer con @francombina7 al final -->
+                    <!-- Footer con @francombina7 -->
                     <div class="relative z-10 border-t border-gray-700/80 pt-2 flex justify-end items-center text-[10px] text-gray-400">
                         <span class="font-bold text-cubo-mint">@francombina7</span>
                     </div>
@@ -336,7 +404,7 @@
         </div>
     </div>
 
-    <!-- JavaScript Parser CSV y Sincronización -->
+    <!-- JavaScript Parser CSV, Personalización e Interfaz -->
     <script>
         const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
 
@@ -353,6 +421,13 @@
         document.addEventListener("DOMContentLoaded", () => {
             try { if (window.lucide) lucide.createIcons(); } catch (e) {}
             cargarSheetURLGuardada();
+            
+            // Cargar frase inicial en textarea
+            const ideaElem = document.getElementById('story-idea-text');
+            if (ideaElem) {
+                document.getElementById('input-idea-semana').value = ideaElem.innerText.replace(/^"|"$/g, '');
+            }
+
             sincronizarConSheet();
         });
 
@@ -488,7 +563,43 @@
             document.getElementById('story-riesgo-ytd').innerText = `YTD: ${marketData.riesgo.ytd}`;
 
             document.getElementById('story-ccl').innerText = marketData.ccl.val;
+            document.getElementById('story-ccl-sem').innerText = `Sem: ${marketData.ccl.sem}`;
+
             document.getElementById('story-btc').innerText = marketData.btc.val;
+            document.getElementById('story-btc-sem').innerText = `Sem: ${marketData.btc.sem}`;
+
+            document.getElementById('story-merval-ars').innerText = marketData.mervalArs.val;
+            document.getElementById('story-merval-ars-sem').innerText = `Sem: ${marketData.mervalArs.sem}`;
+            document.getElementById('story-merval-ars-ytd').innerText = `YTD: ${marketData.mervalArs.ytd}`;
+        }
+
+        // Lógica de Ocultar / Mostrar Activos en la Infografía
+        function actualizarVisibilidadActivos() {
+            const mappings = [
+                { chk: 'chk-merval-usd', card: 'card-story-merval-usd' },
+                { chk: 'chk-sp500',      card: 'card-story-sp500' },
+                { chk: 'chk-mep',        card: 'card-story-mep' },
+                { chk: 'chk-riesgo',     card: 'card-story-riesgo' },
+                { chk: 'chk-ccl',        card: 'card-story-ccl' },
+                { chk: 'chk-btc',        card: 'card-story-btc' },
+                { chk: 'chk-merval-ars', card: 'card-story-merval-ars' }
+            ];
+
+            mappings.forEach(m => {
+                const isChecked = document.getElementById(m.chk).checked;
+                const card = document.getElementById(m.card);
+                if (isChecked) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Lógica de Edición del Texto de la Idea
+        function actualizarTextoIdea() {
+            const val = document.getElementById('input-idea-semana').value;
+            document.getElementById('story-idea-text').innerText = `"${val}"`;
         }
 
         function descargarInfografia() {
