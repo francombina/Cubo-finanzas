@@ -543,7 +543,6 @@
             riesgo:    { val: "674", sem: "-0,1%", ytd: "+18,0%" }
         };
 
-        // Datos estáticos de respaldo iniciales basados en tu captura (por si CORS bloquea el fetch local sin servidor web)
         let fallbackGanadores = [
             { ticker: "SPOT", empresa: "Spotify Technology S.A.", var: "+10,03%" },
             { ticker: "UNH", empresa: "UnitedHealth Group Incorporated", var: "+5,87%" },
@@ -553,11 +552,11 @@
         ];
 
         let fallbackPerdedores = [
-            { ticker: "AVGO", empresa: "Broadcom Inc.", var: "-1,68%" },
-            { ticker: "MSFT", empresa: "Microsoft Corporation", var: "-1,51%" },
-            { ticker: "JPM", empresa: "JP Morgan Chase & Co.", var: "-0,94%" },
-            { ticker: "NVDA", empresa: "NVIDIA Corporation", var: "-0,90%" },
-            { ticker: "XOM", empresa: "ExxonMobil Holdings Corporation", var: "-0,42%" }
+            { ticker: "META", empresa: "Meta Platforms, Inc.", var: "-8,53%" },
+            { ticker: "NFLX", empresa: "Netflix, Inc.", var: "-4,93%" },
+            { ticker: "GOOGL", empresa: "Alphabet Inc.", var: "-4,81%" },
+            { ticker: "AMD", empresa: "Advanced Micro Devices, Inc.", var: "-3,94%" },
+            { ticker: "AVGO", empresa: "Broadcom Inc.", var: "-1,68%" }
         ];
 
         document.addEventListener("DOMContentLoaded", () => {
