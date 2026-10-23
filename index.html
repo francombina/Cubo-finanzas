@@ -78,7 +78,7 @@
                     <span class="p-2 bg-cubo-dark text-cubo-cyan rounded-xl border border-white/10"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></span>
                     <div>
                         <h3 class="font-extrabold text-lg text-white">Configuración de Planillas (CSV)</h3>
-                        <p class="text-xs text-gray-400">Ingresá los enlaces publicados de cada solapa.</p>
+                        <p class="text-xs text-gray-400">Enlaces de solapas configurados y listos.</p>
                     </div>
                 </div>
                 <button onclick="toggleConfigPanel()" class="text-gray-400 hover:text-white font-bold text-sm">✕ Cerrar</button>
@@ -91,11 +91,11 @@
                 </div>
                 <div>
                     <label class="block font-bold text-gray-300 text-xs mb-1">URL Hoja "Subas_EEUU" (Ganadores)</label>
-                    <input type="text" id="cfg-subas-url" class="w-full border border-white/10 p-2.5 rounded-xl text-xs bg-cubo-dark text-cubo-cyan focus:outline-none focus:border-cubo-cyan" placeholder="Opcional: URL CSV de Subas_EEUU">
+                    <input type="text" id="cfg-subas-url" class="w-full border border-white/10 p-2.5 rounded-xl text-xs bg-cubo-dark text-cubo-cyan focus:outline-none focus:border-cubo-cyan">
                 </div>
                 <div>
                     <label class="block font-bold text-gray-300 text-xs mb-1">URL Hoja "Bajas_EEUU" (Perdedores)</label>
-                    <input type="text" id="cfg-bajas-url" class="w-full border border-white/10 p-2.5 rounded-xl text-xs bg-cubo-dark text-cubo-cyan focus:outline-none focus:border-cubo-cyan" placeholder="Opcional: URL CSV de Bajas_EEUU">
+                    <input type="text" id="cfg-bajas-url" class="w-full border border-white/10 p-2.5 rounded-xl text-xs bg-cubo-dark text-cubo-cyan focus:outline-none focus:border-cubo-cyan">
                 </div>
             </div>
 
@@ -497,6 +497,8 @@
     <!-- JavaScript Parser CSV, Personalización e Interfaz -->
     <script>
         const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
+        const DEFAULT_SUBAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=454584979";
+        const DEFAULT_BAJAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=205860665";
 
         let marketData = {
             mervalArs: { val: "$2.848.945", sem: "+0,7%", ytd: "-6,6%" },
@@ -526,8 +528,8 @@
 
         function cargarSheetURLsGuardadas() {
             const savedUrl = localStorage.getItem('cubo_sheet_csv_url') || DEFAULT_SHEET_URL;
-            const savedSubas = localStorage.getItem('cubo_subas_csv_url') || "";
-            const savedBajas = localStorage.getItem('cubo_bajas_csv_url') || "";
+            const savedSubas = localStorage.getItem('cubo_subas_csv_url') || DEFAULT_SUBAS_URL;
+            const savedBajas = localStorage.getItem('cubo_bajas_csv_url') || DEFAULT_BAJAS_URL;
 
             document.getElementById('cfg-sheet-url').value = savedUrl;
             document.getElementById('cfg-subas-url').value = savedSubas;
@@ -540,11 +542,11 @@
             localStorage.setItem('cubo_sheet_csv_url', url);
 
             let subasUrl = document.getElementById('cfg-subas-url').value.trim();
-            if (subasUrl.includes("/pubhtml")) subasUrl = subasUrl.replace("/pubhtml", "/pub?output=csv");
+            if (subasUrl.includes("/edit")) subasUrl = subasUrl.replace(/\/edit.*$/, '/export?format=csv');
             localStorage.setItem('cubo_subas_csv_url', subasUrl);
 
             let bajasUrl = document.getElementById('cfg-bajas-url').value.trim();
-            if (bajasUrl.includes("/pubhtml")) bajasUrl = bajasUrl.replace("/pubhtml", "/pub?output=csv");
+            if (bajasUrl.includes("/edit")) bajasUrl = bajasUrl.replace(/\/edit.*$/, '/export?format=csv');
             localStorage.setItem('cubo_bajas_csv_url', bajasUrl);
 
             toggleConfigPanel();
@@ -555,8 +557,8 @@
             let url = localStorage.getItem('cubo_sheet_csv_url') || DEFAULT_SHEET_URL;
             if (url.includes("/pubhtml")) url = url.replace("/pubhtml", "/pub?output=csv");
 
-            let subasUrl = localStorage.getItem('cubo_subas_csv_url') || "";
-            let bajasUrl = localStorage.getItem('cubo_bajas_csv_url') || "";
+            let subasUrl = localStorage.getItem('cubo_subas_csv_url') || DEFAULT_SUBAS_URL;
+            let bajasUrl = localStorage.getItem('cubo_bajas_csv_url') || DEFAULT_BAJAS_URL;
 
             const badge = document.getElementById('badge-estado');
             badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> Sincronizando hojas...`;
@@ -575,8 +577,6 @@
                         let textSubas = await resSubas.text();
                         parsearTop5(textSubas, 'lista-ganadores');
                     } catch (e) { console.error("Error cargando Subas:", e); }
-                } else {
-                    document.getElementById('lista-ganadores').innerHTML = `<li class="text-gray-500">Configurar URL Subas</li>`;
                 }
 
                 // 3. Sincronizar Bajas EEUU (Top 5 Perdedores)
@@ -586,8 +586,6 @@
                         let textBajas = await resBajas.text();
                         parsearTop5(textBajas, 'lista-perdedores');
                     } catch (e) { console.error("Error cargando Bajas:", e); }
-                } else {
-                    document.getElementById('lista-perdedores').innerHTML = `<li class="text-gray-500">Configurar URL Bajas</li>`;
                 }
 
                 badge.className = "text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-500/20 flex items-center gap-1.5";
@@ -686,9 +684,12 @@
 
                 if (cols.length >= 4) {
                     let ticker = cols[0];
-                    let varSem = cols[3]; // Variación Semanal
-                    html += `<li class="flex justify-between items-center"><span class="font-bold text-white">${ticker}</span> <span class="font-mono">${varSem}</span></li>`;
-                    count++;
+                    let varSem = cols[3]; // Columna D: Variación Semanal
+                    if (ticker) {
+                        let colorClass = elementId === 'lista-ganadores' ? 'text-emerald-400' : 'text-rose-400';
+                        html += `<li class="flex justify-between items-center py-0.5 border-b border-white/5"><span class="font-bold text-white">${ticker}</span> <span class="font-mono ${colorClass}">${varSem}</span></li>`;
+                        count++;
+                    }
                 }
             }
 
