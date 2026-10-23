@@ -271,114 +271,114 @@
                 </div>
             </div>
 
-            <!-- Canvas 9:16 (Título en 1 línea, número abajo, y variaciones a la derecha en líneas separadas) -->
+            <!-- Canvas 9:16 (Tarjetas más anchas/altas, título arriba centrado, valor a la izquierda, variaciones a la derecha apiladas) -->
             <div class="flex justify-center bg-gray-100 p-6 rounded-xl border overflow-x-auto">
-                <div id="story-infographic" class="w-[360px] h-[460px] bg-cubo-navy text-white p-3.5 rounded-2xl flex flex-col justify-between shadow-2xl relative overflow-hidden">
+                <div id="story-infographic" class="w-[360px] h-[500px] bg-cubo-navy text-white p-4 rounded-2xl flex flex-col justify-between shadow-2xl relative overflow-hidden">
                     
                     <div class="absolute -top-10 -right-10 w-40 h-40 bg-cubo-teal rounded-full blur-2xl opacity-40"></div>
                     <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-cubo-mint rounded-full blur-2xl opacity-20"></div>
 
                     <!-- Header con solo "CIERRE DE LA SEMANA" -->
-                    <div class="relative z-10 border-b border-gray-700/80 pb-1.5 flex justify-center items-center">
-                        <span class="text-[11px] font-extrabold text-white tracking-widest uppercase">CIERRE DE LA SEMANA</span>
+                    <div class="relative z-10 border-b border-gray-700/80 pb-2 flex justify-center items-center">
+                        <span class="text-xs font-extrabold text-white tracking-widest uppercase">CIERRE DE LA SEMANA</span>
                     </div>
 
-                    <!-- Grid Dinámica de Activos -->
-                    <div id="story-grid-container" class="relative z-10 grid grid-cols-2 gap-2 my-auto">
+                    <!-- Grid Dinámica de Activos con Tarjetas Ampliadas -->
+                    <div id="story-grid-container" class="relative z-10 grid grid-cols-2 gap-2.5 my-auto">
                         <!-- Merval USD -->
-                        <div id="card-story-merval-usd" class="bg-white/15 backdrop-blur-md p-2 rounded-xl border border-white/10 flex justify-between items-center">
-                            <div class="overflow-hidden pr-1">
-                                <span class="text-[7.5px] font-bold text-gray-300 uppercase block whitespace-nowrap tracking-tight">MERVAL USD</span>
-                                <div class="text-[12px] font-black text-white leading-none mt-1" id="story-merval-usd">$1.739</div>
-                            </div>
-                            <div class="text-right text-[8px] font-bold leading-tight space-y-0.5 shrink-0">
-                                <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-rose-300" id="story-merval-sem">-0,8%</span></div>
-                                <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-rose-300" id="story-merval-ytd">-13,2%</span></div>
+                        <div id="card-story-merval-usd" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between">
+                            <span class="text-[8px] font-bold text-gray-300 uppercase text-center block tracking-widest w-full">MERVAL USD</span>
+                            <div class="flex justify-between items-end mt-1">
+                                <div class="text-[13px] font-black text-white leading-none" id="story-merval-usd">$1.739</div>
+                                <div class="text-right text-[8.5px] font-bold leading-tight space-y-1">
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-rose-300" id="story-merval-sem">-0,8%</span></div>
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-rose-300" id="story-merval-ytd">-13,2%</span></div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- S&P 500 -->
-                        <div id="card-story-sp500" class="bg-white/15 backdrop-blur-md p-2 rounded-xl border border-white/10 flex justify-between items-center">
-                            <div class="overflow-hidden pr-1">
-                                <span class="text-[7.5px] font-bold text-gray-300 uppercase block whitespace-nowrap tracking-tight">S&P 500</span>
-                                <div class="text-[12px] font-black text-white leading-none mt-1" id="story-sp500">$7.663</div>
-                            </div>
-                            <div class="text-right text-[8px] font-bold leading-tight space-y-0.5 shrink-0">
-                                <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-sp500-sem">+0,1%</span></div>
-                                <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-sp500-ytd">+12,0%</span></div>
+                        <div id="card-story-sp500" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between">
+                            <span class="text-[8px] font-bold text-gray-300 uppercase text-center block tracking-widest w-full">S&P 500</span>
+                            <div class="flex justify-between items-end mt-1">
+                                <div class="text-[13px] font-black text-white leading-none" id="story-sp500">$7.663</div>
+                                <div class="text-right text-[8.5px] font-bold leading-tight space-y-1">
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-sp500-sem">+0,1%</span></div>
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-sp500-ytd">+12,0%</span></div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Dólar MEP -->
-                        <div id="card-story-mep" class="bg-white/15 backdrop-blur-md p-2 rounded-xl border border-white/10 flex justify-between items-center">
-                            <div class="overflow-hidden pr-1">
-                                <span class="text-[7.5px] font-bold text-gray-300 uppercase block whitespace-nowrap tracking-tight">DÓLAR MEP</span>
-                                <div class="text-[12px] font-black text-white leading-none mt-1" id="story-mep">$1.554</div>
-                            </div>
-                            <div class="text-right text-[8px] font-bold leading-tight space-y-0.5 shrink-0">
-                                <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-mep-sem">+0,7%</span></div>
-                                <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-mep-ytd">+4,6%</span></div>
+                        <div id="card-story-mep" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between">
+                            <span class="text-[8px] font-bold text-gray-300 uppercase text-center block tracking-widest w-full">DÓLAR MEP</span>
+                            <div class="flex justify-between items-end mt-1">
+                                <div class="text-[13px] font-black text-white leading-none" id="story-mep">$1.554</div>
+                                <div class="text-right text-[8.5px] font-bold leading-tight space-y-1">
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-mep-sem">+0,7%</span></div>
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-mep-ytd">+4,6%</span></div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Riesgo País -->
-                        <div id="card-story-riesgo" class="bg-white/15 backdrop-blur-md p-2 rounded-xl border border-white/10 flex justify-between items-center">
-                            <div class="overflow-hidden pr-1">
-                                <span class="text-[7.5px] font-bold text-gray-300 uppercase block whitespace-nowrap tracking-tight">RIESGO PAÍS</span>
-                                <div class="text-[12px] font-black text-white leading-none mt-1" id="story-riesgo">674</div>
-                            </div>
-                            <div class="text-right text-[8px] font-bold leading-tight space-y-0.5 shrink-0">
-                                <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-rose-300" id="story-riesgo-sem">-0,2%</span></div>
-                                <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-riesgo-ytd">+18,0%</span></div>
+                        <div id="card-story-riesgo" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between">
+                            <span class="text-[8px] font-bold text-gray-300 uppercase text-center block tracking-widest w-full">RIESGO PAÍS</span>
+                            <div class="flex justify-between items-end mt-1">
+                                <div class="text-[13px] font-black text-white leading-none" id="story-riesgo">674</div>
+                                <div class="text-right text-[8.5px] font-bold leading-tight space-y-1">
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-rose-300" id="story-riesgo-sem">-0,2%</span></div>
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-riesgo-ytd">+18,0%</span></div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Dólar CCL -->
-                        <div id="card-story-ccl" class="bg-white/15 backdrop-blur-md p-2 rounded-xl border border-white/10 flex justify-between items-center">
-                            <div class="overflow-hidden pr-1">
-                                <span class="text-[7.5px] font-bold text-gray-300 uppercase block whitespace-nowrap tracking-tight">DÓLAR CCL</span>
-                                <div class="text-[12px] font-black text-white leading-none mt-1" id="story-ccl">$1.638</div>
-                            </div>
-                            <div class="text-right text-[8px] font-bold leading-tight space-y-0.5 shrink-0">
-                                <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-ccl-sem">+1,1%</span></div>
-                                <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-ccl-ytd">+5,0%</span></div>
+                        <div id="card-story-ccl" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between">
+                            <span class="text-[8px] font-bold text-gray-300 uppercase text-center block tracking-widest w-full">DÓLAR CCL</span>
+                            <div class="flex justify-between items-end mt-1">
+                                <div class="text-[13px] font-black text-white leading-none" id="story-ccl">$1.638</div>
+                                <div class="text-right text-[8.5px] font-bold leading-tight space-y-1">
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-ccl-sem">+1,1%</span></div>
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-ccl-ytd">+5,0%</span></div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Bitcoin (BTC) -->
-                        <div id="card-story-btc" class="bg-white/15 backdrop-blur-md p-2 rounded-xl border border-white/10 flex justify-between items-center">
-                            <div class="overflow-hidden pr-1">
-                                <span class="text-[7.5px] font-bold text-gray-300 uppercase block whitespace-nowrap tracking-tight">BITCOIN (BTC)</span>
-                                <div class="text-[12px] font-black text-white leading-none mt-1" id="story-btc">$81.086</div>
-                            </div>
-                            <div class="text-right text-[8px] font-bold leading-tight space-y-0.5 shrink-0">
-                                <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-rose-300" id="story-btc-sem">-0,9%</span></div>
-                                <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-rose-300" id="story-btc-ytd">-8,6%</span></div>
+                        <div id="card-story-btc" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between">
+                            <span class="text-[8px] font-bold text-gray-300 uppercase text-center block tracking-widest w-full">BITCOIN (BTC)</span>
+                            <div class="flex justify-between items-end mt-1">
+                                <div class="text-[13px] font-black text-white leading-none" id="story-btc">$81.086</div>
+                                <div class="text-right text-[8.5px] font-bold leading-tight space-y-1">
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-rose-300" id="story-btc-sem">-0,9%</span></div>
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-rose-300" id="story-btc-ytd">-8,6%</span></div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Merval ARS -->
-                        <div id="card-story-merval-ars" class="bg-white/15 backdrop-blur-md p-2 rounded-xl border border-white/10 flex justify-between items-center hidden">
-                            <div class="overflow-hidden pr-1">
-                                <span class="text-[7.5px] font-bold text-gray-300 uppercase block whitespace-nowrap tracking-tight">MERVAL ARS</span>
-                                <div class="text-[12px] font-black text-white leading-none mt-1" id="story-merval-ars">$2.848.945</div>
-                            </div>
-                            <div class="text-right text-[8px] font-bold leading-tight space-y-0.5 shrink-0">
-                                <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-merval-ars-sem">+0,7%</span></div>
-                                <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-rose-300" id="story-merval-ars-ytd">-6,6%</span></div>
+                        <div id="card-story-merval-ars" class="bg-white/15 backdrop-blur-md p-2.5 rounded-xl border border-white/10 flex flex-col justify-between hidden">
+                            <span class="text-[8px] font-bold text-gray-300 uppercase text-center block tracking-widest w-full">MERVAL ARS</span>
+                            <div class="flex justify-between items-end mt-1">
+                                <div class="text-[13px] font-black text-white leading-none" id="story-merval-ars">$2.848.945</div>
+                                <div class="text-right text-[8.5px] font-bold leading-tight space-y-1">
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-merval-ars-sem">+0,7%</span></div>
+                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-rose-300" id="story-merval-ars-ytd">-6,6%</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Idea Card Dinámica -->
-                    <div class="relative z-10 bg-cubo-teal/60 border border-cubo-mint/30 p-2 rounded-xl text-center">
+                    <div class="relative z-10 bg-cubo-teal/60 border border-cubo-mint/30 p-2.5 rounded-xl text-center">
                         <p id="story-idea-text" class="text-[10px] font-bold leading-tight text-white">
                             "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
                         </p>
                     </div>
 
                     <!-- Footer con @francombina7 -->
-                    <div class="relative z-10 border-t border-gray-700/80 pt-1 flex justify-end items-center text-[9px] text-gray-400">
+                    <div class="relative z-10 border-t border-gray-700/80 pt-1.5 flex justify-end items-center text-[9px] text-gray-400">
                         <span class="font-bold text-cubo-mint">@francombina7</span>
                     </div>
 
