@@ -333,139 +333,78 @@
                 </div>
             </div>
 
-            <!-- TARJETA COMPACTA DE 480px -->
+            <!-- TARJETA COMPACTA DE 480px (CON TOP GANADORES Y PERDEDORES INCLUIDOS) -->
             <div class="flex justify-center bg-black/40 p-2 sm:p-4 rounded-2xl border border-white/10 overflow-x-auto">
-                <div id="story-infographic" class="w-[320px] h-[480px] bg-[#091026] text-white p-3.5 rounded-3xl flex flex-col justify-between shadow-2xl relative overflow-hidden border border-white/15 my-auto">
+                <div id="story-infographic" class="w-[320px] h-[480px] bg-[#091026] text-white p-3 rounded-3xl flex flex-col justify-between shadow-2xl relative overflow-hidden border border-white/15 my-auto">
                     
                     <!-- Glow Accents -->
                     <div class="absolute -top-12 -right-12 w-36 h-36 bg-cubo-cyan/20 rounded-full blur-2xl pointer-events-none"></div>
                     <div class="absolute -bottom-12 -left-12 w-36 h-36 bg-cubo-accent/20 rounded-full blur-2xl pointer-events-none"></div>
 
                     <!-- Header con Etiqueta Cierre Semanal -->
-                    <div class="relative z-10 border-b border-white/10 pb-2 flex justify-center items-center">
-                        <span class="text-[9px] font-mono font-bold text-cubo-cyan bg-cubo-cyan/10 border border-cubo-cyan/30 px-3 py-0.5 rounded-full uppercase tracking-wider">
+                    <div class="relative z-10 border-b border-white/10 pb-1.5 flex justify-between items-center">
+                        <span class="text-[8.5px] font-mono font-bold text-cubo-cyan bg-cubo-cyan/10 border border-cubo-cyan/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
                             CIERRE SEMANAL
                         </span>
+                        <span class="text-[8.5px] font-mono text-gray-400">EEUU Top 3</span>
                     </div>
 
-                    <!-- Grilla Dinámica Compacta -->
-                    <div id="story-grid-container" class="relative z-10 grid grid-cols-2 gap-2 my-auto">
+                    <!-- Contenido Story: Grilla compacta + Top 3 Ganadores/Perdedores -->
+                    <div class="relative z-10 space-y-2 my-auto">
                         
-                        <!-- Merval USD -->
-                        <div id="card-story-merval-usd" class="bg-white/[0.04] backdrop-blur-md p-2 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <div class="flex justify-between items-center mb-0.5">
-                                <span class="text-[8px] font-bold text-gray-400 font-mono tracking-wider uppercase">MERVAL USD</span>
-                                <i data-lucide="trending-up" class="w-2.5 h-2.5 text-cubo-cyan"></i>
+                        <!-- Mini Métricas Principales (2x2 para dejar espacio al Top) -->
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <!-- Merval USD -->
+                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-merval">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[7.5px] font-bold text-gray-400 font-mono">MERVAL USD</span>
+                                    <span class="text-[8px] font-extrabold font-mono text-white" id="story-merval-usd">$1.739</span>
+                                </div>
+                                <span class="text-[7px] text-rose-400 font-mono font-bold" id="story-merval-sem">Sem: -0,8%</span>
                             </div>
-                            <div class="text-sm font-extrabold font-mono text-white mb-1 leading-none" id="story-merval-usd">$1.739</div>
-                            <div class="grid grid-cols-2 gap-1 text-[7.5px] font-mono font-bold">
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 py-0.5 rounded text-center leading-tight">
-                                    Sem: <strong id="story-merval-sem">-0,8%</strong>
+
+                            <!-- S&P 500 -->
+                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-sp500">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[7.5px] font-bold text-gray-400 font-mono">S&P 500</span>
+                                    <span class="text-[8px] font-extrabold font-mono text-white" id="story-sp500">$7.663</span>
                                 </div>
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 py-0.5 rounded text-center leading-tight">
-                                    YTD: <strong id="story-merval-ytd">-13,2%</strong>
+                                <span class="text-[7px] text-emerald-400 font-mono font-bold" id="story-sp500-sem">Sem: +0,1%</span>
+                            </div>
+
+                            <!-- Dólar MEP -->
+                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-mep">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[7.5px] font-bold text-gray-400 font-mono">DÓLAR MEP</span>
+                                    <span class="text-[8px] font-extrabold font-mono text-white" id="story-mep">$1.554</span>
                                 </div>
+                                <span class="text-[7px] text-emerald-400 font-mono font-bold" id="story-mep-sem">Sem: +0,7%</span>
+                            </div>
+
+                            <!-- Riesgo País -->
+                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-riesgo">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[7.5px] font-bold text-gray-400 font-mono">RIESGO PAÍS</span>
+                                    <span class="text-[8px] font-extrabold font-mono text-white" id="story-riesgo">674</span>
+                                </div>
+                                <span class="text-[7px] text-rose-400 font-mono font-bold" id="story-riesgo-sem">Sem: -0,1%</span>
                             </div>
                         </div>
 
-                        <!-- S&P 500 -->
-                        <div id="card-story-sp500" class="bg-white/[0.04] backdrop-blur-md p-2 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <div class="flex justify-between items-center mb-0.5">
-                                <span class="text-[8px] font-bold text-gray-400 font-mono tracking-wider uppercase">S&P 500</span>
-                                <i data-lucide="bar-chart-2" class="w-2.5 h-2.5 text-cubo-cyan"></i>
-                            </div>
-                            <div class="text-sm font-extrabold font-mono text-white mb-1 leading-none" id="story-sp500">$7.663</div>
-                            <div class="grid grid-cols-2 gap-1 text-[7.5px] font-mono font-bold">
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 py-0.5 rounded text-center leading-tight">
-                                    Sem: <strong id="story-sp500-sem">+0,1%</strong>
-                                </div>
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 py-0.5 rounded text-center leading-tight">
-                                    YTD: <strong id="story-sp500-ytd">+11,9%</strong>
+                        <!-- Mini Tablas Top 3 Ganadores y Perdedores en Story -->
+                        <div class="grid grid-cols-2 gap-1.5 pt-0.5 font-mono">
+                            <!-- Ganadores Story -->
+                            <div class="bg-white/[0.03] border border-emerald-500/20 p-1.5 rounded-lg">
+                                <p class="text-[7.5px] font-bold text-emerald-400 mb-1 flex items-center gap-1">🟢 Top 3 Subas</p>
+                                <div id="story-ganadores" class="space-y-0.5 text-[7px] text-gray-300">
+                                    <!-- Dinámico -->
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Dólar MEP -->
-                        <div id="card-story-mep" class="bg-white/[0.04] backdrop-blur-md p-2 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <div class="flex justify-between items-center mb-0.5">
-                                <span class="text-[8px] font-bold text-gray-400 font-mono tracking-wider uppercase">DÓLAR MEP</span>
-                                <i data-lucide="dollar-sign" class="w-2.5 h-2.5 text-cubo-cyan"></i>
-                            </div>
-                            <div class="text-sm font-extrabold font-mono text-white mb-1 leading-none" id="story-mep">$1.554</div>
-                            <div class="grid grid-cols-2 gap-1 text-[7.5px] font-mono font-bold">
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 py-0.5 rounded text-center leading-tight">
-                                    Sem: <strong id="story-mep-sem">+0,7%</strong>
-                                </div>
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 py-0.5 rounded text-center leading-tight">
-                                    YTD: <strong id="story-mep-ytd">+4,6%</strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Riesgo País -->
-                        <div id="card-story-riesgo" class="bg-white/[0.04] backdrop-blur-md p-2 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <div class="flex justify-between items-center mb-0.5">
-                                <span class="text-[8px] font-bold text-gray-400 font-mono tracking-wider uppercase">RIESGO PAÍS</span>
-                                <i data-lucide="shield-alert" class="w-2.5 h-2.5 text-cubo-cyan"></i>
-                            </div>
-                            <div class="text-sm font-extrabold font-mono text-white mb-1 leading-none" id="story-riesgo">674</div>
-                            <div class="grid grid-cols-2 gap-1 text-[7.5px] font-mono font-bold">
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 py-0.5 rounded text-center leading-tight">
-                                    Sem: <strong id="story-riesgo-sem">-0,1%</strong>
-                                </div>
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 py-0.5 rounded text-center leading-tight">
-                                    YTD: <strong id="story-riesgo-ytd">+18,0%</strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Dólar CCL -->
-                        <div id="card-story-ccl" class="bg-white/[0.04] backdrop-blur-md p-2 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <div class="flex justify-between items-center mb-0.5">
-                                <span class="text-[8px] font-bold text-gray-400 font-mono tracking-wider uppercase">DÓLAR CCL</span>
-                                <i data-lucide="coins" class="w-2.5 h-2.5 text-cubo-cyan"></i>
-                            </div>
-                            <div class="text-sm font-extrabold font-mono text-white mb-1 leading-none" id="story-ccl">$1.638</div>
-                            <div class="grid grid-cols-2 gap-1 text-[7.5px] font-mono font-bold">
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 py-0.5 rounded text-center leading-tight">
-                                    Sem: <strong id="story-ccl-sem">+1,1%</strong>
-                                </div>
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 py-0.5 rounded text-center leading-tight">
-                                    YTD: <strong id="story-ccl-ytd">+7,5%</strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bitcoin (BTC) -->
-                        <div id="card-story-btc" class="bg-white/[0.04] backdrop-blur-md p-2 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <div class="flex justify-between items-center mb-0.5">
-                                <span class="text-[8px] font-bold text-gray-400 font-mono tracking-wider uppercase">BITCOIN (BTC)</span>
-                                <i data-lucide="bitcoin" class="w-2.5 h-2.5 text-cubo-cyan"></i>
-                            </div>
-                            <div class="text-sm font-extrabold font-mono text-white mb-1 leading-none" id="story-btc">$81.086</div>
-                            <div class="grid grid-cols-2 gap-1 text-[7.5px] font-mono font-bold">
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 py-0.5 rounded text-center leading-tight">
-                                    Sem: <strong id="story-btc-sem">-0,9%</strong>
-                                </div>
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 py-0.5 rounded text-center leading-tight">
-                                    YTD: <strong id="story-btc-ytd">-8,6%</strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Merval ARS -->
-                        <div id="card-story-merval-ars" class="bg-white/[0.04] backdrop-blur-md p-2 rounded-xl border border-white/10 flex flex-col justify-between hidden">
-                            <div class="flex justify-between items-center mb-0.5">
-                                <span class="text-[8px] font-bold text-gray-400 font-mono tracking-wider uppercase">MERVAL ARS</span>
-                                <i data-lucide="activity" class="w-2.5 h-2.5 text-cubo-cyan"></i>
-                            </div>
-                            <div class="text-xs font-extrabold font-mono text-white mb-1 leading-none" id="story-merval-ars">$2.848.945</div>
-                            <div class="grid grid-cols-2 gap-1 text-[7.5px] font-mono font-bold">
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 py-0.5 rounded text-center leading-tight">
-                                    Sem: <strong id="story-merval-ars-sem">+0,7%</strong>
-                                </div>
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 py-0.5 rounded text-center leading-tight">
-                                    YTD: <strong id="story-merval-ars-ytd">-6,6%</strong>
+                            <!-- Perdedores Story -->
+                            <div class="bg-white/[0.03] border border-rose-500/20 p-1.5 rounded-lg">
+                                <p class="text-[7.5px] font-bold text-rose-400 mb-1 flex items-center gap-1">🔴 Top 3 Bajas</p>
+                                <div id="story-perdedores" class="space-y-0.5 text-[7px] text-gray-300">
+                                    <!-- Dinámico -->
                                 </div>
                             </div>
                         </div>
@@ -473,15 +412,14 @@
                     </div>
 
                     <!-- Idea Card Dinámica Compacta -->
-                    <div class="relative z-10 bg-white/[0.03] backdrop-blur-md border border-white/10 p-2 rounded-xl text-center space-y-0.5">
-                        <i data-lucide="quote" class="w-2.5 h-2.5 text-cubo-cyan/60 mx-auto"></i>
-                        <p id="story-idea-text" class="text-[9.5px] font-medium leading-tight text-gray-200 italic">
+                    <div class="relative z-10 bg-white/[0.03] backdrop-blur-md border border-white/10 p-1.5 rounded-xl text-center space-y-0.5">
+                        <p id="story-idea-text" class="text-[9px] font-medium leading-tight text-gray-200 italic">
                             "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
                         </p>
                     </div>
 
                     <!-- Footer -->
-                    <div class="relative z-10 border-t border-white/10 pt-1.5 flex justify-between items-center text-[8.5px] text-gray-400 font-mono">
+                    <div class="relative z-10 border-t border-white/10 pt-1.5 flex justify-between items-center text-[8px] text-gray-400 font-mono">
                         <span class="text-gray-500">mercado & finanzas</span>
                         <div class="flex items-center gap-1 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full text-cubo-cyan font-bold">
                             <i data-lucide="user" class="w-2.5 h-2.5"></i>
@@ -568,9 +506,7 @@
                 document.getElementById('input-idea-semana').value = ideaElem.innerText.replace(/^"|"$/g, '');
             }
 
-            renderizarTabla('tabla-ganadores', fallbackGanadores, 'text-emerald-400');
-            renderizarTabla('tabla-perdedores', fallbackPerdedores, 'text-rose-400');
-
+            renderizarTablasYStory();
             sincronizarConSheet();
         });
 
@@ -617,31 +553,40 @@
                 parsearCSVConComillas(csvText);
                 actualizarInterfaz();
 
-                // Intentar leer Subas
+                let ganadoresActuales = fallbackGanadores;
+                let perdedoresActuales = fallbackPerdedores;
+
                 if (subasUrl) {
                     try {
                         let resSubas = await fetch(subasUrl);
                         let textSubas = await resSubas.text();
                         let parsedSubas = extraerTop5DesdeCSV(textSubas);
-                        if (parsedSubas.length > 0) renderizarTabla('tabla-ganadores', parsedSubas, 'text-emerald-400');
+                        if (parsedSubas.length > 0) ganadoresActuales = parsedSubas;
                     } catch (e) { console.log("Usando respaldo local Subas por CORS"); }
                 }
 
-                // Intentar leer Bajas
                 if (bajasUrl) {
                     try {
                         let resBajas = await fetch(bajasUrl);
                         let textBajas = await resBajas.text();
                         let parsedBajas = extraerTop5DesdeCSV(textBajas);
-                        if (parsedBajas.length > 0) renderizarTabla('tabla-perdedores', parsedBajas, 'text-rose-400');
+                        if (parsedBajas.length > 0) perdedoresActuales = parsedBajas;
                     } catch (e) { console.log("Usando respaldo local Bajas por CORS"); }
                 }
+
+                renderizarTabla('tabla-ganadores', ganadoresActuales, 'text-emerald-400');
+                renderizarTabla('tabla-perdedores', perdedoresActuales, 'text-rose-400');
+                renderizarStoryTop(ganadoresActuales.slice(0, 3), perdedoresActuales.slice(0, 3));
 
                 badge.className = "text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-500/20 flex items-center gap-1.5";
                 badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Google Sheets Sincronizado`;
 
             } catch (err) {
                 console.warn("Aviso CORS detectado, manteniendo valores de respaldo.");
+                renderizarTabla('tabla-ganadores', fallbackGanadores, 'text-emerald-400');
+                renderizarTabla('tabla-perdedores', fallbackPerdedores, 'text-rose-400');
+                renderizarStoryTop(fallbackGanadores.slice(0, 3), fallbackPerdedores.slice(0, 3));
+
                 badge.className = "text-xs bg-amber-500/10 text-amber-400 font-bold px-3 py-1.5 rounded-xl border border-amber-500/20 flex items-center gap-1.5";
                 badge.innerHTML = `⚠️ Modo Local / Respaldo Activo`;
             }
@@ -758,6 +703,26 @@
             document.getElementById(elementId).innerHTML = html;
         }
 
+        function renderizarStoryTop(ganadores, perdedores) {
+            let htmlG = "";
+            ganadores.forEach(item => {
+                htmlG += `<div class="flex justify-between items-center"><span class="font-bold text-white">${item.ticker}</span> <span class="text-emerald-400 font-bold">${item.var}</span></div>`;
+            });
+            document.getElementById('story-ganadores').innerHTML = htmlG;
+
+            let htmlP = "";
+            perdedores.forEach(item => {
+                htmlP += `<div class="flex justify-between items-center"><span class="font-bold text-white">${item.ticker}</span> <span class="text-rose-400 font-bold">${item.var}</span></div>`;
+            });
+            document.getElementById('story-perdedores').innerHTML = htmlP;
+        }
+
+        function renderizarTablasYStory() {
+            renderizarTabla('tabla-ganadores', fallbackGanadores, 'text-emerald-400');
+            renderizarTabla('tabla-perdedores', fallbackPerdedores, 'text-rose-400');
+            renderizarStoryTop(fallbackGanadores.slice(0, 3), fallbackPerdedores.slice(0, 3));
+        }
+
         function actualizarInterfaz() {
             // Web Dashboard
             document.getElementById('val-merval-usd').innerText = marketData.mervalUsd.val;
@@ -788,43 +753,24 @@
 
             // Story 9:16
             document.getElementById('story-merval-usd').innerText = marketData.mervalUsd.val;
-            document.getElementById('story-merval-sem').innerText = marketData.mervalUsd.sem;
-            document.getElementById('story-merval-ytd').innerText = marketData.mervalUsd.ytd;
+            document.getElementById('story-merval-sem').innerText = `Sem: ${marketData.mervalUsd.sem}`;
 
             document.getElementById('story-sp500').innerText = marketData.sp500.val;
-            document.getElementById('story-sp500-sem').innerText = marketData.sp500.sem;
-            document.getElementById('story-sp500-ytd').innerText = marketData.sp500.ytd;
+            document.getElementById('story-sp500-sem').innerText = `Sem: ${marketData.sp500.sem}`;
 
             document.getElementById('story-mep').innerText = marketData.mep.val;
-            document.getElementById('story-mep-sem').innerText = marketData.mep.sem;
-            document.getElementById('story-mep-ytd').innerText = marketData.mep.ytd;
+            document.getElementById('story-mep-sem').innerText = `Sem: ${marketData.mep.sem}`;
 
             document.getElementById('story-riesgo').innerText = marketData.riesgo.val;
-            document.getElementById('story-riesgo-sem').innerText = marketData.riesgo.sem;
-            document.getElementById('story-riesgo-ytd').innerText = marketData.riesgo.ytd;
-
-            document.getElementById('story-ccl').innerText = marketData.ccl.val;
-            document.getElementById('story-ccl-sem').innerText = marketData.ccl.sem;
-            document.getElementById('story-ccl-ytd').innerText = marketData.ccl.ytd;
-
-            document.getElementById('story-btc').innerText = marketData.btc.val;
-            document.getElementById('story-btc-sem').innerText = marketData.btc.sem;
-            document.getElementById('story-btc-ytd').innerText = marketData.btc.ytd;
-
-            document.getElementById('story-merval-ars').innerText = marketData.mervalArs.val;
-            document.getElementById('story-merval-ars-sem').innerText = marketData.mervalArs.sem;
-            document.getElementById('story-merval-ars-ytd').innerText = marketData.mervalArs.ytd;
+            document.getElementById('story-riesgo-sem').innerText = `Sem: ${marketData.riesgo.sem}`;
         }
 
         function actualizarVisibilidadActivos() {
             const mappings = [
-                { chk: 'chk-merval-usd', card: 'card-story-merval-usd' },
-                { chk: 'chk-sp500',      card: 'card-story-sp500' },
-                { chk: 'chk-mep',        card: 'card-story-mep' },
-                { chk: 'chk-riesgo',     card: 'card-story-riesgo' },
-                { chk: 'chk-ccl',        card: 'card-story-ccl' },
-                { chk: 'chk-btc',        card: 'card-story-btc' },
-                { chk: 'chk-merval-ars', card: 'card-story-merval-ars' }
+                { chk: 'chk-merval-usd', card: 'story-card-merval' },
+                { chk: 'chk-sp500',      card: 'story-card-sp500' },
+                { chk: 'chk-mep',        card: 'story-card-mep' },
+                { chk: 'chk-riesgo',     card: 'story-card-riesgo' }
             ];
 
             mappings.forEach(m => {
