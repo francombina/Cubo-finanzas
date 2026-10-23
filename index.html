@@ -39,20 +39,22 @@
     <!-- html2canvas para exportar la infografía a PNG -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* Fijación estricta de altura de línea para evitar saltos en html2canvas */
+        /* Ajustes precisos de baseline para html2canvas */
         .pct-badge {
+            display: block !important;
             line-height: 1 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            padding-top: 6px !important;
-            padding-bottom: 6px !important;
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+            text-align: center !important;
         }
-        .pct-badge span {
+        .pct-badge span, .pct-badge strong {
+            display: inline-block !important;
             line-height: 1 !important;
+            vertical-align: middle !important;
         }
         .num-val {
-            line-height: 1.1 !important;
+            line-height: 1 !important;
+            margin-bottom: 8px !important;
         }
     </style>
 </head>
@@ -120,7 +122,7 @@
                 <span class="p-2 bg-cubo-dark text-cubo-cyan rounded-xl border border-white/10"><i data-lucide="activity" class="w-5 h-5"></i></span>
                 <div>
                     <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Origen de Datos</p>
-                    <p class="text-xs text-cubo-cyan font-medium font-mono mt-0.5">Sincronización exacta de datos desde Google Sheets[span_1](start_span)[span_1](end_span)[span_2](start_span)[span_2](end_span)</p>
+                    <p class="text-xs text-cubo-cyan font-medium font-mono mt-0.5">Sincronización exacta de datos desde Google Sheets[cite: 4, 5]</p>
                 </div>
             </div>
             <span id="badge-estado" class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-500/20 flex items-center gap-1.5">
@@ -134,9 +136,9 @@
                 <div>
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
                         <i data-lucide="bar-chart-2" class="w-5 h-5 text-cubo-cyan"></i>
-                        Indicadores Principales de Mercado[span_3](start_span)[span_3](end_span)
+                        Indicadores Principales de Mercado[cite: 5]
                     </h2>
-                    <p class="text-sm text-gray-400">Valores y porcentajes actualizados[span_4](start_span)[span_4](end_span)</p>
+                    <p class="text-sm text-gray-400">Valores y porcentajes actualizados[cite: 5]</p>
                 </div>
             </div>
 
@@ -230,7 +232,7 @@
                     <span class="text-[10px] bg-cubo-cyan/10 text-cubo-cyan font-bold px-2 py-0.5 rounded-lg border border-cubo-cyan/20">Google Sheets</span>
                 </div>
                 <p class="text-xs text-gray-300 leading-relaxed pt-1">
-                    Lectura directa de celdas respetando signos, porcentajes y comas decimales originales[span_5](start_span)[span_5](end_span)[span_6](start_span)[span_6](end_span).
+                    Lectura directa de celdas respetando signos, porcentajes y comas decimales originales[cite: 4, 5].
                 </p>
             </div>
 
@@ -299,7 +301,7 @@
                 </div>
             </div>
 
-            <!-- Canvas 9:16 - DISEÑO EXACTO A LA IMAGEN REFERENCIADA CON FIX DE DESPLAZAMIENTO -->
+            <!-- Canvas 9:16 (DISEÑO EXACTO A TUS IMÁGENES CON FIX DE RENDERIZADO) -->
             <div class="flex justify-center bg-black/40 p-6 rounded-2xl border border-white/10 overflow-x-auto">
                 <div id="story-infographic" class="w-[360px] h-[640px] bg-[#091026] text-white p-5 rounded-3xl flex flex-col justify-between shadow-2xl relative overflow-hidden border border-white/15">
                     
@@ -330,12 +332,12 @@
                                 <span class="text-[9px] font-bold text-gray-400 font-mono tracking-wider uppercase">MERVAL USD</span>
                                 <i data-lucide="trending-up" class="w-3 h-3 text-cubo-cyan"></i>
                             </div>
-                            <div class="text-lg font-extrabold font-mono text-white mb-2 num-val" id="story-merval-usd">$1.739</div>
+                            <div class="text-lg font-extrabold font-mono text-white num-val" id="story-merval-usd">$1.739</div>
                             <div class="grid grid-cols-2 gap-1.5 text-[9px] font-mono font-bold">
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg text-center pct-badge">
+                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg pct-badge">
                                     <span>Sem: <strong id="story-merval-sem">-0,8%</strong></span>
                                 </div>
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg text-center pct-badge">
+                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg pct-badge">
                                     <span>YTD: <strong id="story-merval-ytd">-13,2%</strong></span>
                                 </div>
                             </div>
@@ -347,12 +349,12 @@
                                 <span class="text-[9px] font-bold text-gray-400 font-mono tracking-wider uppercase">S&P 500</span>
                                 <i data-lucide="bar-chart-2" class="w-3 h-3 text-cubo-cyan"></i>
                             </div>
-                            <div class="text-lg font-extrabold font-mono text-white mb-2 num-val" id="story-sp500">$7.663</div>
+                            <div class="text-lg font-extrabold font-mono text-white num-val" id="story-sp500">$7.663</div>
                             <div class="grid grid-cols-2 gap-1.5 text-[9px] font-mono font-bold">
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg text-center pct-badge">
+                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg pct-badge">
                                     <span>Sem: <strong id="story-sp500-sem">+0,1%</strong></span>
                                 </div>
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg text-center pct-badge">
+                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg pct-badge">
                                     <span>YTD: <strong id="story-sp500-ytd">+11,9%</strong></span>
                                 </div>
                             </div>
@@ -364,12 +366,12 @@
                                 <span class="text-[9px] font-bold text-gray-400 font-mono tracking-wider uppercase">DÓLAR MEP</span>
                                 <i data-lucide="dollar-sign" class="w-3 h-3 text-cubo-cyan"></i>
                             </div>
-                            <div class="text-lg font-extrabold font-mono text-white mb-2 num-val" id="story-mep">$1.554</div>
+                            <div class="text-lg font-extrabold font-mono text-white num-val" id="story-mep">$1.554</div>
                             <div class="grid grid-cols-2 gap-1.5 text-[9px] font-mono font-bold">
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg text-center pct-badge">
+                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg pct-badge">
                                     <span>Sem: <strong id="story-mep-sem">+0,7%</strong></span>
                                 </div>
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg text-center pct-badge">
+                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg pct-badge">
                                     <span>YTD: <strong id="story-mep-ytd">+4,6%</strong></span>
                                 </div>
                             </div>
@@ -381,12 +383,12 @@
                                 <span class="text-[9px] font-bold text-gray-400 font-mono tracking-wider uppercase">RIESGO PAÍS</span>
                                 <i data-lucide="shield-alert" class="w-3 h-3 text-cubo-cyan"></i>
                             </div>
-                            <div class="text-lg font-extrabold font-mono text-white mb-2 num-val" id="story-riesgo">674</div>
+                            <div class="text-lg font-extrabold font-mono text-white num-val" id="story-riesgo">674</div>
                             <div class="grid grid-cols-2 gap-1.5 text-[9px] font-mono font-bold">
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg text-center pct-badge">
+                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg pct-badge">
                                     <span>Sem: <strong id="story-riesgo-sem">-0,1%</strong></span>
                                 </div>
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg text-center pct-badge">
+                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg pct-badge">
                                     <span>YTD: <strong id="story-riesgo-ytd">+18,0%</strong></span>
                                 </div>
                             </div>
@@ -398,12 +400,12 @@
                                 <span class="text-[9px] font-bold text-gray-400 font-mono tracking-wider uppercase">DÓLAR CCL</span>
                                 <i data-lucide="coins" class="w-3 h-3 text-cubo-cyan"></i>
                             </div>
-                            <div class="text-lg font-extrabold font-mono text-white mb-2 num-val" id="story-ccl">$1.638</div>
+                            <div class="text-lg font-extrabold font-mono text-white num-val" id="story-ccl">$1.638</div>
                             <div class="grid grid-cols-2 gap-1.5 text-[9px] font-mono font-bold">
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg text-center pct-badge">
+                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg pct-badge">
                                     <span>Sem: <strong id="story-ccl-sem">+1,1%</strong></span>
                                 </div>
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg text-center pct-badge">
+                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg pct-badge">
                                     <span>YTD: <strong id="story-ccl-ytd">+7,5%</strong></span>
                                 </div>
                             </div>
@@ -415,12 +417,12 @@
                                 <span class="text-[9px] font-bold text-gray-400 font-mono tracking-wider uppercase">BITCOIN (BTC)</span>
                                 <i data-lucide="bitcoin" class="w-3 h-3 text-cubo-cyan"></i>
                             </div>
-                            <div class="text-lg font-extrabold font-mono text-white mb-2 num-val" id="story-btc">$81.086</div>
+                            <div class="text-lg font-extrabold font-mono text-white num-val" id="story-btc">$81.086</div>
                             <div class="grid grid-cols-2 gap-1.5 text-[9px] font-mono font-bold">
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg text-center pct-badge">
+                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg pct-badge">
                                     <span>Sem: <strong id="story-btc-sem">-0,9%</strong></span>
                                 </div>
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg text-center pct-badge">
+                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg pct-badge">
                                     <span>YTD: <strong id="story-btc-ytd">-8,6%</strong></span>
                                 </div>
                             </div>
@@ -432,12 +434,12 @@
                                 <span class="text-[9px] font-bold text-gray-400 font-mono tracking-wider uppercase">MERVAL ARS</span>
                                 <i data-lucide="activity" class="w-3 h-3 text-cubo-cyan"></i>
                             </div>
-                            <div class="text-base font-extrabold font-mono text-white mb-2 num-val" id="story-merval-ars">$2.848.945</div>
+                            <div class="text-base font-extrabold font-mono text-white num-val" id="story-merval-ars">$2.848.945</div>
                             <div class="grid grid-cols-2 gap-1.5 text-[9px] font-mono font-bold">
-                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg text-center pct-badge">
+                                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-lg pct-badge">
                                     <span>Sem: <strong id="story-merval-ars-sem">+0,7%</strong></span>
                                 </div>
-                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg text-center pct-badge">
+                                <div class="bg-rose-500/15 border border-rose-500/30 text-rose-300 rounded-lg pct-badge">
                                     <span>YTD: <strong id="story-merval-ars-ytd">-6,6%</strong></span>
                                 </div>
                             </div>
@@ -713,6 +715,7 @@
         async function descargarInfografia() {
             const element = document.getElementById('story-infographic');
             
+            // Garantizar la precarga tipográfica
             if (document.fonts && document.fonts.ready) {
                 await document.fonts.ready;
             }
@@ -728,6 +731,14 @@
                         clonedElement.style.transform = 'none';
                         clonedElement.style.margin = '0';
                     }
+                    // Forzado de estilos para html2canvas
+                    const badges = clonedDoc.querySelectorAll('.pct-badge');
+                    badges.forEach(b => {
+                        b.style.display = 'block';
+                        b.style.lineHeight = '1';
+                        b.style.paddingTop = '5px';
+                        b.style.paddingBottom = '5px';
+                    });
                 }
             }).then(canvas => {
                 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
