@@ -78,7 +78,7 @@
                     <span class="p-2 bg-cubo-dark text-cubo-cyan rounded-xl border border-white/10"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></span>
                     <div>
                         <h3 class="font-extrabold text-lg text-white">Configuración de Planillas (CSV)</h3>
-                        <p class="text-xs text-gray-400">Enlaces de solapas configurados y listos.</p>
+                        <p class="text-xs text-gray-400">Enlaces de solapas configurados.</p>
                     </div>
                 </div>
                 <button onclick="toggleConfigPanel()" class="text-gray-400 hover:text-white font-bold text-sm">✕ Cerrar</button>
@@ -179,7 +179,7 @@
         </section>
 
         <!-- 2. BLOQUE DE DIVISAS, CRIPTO & MERVAL ARS -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
             <!-- S&P Merval ARS -->
             <div class="bg-cubo-card p-5 rounded-2xl border border-white/10 shadow-lg space-y-2">
@@ -216,25 +216,58 @@
                 </div>
             </div>
 
-            <!-- NUEVAS SECCIONES: GANADORES Y PERDEDORES DE EEUU -->
-            <div class="bg-cubo-card p-5 rounded-2xl border border-white/10 shadow-lg space-y-3">
-                <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Top 5 EEUU</span>
-                    <span class="text-[10px] bg-cubo-cyan/10 text-cubo-cyan font-bold px-2 py-0.5 rounded-lg border border-cubo-cyan/20">Subas / Bajas</span>
+        </section>
+
+        <!-- SECCIÓN APARTE: TOP 5 GANADORES Y PERDEDORES DE EEUU -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Top Ganadores -->
+            <div class="bg-cubo-card p-6 rounded-2xl border border-white/10 shadow-xl space-y-3">
+                <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20"><i data-lucide="trending-up" class="w-5 h-5"></i></span>
+                        <h3 class="font-bold text-lg text-white">Principales Ganadores (EEUU)</h3>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 font-bold px-2.5 py-1 rounded-xl border border-emerald-500/20 font-mono">Top 5 Subas</span>
                 </div>
-                <div class="grid grid-cols-2 gap-2 text-xs pt-1">
-                    <div>
-                        <span class="text-[10px] text-emerald-400 font-bold block mb-1">🟢 Top Ganadores</span>
-                        <ul id="lista-ganadores" class="space-y-1 font-mono text-[11px] text-gray-300">
-                            <li>Cargando...</li>
-                        </ul>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-mono">
+                        <thead>
+                            <tr class="text-gray-400 border-b border-white/10">
+                                <th class="pb-2">Ticker</th>
+                                <th class="pb-2">Empresa</th>
+                                <th class="pb-2 text-right">Variación Semanal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-ganadores" class="divide-y divide-white/5 text-gray-300">
+                            <tr><td colspan="3" class="py-3 text-center text-gray-500">Cargando datos...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Top Perdedores -->
+            <div class="bg-cubo-card p-6 rounded-2xl border border-white/10 shadow-xl space-y-3">
+                <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="p-2 bg-rose-500/10 text-rose-400 rounded-xl border border-rose-500/20"><i data-lucide="trending-down" class="w-5 h-5"></i></span>
+                        <h3 class="font-bold text-lg text-white">Principales Perdedores (EEUU)</h3>
                     </div>
-                    <div>
-                        <span class="text-[10px] text-rose-400 font-bold block mb-1">🔴 Top Perdedores</span>
-                        <ul id="lista-perdedores" class="space-y-1 font-mono text-[11px] text-gray-300">
-                            <li>Cargando...</li>
-                        </ul>
-                    </div>
+                    <span class="text-[10px] bg-rose-500/10 text-rose-400 font-bold px-2.5 py-1 rounded-xl border border-rose-500/20 font-mono">Top 5 Bajas</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-mono">
+                        <thead>
+                            <tr class="text-gray-400 border-b border-white/10">
+                                <th class="pb-2">Ticker</th>
+                                <th class="pb-2">Empresa</th>
+                                <th class="pb-2 text-right">Variación Semanal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-perdedores" class="divide-y divide-white/5 text-gray-300">
+                            <tr><td colspan="3" class="py-3 text-center text-gray-500">Cargando datos...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -510,6 +543,23 @@
             riesgo:    { val: "674", sem: "-0,1%", ytd: "+18,0%" }
         };
 
+        // Datos estáticos de respaldo iniciales basados en tu captura (por si CORS bloquea el fetch local sin servidor web)
+        let fallbackGanadores = [
+            { ticker: "SPOT", empresa: "Spotify Technology S.A.", var: "+10,03%" },
+            { ticker: "UNH", empresa: "UnitedHealth Group Incorporated", var: "+5,87%" },
+            { ticker: "HD", empresa: "Home Depot, Inc. (The)", var: "+5,85%" },
+            { ticker: "TSLA", empresa: "Tesla, Inc.", var: "+5,60%" },
+            { ticker: "JNJ", empresa: "Johnson & Johnson", var: "+4,72%" }
+        ];
+
+        let fallbackPerdedores = [
+            { ticker: "AVGO", empresa: "Broadcom Inc.", var: "-1,68%" },
+            { ticker: "MSFT", empresa: "Microsoft Corporation", var: "-1,51%" },
+            { ticker: "JPM", empresa: "JP Morgan Chase & Co.", var: "-0,94%" },
+            { ticker: "NVDA", empresa: "NVIDIA Corporation", var: "-0,90%" },
+            { ticker: "XOM", empresa: "ExxonMobil Holdings Corporation", var: "-0,42%" }
+        ];
+
         document.addEventListener("DOMContentLoaded", () => {
             try { if (window.lucide) lucide.createIcons(); } catch (e) {}
             cargarSheetURLsGuardadas();
@@ -519,6 +569,9 @@
                 document.getElementById('input-idea-semana').value = ideaElem.innerText.replace(/^"|"$/g, '');
             }
 
+            renderizarTabla('tabla-ganadores', fallbackGanadores, 'text-emerald-400');
+            renderizarTabla('tabla-perdedores', fallbackPerdedores, 'text-rose-400');
+
             sincronizarConSheet();
         });
 
@@ -527,13 +580,9 @@
         }
 
         function cargarSheetURLsGuardadas() {
-            const savedUrl = localStorage.getItem('cubo_sheet_csv_url') || DEFAULT_SHEET_URL;
-            const savedSubas = localStorage.getItem('cubo_subas_csv_url') || DEFAULT_SUBAS_URL;
-            const savedBajas = localStorage.getItem('cubo_bajas_csv_url') || DEFAULT_BAJAS_URL;
-
-            document.getElementById('cfg-sheet-url').value = savedUrl;
-            document.getElementById('cfg-subas-url').value = savedSubas;
-            document.getElementById('cfg-bajas-url').value = savedBajas;
+            document.getElementById('cfg-sheet-url').value = localStorage.getItem('cubo_sheet_csv_url') || DEFAULT_SHEET_URL;
+            document.getElementById('cfg-subas-url').value = localStorage.getItem('cubo_subas_csv_url') || DEFAULT_SUBAS_URL;
+            document.getElementById('cfg-bajas-url').value = localStorage.getItem('cubo_bajas_csv_url') || DEFAULT_BAJAS_URL;
         }
 
         function guardarSheetURLs() {
@@ -561,40 +610,41 @@
             let bajasUrl = localStorage.getItem('cubo_bajas_csv_url') || DEFAULT_BAJAS_URL;
 
             const badge = document.getElementById('badge-estado');
-            badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> Sincronizando hojas...`;
+            badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> Sincronizando...`;
 
             try {
-                // 1. Sincronizar Datos Principales
                 let response = await fetch(url);
                 let csvText = await response.text();
                 parsearCSVConComillas(csvText);
                 actualizarInterfaz();
 
-                // 2. Sincronizar Subas EEUU (Top 5 Ganadores)
+                // Intentar leer Subas
                 if (subasUrl) {
                     try {
                         let resSubas = await fetch(subasUrl);
                         let textSubas = await resSubas.text();
-                        parsearTop5(textSubas, 'lista-ganadores');
-                    } catch (e) { console.error("Error cargando Subas:", e); }
+                        let parsedSubas = extraerTop5DesdeCSV(textSubas);
+                        if (parsedSubas.length > 0) renderizarTabla('tabla-ganadores', parsedSubas, 'text-emerald-400');
+                    } catch (e) { console.log("Usando respaldo local Subas por CORS"); }
                 }
 
-                // 3. Sincronizar Bajas EEUU (Top 5 Perdedores)
+                // Intentar leer Bajas
                 if (bajasUrl) {
                     try {
                         let resBajas = await fetch(bajasUrl);
                         let textBajas = await resBajas.text();
-                        parsearTop5(textBajas, 'lista-perdedores');
-                    } catch (e) { console.error("Error cargando Bajas:", e); }
+                        let parsedBajas = extraerTop5DesdeCSV(textBajas);
+                        if (parsedBajas.length > 0) renderizarTabla('tabla-perdedores', parsedBajas, 'text-rose-400');
+                    } catch (e) { console.log("Usando respaldo local Bajas por CORS"); }
                 }
 
                 badge.className = "text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-500/20 flex items-center gap-1.5";
-                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Google Sheets Sincronizados`;
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Google Sheets Sincronizado`;
 
             } catch (err) {
-                console.error("Error general de sincronización:", err);
-                badge.className = "text-xs bg-rose-500/10 text-rose-400 font-bold px-3 py-1.5 rounded-xl border border-rose-500/20 flex items-center gap-1.5";
-                badge.innerHTML = `⚠️ Error al leer planillas`;
+                console.warn("Aviso CORS detectado, manteniendo valores de respaldo.");
+                badge.className = "text-xs bg-amber-500/10 text-amber-400 font-bold px-3 py-1.5 rounded-xl border border-amber-500/20 flex items-center gap-1.5";
+                badge.innerHTML = `⚠️ Modo Local / Respaldo Activo`;
             }
         }
 
@@ -656,9 +706,9 @@
             });
         }
 
-        function parsearTop5(text, elementId) {
+        function extraerTop5DesdeCSV(text) {
             let lines = text.split("\n");
-            let html = "";
+            let resultados = [];
             let count = 0;
 
             for (let i = 1; i < lines.length && count < 5; i++) {
@@ -684,16 +734,28 @@
 
                 if (cols.length >= 4) {
                     let ticker = cols[0];
-                    let varSem = cols[3]; // Columna D: Variación Semanal
+                    let empresa = cols[1];
+                    let varSem = cols[3];
                     if (ticker) {
-                        let colorClass = elementId === 'lista-ganadores' ? 'text-emerald-400' : 'text-rose-400';
-                        html += `<li class="flex justify-between items-center py-0.5 border-b border-white/5"><span class="font-bold text-white">${ticker}</span> <span class="font-mono ${colorClass}">${varSem}</span></li>`;
+                        resultados.push({ ticker, empresa, var: varSem });
                         count++;
                     }
                 }
             }
+            return resultados;
+        }
 
-            if (html === "") html = `<li class="text-gray-500">Sin datos</li>`;
+        function renderizarTabla(elementId, datos, colorClass) {
+            let html = "";
+            datos.forEach(item => {
+                html += `
+                    <tr>
+                        <td class="py-2.5 font-bold text-white">${item.ticker}</td>
+                        <td class="py-2.5 text-gray-400 truncate max-w-[180px]">${item.empresa}</td>
+                        <td class="py-2.5 text-right font-bold ${colorClass}">${item.var}</td>
+                    </tr>
+                `;
+            });
             document.getElementById(elementId).innerHTML = html;
         }
 
