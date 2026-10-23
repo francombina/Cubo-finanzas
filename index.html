@@ -1,385 +1,519 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cubo Finanzas — Dashboard & Historias</title>
+    <title>Cubo Finanzas — Terminal & Story Generator</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
                     colors: {
-                        cubo: {
-                            navy: '#1A3644',
-                            teal: '#2C4E5E',
+                        brand: {
+                            50: '#f0fdf9',
+                            100: '#ccfbef',
+                            200: '#99f6e0',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
                             mint: '#A0D8C3',
-                            bg: '#F4F7F6',
-                            card: '#FFFFFF'
+                            teal: '#2C4E5E',
+                            dark: '#0B132B',
+                            navy: '#1C2541',
+                            deep: '#070C1A',
+                            accent: '#38BDF8'
                         }
+                    },
+                    boxShadow: {
+                        'glow-mint': '0 0 25px -5px rgba(160, 216, 195, 0.25)',
+                        'glow-teal': '0 0 35px -5px rgba(44, 78, 94, 0.4)',
+                        'glow-accent': '0 0 25px -5px rgba(56, 189, 248, 0.3)',
                     }
                 }
             }
         }
     </script>
+    
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <!-- html2canvas para exportar la infografía a PNG -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-</head>
-<body class="bg-cubo-bg text-cubo-navy font-sans antialiased min-h-screen pb-12">
 
-    <!-- Header Principal -->
-    <header class="bg-cubo-navy text-white shadow-md sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
-                <div class="bg-cubo-mint p-2.5 rounded-xl text-cubo-navy font-black text-2xl tracking-tighter shadow-inner">
-                    CF
+    <style>
+        /* Glassmorphism custom classes */
+        .glass-panel {
+            background: rgba(28, 37, 65, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-panel-hover {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel-hover:hover {
+            background: rgba(28, 37, 65, 0.75);
+            border-color: rgba(160, 216, 195, 0.25);
+            transform: translateY(-2px);
+        }
+        .glass-card-story {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        /* Gradient Mesh Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, #A0D8C3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .text-gradient-accent {
+            background: linear-gradient(135deg, #38BDF8 0%, #A0D8C3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070C1A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2C4E5E;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-brand-deep text-slate-100 font-sans antialiased min-h-screen selection:bg-brand-mint selection:text-brand-dark pb-16">
+
+    <!-- Ambient Grid Background -->
+    <div class="fixed inset-0 pointer-events-none bg-[radial-gradient(#1c2541_1px,transparent_1px)] [background-size:24px_24px] opacity-30 z-0"></div>
+
+    <!-- Header Principal Estilo Fintech Terminal -->
+    <header class="sticky top-0 z-40 bg-brand-deep/80 backdrop-blur-xl border-b border-white/10 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
+            <div class="flex items-center gap-3.5">
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-brand-mint to-brand-accent rounded-xl blur opacity-60 group-hover:opacity-100 transition duration-300"></div>
+                    <div class="relative bg-brand-dark px-3 py-2 rounded-xl border border-white/20 font-black text-xl text-brand-mint tracking-tight flex items-center justify-center">
+                        CF
+                    </div>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-extrabold tracking-tight">CUBO FINANZAS</h1>
-                    <p class="text-xs text-cubo-mint font-medium">Dashboard de Mercado & Los Números de la Semana</p>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                            CUBO FINANZAS
+                        </h1>
+                        <span class="text-[10px] font-mono font-semibold bg-brand-teal/50 text-brand-mint px-2 py-0.5 rounded-full border border-brand-mint/20">v2.5 PRO</span>
+                    </div>
+                    <p class="text-xs text-slate-400 font-medium">Terminal de Análisis & Generador de Historias 9:16</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-2 flex-wrap">
-                <button onclick="sincronizarConSheet()" class="flex items-center gap-1.5 bg-cubo-teal hover:bg-opacity-90 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow-sm">
+                <button onclick="sincronizarConSheet()" class="flex items-center gap-2 bg-brand-navy hover:bg-brand-teal text-brand-mint border border-brand-mint/30 px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-lg shadow-black/20 hover:border-brand-mint">
                     <i data-lucide="refresh-cw" class="w-4 h-4"></i> Sincronizar Sheet
                 </button>
-                <button onclick="toggleConfigPanel()" class="flex items-center gap-1.5 bg-cubo-mint hover:bg-opacity-90 text-cubo-navy px-3.5 py-2 rounded-lg text-xs font-bold transition shadow-sm">
-                    <i data-lucide="settings" class="w-4 h-4"></i> Link de Google Sheet
+                <button onclick="toggleConfigPanel()" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 px-3.5 py-2 rounded-xl text-xs font-bold transition">
+                    <i data-lucide="link" class="w-4 h-4 text-brand-accent"></i> Google Sheet URL
                 </button>
-                <button onclick="abrirModalEdicion()" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow-sm">
-                    <i data-lucide="edit-3" class="w-4 h-4"></i> Edición Manual
+                <button onclick="abrirModalEdicion()" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 px-3.5 py-2 rounded-xl text-xs font-bold transition">
+                    <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-mint"></i> Edición Manual
                 </button>
             </div>
         </div>
     </header>
 
     <!-- Contenido Principal -->
-    <main class="max-w-6xl mx-auto px-4 mt-6 space-y-8">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 mt-8 space-y-8 relative z-10">
 
         <!-- PANEL DE CONFIGURACIÓN DE URL DE GOOGLE SHEETS -->
-        <section id="panel-configuracion" class="bg-white border-2 border-cubo-teal p-6 rounded-2xl shadow-lg hidden space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-                <div class="flex items-center gap-2">
-                    <span class="p-2 bg-cubo-navy text-cubo-mint rounded-lg"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></span>
+        <section id="panel-configuracion" class="glass-panel p-6 rounded-2xl border border-brand-mint/30 hidden space-y-4 shadow-glow-teal animate-in fade-in slide-in-from-top-4 duration-300">
+            <div class="flex justify-between items-center border-b border-white/10 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="p-2.5 bg-brand-teal/60 text-brand-mint rounded-xl border border-brand-mint/20"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></span>
                     <div>
-                        <h3 class="font-extrabold text-lg text-cubo-navy">Vinculación con Google Sheets</h3>
-                        <p class="text-xs text-gray-500">Ingresá el enlace publicado de tu planilla (CSV).</p>
+                        <h3 class="font-extrabold text-base text-white">Vinculación Dinámica con Google Sheets</h3>
+                        <p class="text-xs text-slate-400">Ingresá el enlace publicado en formato CSV para mantener los valores actualizados automáticamente.</p>
                     </div>
                 </div>
-                <button onclick="toggleConfigPanel()" class="text-gray-400 hover:text-gray-600 font-bold text-sm">✕ Cerrar</button>
+                <button onclick="toggleConfigPanel()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
             </div>
 
             <div>
-                <label class="block font-bold text-gray-700 text-xs mb-1">URL de la Planilla Publicada</label>
-                <input type="text" id="cfg-sheet-url" class="w-full border p-2.5 rounded-lg text-xs font-mono bg-gray-50 border-gray-300">
+                <label class="block font-bold text-slate-300 text-xs mb-1.5 font-mono">URL DE LA PLANILLA PUBLICADA (CSV)</label>
+                <input type="text" id="cfg-sheet-url" class="w-full bg-brand-dark/90 border border-white/15 p-3 rounded-xl text-xs font-mono text-brand-mint focus:outline-none focus:border-brand-mint transition">
             </div>
 
-            <div class="flex justify-between items-center border-t pt-4">
-                <span class="text-[11px] text-gray-500">Se guarda en el navegador para futuras sesiones.</span>
-                <button onclick="guardarSheetURL()" class="bg-cubo-navy hover:bg-cubo-teal text-white px-5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-t border-white/10 pt-4">
+                <span class="text-[11px] text-slate-400 flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-brand-mint"></i> La URL se almacena localmente en tu navegador.
+                </span>
+                <button onclick="guardarSheetURL()" class="bg-gradient-to-r from-brand-teal to-brand-navy hover:from-brand-mint hover:to-brand-accent hover:text-brand-dark text-white border border-brand-mint/30 px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-lg flex items-center gap-2">
                     <i data-lucide="save" class="w-4 h-4"></i> Guardar y Sincronizar
                 </button>
             </div>
         </section>
 
-        <!-- Estado de Conexión -->
-        <div class="bg-white border border-gray-200 p-4 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-3">
-                <span class="p-2 bg-cubo-navy text-cubo-mint rounded-lg"><i data-lucide="activity" class="w-5 h-5"></i></span>
+        <!-- Barra de Estado de Sincronización -->
+        <div class="glass-panel p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="p-2.5 bg-brand-teal/40 rounded-xl border border-white/10 text-brand-mint">
+                    <i data-lucide="activity" class="w-5 h-5"></i>
+                </div>
                 <div>
-                    <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Origen de Datos</p>
-                    <p class="text-xs text-cubo-teal font-medium mt-0.5">Sincronización exacta de porcentajes desde Google Sheets[cite: 4, 5]</p>
+                    <div class="flex items-center gap-2">
+                        <p class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Estado de Conexión</p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">LIVE</span>
+                    </div>
+                    <p class="text-xs text-slate-300 font-medium mt-0.5">Sincronización automatizada desde Google Sheets con formateo inteligente</p>
                 </div>
             </div>
-            <span id="badge-estado" class="text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Google Sheet Vinculado
+            <span id="badge-estado" class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3.5 py-2 rounded-xl border border-emerald-500/30 flex items-center gap-2 shadow-inner">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Google Sheet Conectado
             </span>
         </div>
 
-        <!-- 1. TARJETAS PRINCIPALES (MÉTRICAS CLAVE) -->
-        <section>
-            <div class="flex justify-between items-end mb-4">
+        <!-- 1. DASHBOARD PRINCIPAL - MÉTRICAS DE MERCADO -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-end">
                 <div>
-                    <h2 class="text-xl font-bold text-cubo-navy flex items-center gap-2">
-                        <i data-lucide="bar-chart-2" class="w-5 h-5 text-cubo-teal"></i>
-                        Indicadores Principales de Mercado[cite: 5]
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="trending-up" class="w-5 h-5 text-brand-accent"></i>
+                        Indicadores de Mercado
                     </h2>
-                    <p class="text-sm text-gray-600">Valores y porcentajes sincronizados desde la planilla[cite: 5]</p>
+                    <p class="text-xs text-slate-400">Cotizaciones, variación semanal y rendimiento acumulado anual (YTD)</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 
                 <!-- S&P Merval USD -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
-                    <span class="text-xs font-bold uppercase text-gray-500 block mb-1">S&P Merval en USD</span>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-merval-usd">$1.739</div>
-                    <div class="flex items-center gap-1 text-[11px] font-bold flex-wrap">
-                        <span id="sem-merval-usd" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Sem: -0,8%</span>
-                        <span id="ytd-merval-usd" class="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">YTD: -13,2%</span>
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-brand-accent/5 rounded-full blur-xl group-hover:bg-brand-accent/10 transition"></div>
+                    <span class="text-[11px] font-mono font-bold uppercase text-slate-400 block mb-1">S&P MERVAL (USD)</span>
+                    <div class="text-3xl font-extrabold text-white tracking-tight my-2 font-mono" id="val-merval-usd">$1.739</div>
+                    <div class="flex items-center gap-2 text-xs font-mono font-bold mt-3">
+                        <span id="sem-merval-usd" class="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 border border-rose-500/20">Sem: -0,8%</span>
+                        <span id="ytd-merval-usd" class="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 border border-rose-500/20">YTD: -13,2%</span>
                     </div>
                 </div>
 
-                <!-- SP500 -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
-                    <span class="text-xs font-bold uppercase text-gray-500 block mb-1">S&P 500</span>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-sp500">$7.663</div>
-                    <div class="flex items-center gap-1 text-[11px] font-bold flex-wrap">
-                        <span id="sem-sp500" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Sem: +0,1%</span>
-                        <span id="ytd-sp500" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">YTD: +12,0%</span>
+                <!-- S&P 500 -->
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl group-hover:bg-emerald-500/10 transition"></div>
+                    <span class="text-[11px] font-mono font-bold uppercase text-slate-400 block mb-1">S&P 500</span>
+                    <div class="text-3xl font-extrabold text-white tracking-tight my-2 font-mono" id="val-sp500">$7.663</div>
+                    <div class="flex items-center gap-2 text-xs font-mono font-bold mt-3">
+                        <span id="sem-sp500" class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Sem: +0,1%</span>
+                        <span id="ytd-sp500" class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">YTD: +12,0%</span>
                     </div>
                 </div>
 
                 <!-- Dólar MEP -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
-                    <span class="text-xs font-bold uppercase text-gray-500 block mb-1">Dólar MEP</span>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-mep">$1.554</div>
-                    <div class="flex items-center gap-1 text-[11px] font-bold flex-wrap">
-                        <span id="sem-mep" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Sem: +0,7%</span>
-                        <span id="ytd-mep" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">YTD: +4,6%</span>
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-brand-mint/5 rounded-full blur-xl group-hover:bg-brand-mint/10 transition"></div>
+                    <span class="text-[11px] font-mono font-bold uppercase text-slate-400 block mb-1">DÓLAR MEP</span>
+                    <div class="text-3xl font-extrabold text-white tracking-tight my-2 font-mono" id="val-mep">$1.554</div>
+                    <div class="flex items-center gap-2 text-xs font-mono font-bold mt-3">
+                        <span id="sem-mep" class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Sem: +0,7%</span>
+                        <span id="ytd-mep" class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">YTD: +4,6%</span>
                     </div>
                 </div>
 
                 <!-- Riesgo País -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition border-l-4 border-l-cubo-teal">
-                    <span class="text-xs font-bold uppercase text-gray-500 block mb-1">Riesgo País</span>
-                    <div class="text-2xl font-black text-cubo-navy mb-1" id="val-riesgo">674</div>
-                    <div class="flex items-center gap-1 text-[11px] font-bold flex-wrap">
-                        <span id="sem-riesgo" class="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">Sem: -0,2%</span>
-                        <span id="ytd-riesgo" class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">YTD: +18,0%</span>
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover relative overflow-hidden group border-l-4 border-l-brand-mint">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-brand-teal/20 rounded-full blur-xl group-hover:bg-brand-teal/30 transition"></div>
+                    <span class="text-[11px] font-mono font-bold uppercase text-slate-400 block mb-1">RIESGO PAÍS</span>
+                    <div class="text-3xl font-extrabold text-white tracking-tight my-2 font-mono" id="val-riesgo">674</div>
+                    <div class="flex items-center gap-2 text-xs font-mono font-bold mt-3">
+                        <span id="sem-riesgo" class="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 border border-rose-500/20">Sem: -0,2%</span>
+                        <span id="ytd-riesgo" class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">YTD: +18,0%</span>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- 2. BLOQUE DE DIVISAS, CRIPTO & MERVAL ARS -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- 2. REFERENCIAS ADICIONALES (CCL, BTC, MERVAL ARS) -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
             
             <!-- S&P Merval ARS -->
-            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2">
-                <div class="flex justify-between items-center border-b pb-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">S&P Merval (ARS)</span>
-                    <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Local</span>
+            <div class="glass-panel p-5 rounded-2xl space-y-3">
+                <div class="flex justify-between items-center border-b border-white/10 pb-2.5">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase">S&P Merval (ARS)</span>
+                    <span class="text-[10px] font-mono bg-white/10 text-slate-300 font-bold px-2 py-0.5 rounded-md border border-white/10">Local</span>
                 </div>
-                <div class="pt-1">
-                    <span class="text-2xl font-black text-cubo-navy" id="val-merval-ars">$2.848.945</span>
-                    <div class="flex gap-2 text-xs font-bold mt-2">
-                        <span class="text-emerald-600" id="merval-ars-sem">Sem: +0,7%</span>
-                        <span class="text-gray-500" id="merval-ars-ytd">YTD: -6,6%</span>
+                <div>
+                    <span class="text-2xl font-black text-white font-mono" id="val-merval-ars">$2.848.945</span>
+                    <div class="flex gap-2 text-xs font-mono font-bold mt-2">
+                        <span class="text-emerald-400" id="merval-ars-sem">Sem: +0,7%</span>
+                        <span class="text-rose-400" id="merval-ars-ytd">YTD: -6,6%</span>
                     </div>
                 </div>
             </div>
 
             <!-- Dólar CCL & BTC -->
-            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
-                <div class="flex justify-between items-center border-b pb-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">CCL & Cripto</span>
-                    <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Referencias</span>
+            <div class="glass-panel p-5 rounded-2xl space-y-3">
+                <div class="flex justify-between items-center border-b border-white/10 pb-2.5">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase">CCL & Cripto</span>
+                    <span class="text-[10px] font-mono bg-white/10 text-slate-300 font-bold px-2 py-0.5 rounded-md border border-white/10">Referencias</span>
                 </div>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <div class="bg-cubo-bg p-2 rounded-lg">
-                        <span class="text-[10px] text-gray-500 font-bold block">DÓLAR CCL</span>
-                        <span class="font-black text-cubo-navy text-sm" id="val-ccl">$1.638</span>
-                        <span class="text-[10px] text-emerald-600 font-bold block mt-0.5" id="ccl-sem">Sem: +1,1%</span>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-brand-dark/60 p-3 rounded-xl border border-white/5">
+                        <span class="text-[10px] font-mono text-slate-400 font-bold block uppercase">Dólar CCL</span>
+                        <span class="font-bold font-mono text-white text-base block mt-0.5" id="val-ccl">$1.638</span>
+                        <span class="text-[10px] font-mono text-emerald-400 font-bold block mt-1" id="ccl-sem">Sem: +1,1%</span>
                     </div>
-                    <div class="bg-cubo-bg p-2 rounded-lg">
-                        <span class="text-[10px] text-gray-500 font-bold block">BTC</span>
-                        <span class="font-black text-cubo-navy text-sm" id="val-btc">$81.086</span>
-                        <span class="text-[10px] text-rose-600 font-bold block mt-0.5" id="btc-sem">Sem: -0,9%</span>
+                    <div class="bg-brand-dark/60 p-3 rounded-xl border border-white/5">
+                        <span class="text-[10px] font-mono text-slate-400 font-bold block uppercase">Bitcoin BTC</span>
+                        <span class="font-bold font-mono text-white text-base block mt-0.5" id="val-btc">$81.086</span>
+                        <span class="text-[10px] font-mono text-rose-400 font-bold block mt-1" id="btc-sem">Sem: -0,9%</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Resumen de Variaciones Generales -->
-            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
-                <div class="flex justify-between items-center border-b pb-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Estado de Lectura</span>
-                    <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Google Sheets</span>
+            <!-- Panel Informativo -->
+            <div class="glass-panel p-5 rounded-2xl space-y-3 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center border-b border-white/10 pb-2.5">
+                        <span class="text-xs font-mono font-bold text-slate-400 uppercase">Sincronización Automática</span>
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-mint"></i>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mt-3">
+                        Los valores se formatean automáticamente respetando el redondeo sin decimales y manteniendo los signos explícitos de variación porcentual.
+                    </p>
                 </div>
-                <p class="text-xs text-gray-600 leading-relaxed pt-1">
-                    Lectura directa de celdas respetando signos, porcentajes y comas decimales originales[cite: 4, 5].
-                </p>
+                <div class="text-[11px] font-mono text-brand-mint flex items-center gap-1.5">
+                    <i data-lucide="zap" class="w-3.5 h-3.5"></i> Listo para exportar a Instagram Stories
+                </div>
             </div>
 
         </section>
 
         <!-- 3. GENERADOR DE INFOGRAFÍA PARA HISTORIAS (9:16) -->
-        <section class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-4">
+        <section class="glass-panel p-6 rounded-3xl space-y-6 border border-white/10 shadow-2xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 pb-5">
                 <div>
-                    <h3 class="text-lg font-bold text-cubo-navy flex items-center gap-2">
-                        <i data-lucide="image" class="w-5 h-5 text-cubo-teal"></i>
-                        Infografía para Historias (9:16)
-                    </h3>
-                    <p class="text-xs text-gray-500">Personalizá qué activos mostrar y la frase de la semana antes de exportar</p>
+                    <div class="flex items-center gap-2">
+                        <h3 class="text-xl font-extrabold text-white flex items-center gap-2">
+                            <i data-lucide="instagram" class="w-6 h-6 text-brand-mint"></i>
+                            Infografía para Instagram Stories
+                        </h3>
+                        <span class="text-[10px] font-mono bg-brand-teal/50 text-brand-mint px-2 py-0.5 rounded-full border border-brand-mint/30">9:16 HD</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-0.5">Elegí qué activos mostrar, personalizá la frase y exportá en PNG alta calidad</p>
                 </div>
-                <button onclick="descargarInfografia()" class="bg-cubo-navy hover:bg-cubo-teal text-white px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow">
+                
+                <button onclick="descargarInfografia()" class="bg-gradient-to-r from-brand-mint to-brand-accent hover:from-white hover:to-brand-mint text-brand-dark px-6 py-3 rounded-xl font-extrabold text-xs transition-all shadow-glow-mint flex items-center gap-2">
                     <i data-lucide="download" class="w-4 h-4"></i> Descargar Imagen PNG
                 </button>
             </div>
 
-            <!-- PANEL DE PERSONALIZACIÓN DE LA INFOGRAFÍA -->
-            <div class="bg-cubo-bg p-4 rounded-xl border border-gray-200 space-y-4">
-                <h4 class="text-xs font-extrabold uppercase tracking-wider text-cubo-navy flex items-center gap-1.5">
-                    <i data-lucide="sliders" class="w-4 h-4 text-cubo-teal"></i> Personalizar Contenido de la Imagen
+            <!-- CONTROLES DE PERSONALIZACIÓN -->
+            <div class="bg-brand-dark/70 p-5 rounded-2xl border border-white/10 space-y-4">
+                <h4 class="text-xs font-mono font-extrabold uppercase tracking-wider text-brand-mint flex items-center gap-2">
+                    <i data-lucide="settings-2" class="w-4 h-4"></i> Personalizar Contenido de la Historia
                 </h4>
 
                 <!-- Checkboxes de Selección de Activos -->
                 <div>
-                    <label class="block text-[11px] font-bold text-gray-600 mb-2">Activos a incluir en la grilla principal:</label>
-                    <div class="flex flex-wrap gap-3 text-xs">
-                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
-                            <input type="checkbox" id="chk-merval-usd" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
-                            <span class="font-semibold text-cubo-navy">Merval USD</span>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-2.5">Activos a incluir en la grilla:</label>
+                    <div class="flex flex-wrap gap-2.5">
+                        <label class="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-3 py-2 rounded-xl border border-white/10 cursor-pointer text-xs font-medium text-slate-200 transition">
+                            <input type="checkbox" id="chk-merval-usd" checked onchange="actualizarVisibilidadActivos()" class="rounded bg-brand-dark border-white/20 text-brand-mint focus:ring-brand-mint">
+                            <span>Merval USD</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
-                            <input type="checkbox" id="chk-sp500" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
-                            <span class="font-semibold text-cubo-navy">S&P 500</span>
+                        <label class="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-3 py-2 rounded-xl border border-white/10 cursor-pointer text-xs font-medium text-slate-200 transition">
+                            <input type="checkbox" id="chk-sp500" checked onchange="actualizarVisibilidadActivos()" class="rounded bg-brand-dark border-white/20 text-brand-mint focus:ring-brand-mint">
+                            <span>S&P 500</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
-                            <input type="checkbox" id="chk-mep" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
-                            <span class="font-semibold text-cubo-navy">Dólar MEP</span>
+                        <label class="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-3 py-2 rounded-xl border border-white/10 cursor-pointer text-xs font-medium text-slate-200 transition">
+                            <input type="checkbox" id="chk-mep" checked onchange="actualizarVisibilidadActivos()" class="rounded bg-brand-dark border-white/20 text-brand-mint focus:ring-brand-mint">
+                            <span>Dólar MEP</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
-                            <input type="checkbox" id="chk-riesgo" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
-                            <span class="font-semibold text-cubo-navy">Riesgo País</span>
+                        <label class="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-3 py-2 rounded-xl border border-white/10 cursor-pointer text-xs font-medium text-slate-200 transition">
+                            <input type="checkbox" id="chk-riesgo" checked onchange="actualizarVisibilidadActivos()" class="rounded bg-brand-dark border-white/20 text-brand-mint focus:ring-brand-mint">
+                            <span>Riesgo País</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
-                            <input type="checkbox" id="chk-ccl" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
-                            <span class="font-semibold text-cubo-navy">Dólar CCL</span>
+                        <label class="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-3 py-2 rounded-xl border border-white/10 cursor-pointer text-xs font-medium text-slate-200 transition">
+                            <input type="checkbox" id="chk-ccl" checked onchange="actualizarVisibilidadActivos()" class="rounded bg-brand-dark border-white/20 text-brand-mint focus:ring-brand-mint">
+                            <span>Dólar CCL</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
-                            <input type="checkbox" id="chk-btc" checked onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
-                            <span class="font-semibold text-cubo-navy">Bitcoin (BTC)</span>
+                        <label class="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-3 py-2 rounded-xl border border-white/10 cursor-pointer text-xs font-medium text-slate-200 transition">
+                            <input type="checkbox" id="chk-btc" checked onchange="actualizarVisibilidadActivos()" class="rounded bg-brand-dark border-white/20 text-brand-mint focus:ring-brand-mint">
+                            <span>Bitcoin (BTC)</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50">
-                            <input type="checkbox" id="chk-merval-ars" onchange="actualizarVisibilidadActivos()" class="rounded text-cubo-teal focus:ring-cubo-teal">
-                            <span class="font-semibold text-cubo-navy">Merval ARS</span>
+                        <label class="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-3 py-2 rounded-xl border border-white/10 cursor-pointer text-xs font-medium text-slate-200 transition">
+                            <input type="checkbox" id="chk-merval-ars" onchange="actualizarVisibilidadActivos()" class="rounded bg-brand-dark border-white/20 text-brand-mint focus:ring-brand-mint">
+                            <span>Merval ARS</span>
                         </label>
                     </div>
                 </div>
 
-                <!-- Textarea para Frase de la Semana -->
+                <!-- Textarea Frase de la Semana -->
                 <div>
-                    <label class="block text-[11px] font-bold text-gray-600 mb-1">Frase / Idea de la Semana:</label>
-                    <textarea id="input-idea-semana" oninput="actualizarTextoIdea()" rows="2" class="w-full border border-gray-300 p-2 rounded-lg text-xs text-cubo-navy bg-white focus:ring-1 focus:ring-cubo-teal focus:outline-none" placeholder="Escribí acá tu reflexión o síntesis del mercado..."></textarea>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1.5">Frase / Idea de la Semana:</label>
+                    <textarea id="input-idea-semana" oninput="actualizarTextoIdea()" rows="2" class="w-full bg-brand-dark border border-white/15 p-3 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-brand-mint transition" placeholder="Escribí acá tu reflexión o síntesis del mercado..."></textarea>
                 </div>
             </div>
 
-            <!-- Canvas 9:16 (Sin recuadros ni bordes, diseño minimalista limpio) -->
-            <div class="flex justify-center bg-gray-100 p-6 rounded-xl border overflow-x-auto">
-                <div id="story-infographic" class="w-[360px] h-[520px] bg-cubo-navy text-white p-5 rounded-2xl flex flex-col justify-between shadow-2xl relative overflow-hidden">
+            <!-- LIENZO CANVA / STORY PREVIEW (ESTILO PREMIUM DARK FINTECH GLASS) -->
+            <div class="flex justify-center bg-brand-dark/90 p-4 sm:p-8 rounded-2xl border border-white/10 overflow-x-auto shadow-inner">
+                
+                <!-- Tarjeta Principal Aspecto 9:16 (360x640px) con Glassmorphic FinTech Styling -->
+                <div id="story-infographic" class="w-[360px] h-[640px] bg-gradient-to-b from-[#0B132B] via-[#1C2541] to-[#070C1A] text-white p-6 rounded-[2rem] flex flex-col justify-between shadow-2xl relative overflow-hidden border border-white/15 shrink-0">
                     
-                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-cubo-teal rounded-full blur-2xl opacity-40"></div>
-                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-cubo-mint rounded-full blur-2xl opacity-20"></div>
+                    <!-- Glow Lights Neón de Fondo -->
+                    <div class="absolute -top-16 -right-16 w-52 h-52 bg-brand-teal rounded-full blur-[60px] opacity-40 pointer-events-none"></div>
+                    <div class="absolute -bottom-16 -left-16 w-52 h-52 bg-brand-mint rounded-full blur-[70px] opacity-25 pointer-events-none"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-brand-accent rounded-full blur-[90px] opacity-10 pointer-events-none"></div>
 
-                    <!-- Header con solo "CIERRE DE LA SEMANA" -->
-                    <div class="relative z-10 border-b border-gray-700/80 pb-2.5 flex justify-center items-center">
-                        <span class="text-xs font-extrabold text-white tracking-widest uppercase">CIERRE DE LA SEMANA</span>
+                    <!-- Header Infografía -->
+                    <div class="relative z-10 space-y-2">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 bg-brand-mint/20 rounded-lg border border-brand-mint/40 flex items-center justify-center font-black text-brand-mint text-xs">
+                                    CF
+                                </div>
+                                <span class="text-[11px] font-extrabold tracking-wider text-white uppercase">CUBO FINANZAS</span>
+                            </div>
+                            <span class="text-[9px] font-mono font-bold bg-brand-teal/60 text-brand-mint px-2 py-0.5 rounded-full border border-brand-mint/30">
+                                CIERRE SEMANAL
+                            </span>
+                        </div>
                     </div>
 
-                    <!-- Grid Dinámica de Activos sin Recuadros -->
-                    <div id="story-grid-container" class="relative z-10 grid grid-cols-2 gap-y-4 gap-x-4 my-auto">
+                    <!-- Grilla Dinámica de Tarjetas Glassmorphism -->
+                    <div id="story-grid-container" class="relative z-10 grid grid-cols-2 gap-3 my-auto">
+                        
                         <!-- Merval USD -->
-                        <div id="card-story-merval-usd" class="flex flex-col justify-between">
-                            <span class="text-[8.5px] font-bold text-gray-400 uppercase text-center block tracking-wider w-full whitespace-nowrap">MERVAL USD</span>
-                            <div class="flex justify-between items-center mt-1">
-                                <div class="text-[12px] font-black text-white leading-none" id="story-merval-usd">$1.739</div>
-                                <div class="text-right text-[7.5px] font-bold leading-tight space-y-0.5">
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-rose-300" id="story-merval-sem">-0,8%</span></div>
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-rose-300" id="story-merval-ytd">-13,2%</span></div>
-                                </div>
+                        <div id="card-story-merval-usd" class="glass-card-story p-3 rounded-2xl flex flex-col justify-between space-y-2 border border-white/10">
+                            <div class="flex justify-between items-start">
+                                <span class="text-[9px] font-mono font-extrabold text-slate-300 uppercase tracking-wider">MERVAL USD</span>
+                                <i data-lucide="trending-up" class="w-3 h-3 text-brand-accent"></i>
+                            </div>
+                            <div class="text-lg font-black font-mono text-white tracking-tight" id="story-merval-usd">$1.739</div>
+                            <div class="flex justify-between items-center text-[8px] font-mono font-bold pt-1 border-t border-white/5">
+                                <span id="story-merval-sem" class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">Sem: -0,8%</span>
+                                <span id="story-merval-ytd" class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">YTD: -13,2%</span>
                             </div>
                         </div>
 
                         <!-- S&P 500 -->
-                        <div id="card-story-sp500" class="flex flex-col justify-between">
-                            <span class="text-[8.5px] font-bold text-gray-400 uppercase text-center block tracking-wider w-full whitespace-nowrap">S&P 500</span>
-                            <div class="flex justify-between items-center mt-1">
-                                <div class="text-[12px] font-black text-white leading-none" id="story-sp500">$7.663</div>
-                                <div class="text-right text-[7.5px] font-bold leading-tight space-y-0.5">
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-sp500-sem">+0,1%</span></div>
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-sp500-ytd">+12,0%</span></div>
-                                </div>
+                        <div id="card-story-sp500" class="glass-card-story p-3 rounded-2xl flex flex-col justify-between space-y-2 border border-white/10">
+                            <div class="flex justify-between items-start">
+                                <span class="text-[9px] font-mono font-extrabold text-slate-300 uppercase tracking-wider">S&P 500</span>
+                                <i data-lucide="bar-chart-3" class="w-3 h-3 text-brand-mint"></i>
+                            </div>
+                            <div class="text-lg font-black font-mono text-white tracking-tight" id="story-sp500">$7.663</div>
+                            <div class="flex justify-between items-center text-[8px] font-mono font-bold pt-1 border-t border-white/5">
+                                <span id="story-sp500-sem" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Sem: +0,1%</span>
+                                <span id="story-sp500-ytd" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">YTD: +12,0%</span>
                             </div>
                         </div>
 
                         <!-- Dólar MEP -->
-                        <div id="card-story-mep" class="flex flex-col justify-between">
-                            <span class="text-[8.5px] font-bold text-gray-400 uppercase text-center block tracking-wider w-full whitespace-nowrap">DÓLAR MEP</span>
-                            <div class="flex justify-between items-center mt-1">
-                                <div class="text-[12px] font-black text-white leading-none" id="story-mep">$1.554</div>
-                                <div class="text-right text-[7.5px] font-bold leading-tight space-y-0.5">
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-mep-sem">+0,7%</span></div>
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-mep-ytd">+4,6%</span></div>
-                                </div>
+                        <div id="card-story-mep" class="glass-card-story p-3 rounded-2xl flex flex-col justify-between space-y-2 border border-white/10">
+                            <div class="flex justify-between items-start">
+                                <span class="text-[9px] font-mono font-extrabold text-slate-300 uppercase tracking-wider">DÓLAR MEP</span>
+                                <i data-lucide="dollar-sign" class="w-3 h-3 text-brand-mint"></i>
+                            </div>
+                            <div class="text-lg font-black font-mono text-white tracking-tight" id="story-mep">$1.554</div>
+                            <div class="flex justify-between items-center text-[8px] font-mono font-bold pt-1 border-t border-white/5">
+                                <span id="story-mep-sem" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Sem: +0,7%</span>
+                                <span id="story-mep-ytd" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">YTD: +4,6%</span>
                             </div>
                         </div>
 
                         <!-- Riesgo País -->
-                        <div id="card-story-riesgo" class="flex flex-col justify-between">
-                            <span class="text-[8.5px] font-bold text-gray-400 uppercase text-center block tracking-wider w-full whitespace-nowrap">RIESGO PAÍS</span>
-                            <div class="flex justify-between items-center mt-1">
-                                <div class="text-[12px] font-black text-white leading-none" id="story-riesgo">674</div>
-                                <div class="text-right text-[7.5px] font-bold leading-tight space-y-0.5">
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-rose-300" id="story-riesgo-sem">-0,2%</span></div>
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-riesgo-ytd">+18,0%</span></div>
-                                </div>
+                        <div id="card-story-riesgo" class="glass-card-story p-3 rounded-2xl flex flex-col justify-between space-y-2 border border-white/10">
+                            <div class="flex justify-between items-start">
+                                <span class="text-[9px] font-mono font-extrabold text-slate-300 uppercase tracking-wider">RIESGO PAÍS</span>
+                                <i data-lucide="shield-alert" class="w-3 h-3 text-brand-accent"></i>
+                            </div>
+                            <div class="text-lg font-black font-mono text-white tracking-tight" id="story-riesgo">674</div>
+                            <div class="flex justify-between items-center text-[8px] font-mono font-bold pt-1 border-t border-white/5">
+                                <span id="story-riesgo-sem" class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">Sem: -0,2%</span>
+                                <span id="story-riesgo-ytd" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">YTD: +18,0%</span>
                             </div>
                         </div>
 
                         <!-- Dólar CCL -->
-                        <div id="card-story-ccl" class="flex flex-col justify-between">
-                            <span class="text-[8.5px] font-bold text-gray-400 uppercase text-center block tracking-wider w-full whitespace-nowrap">DÓLAR CCL</span>
-                            <div class="flex justify-between items-center mt-1">
-                                <div class="text-[12px] font-black text-white leading-none" id="story-ccl">$1.638</div>
-                                <div class="text-right text-[7.5px] font-bold leading-tight space-y-0.5">
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-ccl-sem">+1,1%</span></div>
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-cubo-mint" id="story-ccl-ytd">+5,0%</span></div>
-                                </div>
+                        <div id="card-story-ccl" class="glass-card-story p-3 rounded-2xl flex flex-col justify-between space-y-2 border border-white/10">
+                            <div class="flex justify-between items-start">
+                                <span class="text-[9px] font-mono font-extrabold text-slate-300 uppercase tracking-wider">DÓLAR CCL</span>
+                                <i data-lucide="coins" class="w-3 h-3 text-brand-mint"></i>
+                            </div>
+                            <div class="text-lg font-black font-mono text-white tracking-tight" id="story-ccl">$1.638</div>
+                            <div class="flex justify-between items-center text-[8px] font-mono font-bold pt-1 border-t border-white/5">
+                                <span id="story-ccl-sem" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Sem: +1,1%</span>
+                                <span id="story-ccl-ytd" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">YTD: +5,0%</span>
                             </div>
                         </div>
 
-                        <!-- Bitcoin (BTC) -->
-                        <div id="card-story-btc" class="flex flex-col justify-between">
-                            <span class="text-[8.5px] font-bold text-gray-400 uppercase text-center block tracking-wider w-full whitespace-nowrap">BITCOIN (BTC)</span>
-                            <div class="flex justify-between items-center mt-1">
-                                <div class="text-[11.5px] font-black text-white leading-none" id="story-btc">$81.086</div>
-                                <div class="text-right text-[7.5px] font-bold leading-tight space-y-0.5">
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-rose-300" id="story-btc-sem">-0,9%</span></div>
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-rose-300" id="story-btc-ytd">-8,6%</span></div>
-                                </div>
+                        <!-- Bitcoin BTC -->
+                        <div id="card-story-btc" class="glass-card-story p-3 rounded-2xl flex flex-col justify-between space-y-2 border border-white/10">
+                            <div class="flex justify-between items-start">
+                                <span class="text-[9px] font-mono font-extrabold text-slate-300 uppercase tracking-wider">BITCOIN (BTC)</span>
+                                <i data-lucide="bitcoin" class="w-3 h-3 text-brand-accent"></i>
+                            </div>
+                            <div class="text-lg font-black font-mono text-white tracking-tight" id="story-btc">$81.086</div>
+                            <div class="flex justify-between items-center text-[8px] font-mono font-bold pt-1 border-t border-white/5">
+                                <span id="story-btc-sem" class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">Sem: -0,9%</span>
+                                <span id="story-btc-ytd" class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">YTD: -8,6%</span>
                             </div>
                         </div>
 
                         <!-- Merval ARS -->
-                        <div id="card-story-merval-ars" class="flex flex-col justify-between hidden">
-                            <span class="text-[8.5px] font-bold text-gray-400 uppercase text-center block tracking-wider w-full whitespace-nowrap">MERVAL ARS</span>
-                            <div class="flex justify-between items-center mt-1">
-                                <div class="text-[10.5px] font-black text-white leading-none" id="story-merval-ars">$2.848.945</div>
-                                <div class="text-right text-[7.5px] font-bold leading-tight space-y-0.5">
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">Sem:</span> <span class="text-cubo-mint" id="story-merval-ars-sem">+0,7%</span></div>
-                                    <div class="whitespace-nowrap"><span class="text-gray-400">YTD:</span> <span class="text-rose-300" id="story-merval-ars-ytd">-6,6%</span></div>
-                                </div>
+                        <div id="card-story-merval-ars" class="glass-card-story p-3 rounded-2xl flex flex-col justify-between space-y-2 border border-white/10 hidden">
+                            <div class="flex justify-between items-start">
+                                <span class="text-[9px] font-mono font-extrabold text-slate-300 uppercase tracking-wider">MERVAL ARS</span>
+                                <i data-lucide="line-chart" class="w-3 h-3 text-brand-mint"></i>
+                            </div>
+                            <div class="text-base font-black font-mono text-white tracking-tight" id="story-merval-ars">$2.848.945</div>
+                            <div class="flex justify-between items-center text-[8px] font-mono font-bold pt-1 border-t border-white/5">
+                                <span id="story-merval-ars-sem" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Sem: +0,7%</span>
+                                <span id="story-merval-ars-ytd" class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">YTD: -6,6%</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Idea Card Dinámica (También sin recuadro pesado) -->
-                    <div class="relative z-10 border-t border-b border-cubo-mint/20 py-2 text-center">
-                        <p id="story-idea-text" class="text-[10px] font-bold leading-tight text-white">
+                    <!-- Frase/Idea de la semana -->
+                    <div class="relative z-10 glass-card-story p-3.5 rounded-2xl border border-white/15 bg-brand-teal/20 space-y-1 text-center">
+                        <div class="flex justify-center items-center gap-1 text-brand-mint mb-0.5">
+                            <i data-lucide="quote" class="w-3.5 h-3.5 opacity-80"></i>
+                        </div>
+                        <p id="story-idea-text" class="text-[10.5px] font-medium leading-snug text-slate-200">
                             "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
                         </p>
                     </div>
 
-                    <!-- Footer con @francombina7 -->
-                    <div class="relative z-10 flex justify-end items-center text-[9px] text-gray-400">
-                        <span class="font-bold text-cubo-mint">@francombina7</span>
+                    <!-- Footer Branding Personal -->
+                    <div class="relative z-10 flex justify-between items-center border-t border-white/10 pt-3 text-[10px]">
+                        <span class="font-mono text-slate-400">mercado & finanzas</span>
+                        <div class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-full border border-white/15">
+                            <i data-lucide="user" class="w-3 h-3 text-brand-mint"></i>
+                            <span class="font-bold font-mono text-brand-mint">@francombina7</span>
+                        </div>
                     </div>
 
                 </div>
@@ -389,38 +523,45 @@
     </main>
 
     <!-- Modal de Edición Manual -->
-    <div id="modal-edicion" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 space-y-4 max-h-[85vh] flex flex-col">
-            <div class="flex justify-between items-center border-b pb-3 shrink-0">
-                <h3 class="font-bold text-lg text-cubo-navy">Edición Manual de Contingencia</h3>
-                <button onclick="cerrarModalEdicion()" class="text-gray-400 hover:text-gray-600 font-bold">✕</button>
+    <div id="modal-edicion" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+        <div class="glass-panel border border-white/20 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3 shrink-0">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="edit-3" class="w-5 h-5 text-brand-mint"></i>
+                    <h3 class="font-extrabold text-lg text-white">Edición Manual de Valores</h3>
+                </div>
+                <button onclick="cerrarModalEdicion()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
             </div>
-            <div class="overflow-y-auto pr-2 space-y-3 text-sm flex-grow">
+            
+            <div class="overflow-y-auto pr-2 space-y-3.5 text-xs flex-grow font-mono">
                 <div>
-                    <label class="block text-[11px] text-gray-500 font-bold">S&P Merval en USD</label>
-                    <input type="text" id="input-merval-usd" value="$1.739" class="w-full border p-1.5 rounded text-sm">
+                    <label class="block text-slate-400 font-bold mb-1">S&P Merval USD</label>
+                    <input type="text" id="input-merval-usd" value="$1.739" class="w-full bg-brand-dark border border-white/15 p-2.5 rounded-xl text-white">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-500 font-bold">S&P 500</label>
-                    <input type="text" id="input-sp500" value="$7.663" class="w-full border p-1.5 rounded text-sm">
+                    <label class="block text-slate-400 font-bold mb-1">S&P 500</label>
+                    <input type="text" id="input-sp500" value="$7.663" class="w-full bg-brand-dark border border-white/15 p-2.5 rounded-xl text-white">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-500 font-bold">Dólar MEP</label>
-                    <input type="text" id="input-mep" value="$1.554" class="w-full border p-1.5 rounded text-sm">
+                    <label class="block text-slate-400 font-bold mb-1">Dólar MEP</label>
+                    <input type="text" id="input-mep" value="$1.554" class="w-full bg-brand-dark border border-white/15 p-2.5 rounded-xl text-white">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-500 font-bold">Riesgo País</label>
-                    <input type="text" id="input-riesgo" value="674" class="w-full border p-1.5 rounded text-sm">
+                    <label class="block text-slate-400 font-bold mb-1">Riesgo País</label>
+                    <input type="text" id="input-riesgo" value="674" class="w-full bg-brand-dark border border-white/15 p-2.5 rounded-xl text-white">
                 </div>
             </div>
-            <div class="flex justify-end gap-2 border-t pt-3 shrink-0">
-                <button onclick="cerrarModalEdicion()" class="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Cancelar</button>
-                <button onclick="guardarEdicionManual()" class="px-4 py-2 text-sm font-semibold bg-cubo-navy text-white hover:bg-cubo-teal rounded-lg">Guardar Cambios</button>
+
+            <div class="flex justify-end gap-3 border-t border-white/10 pt-4 shrink-0">
+                <button onclick="cerrarModalEdicion()" class="px-4 py-2 rounded-xl font-bold text-xs text-slate-400 hover:bg-white/5 transition">Cancelar</button>
+                <button onclick="guardarEdicionManual()" class="px-5 py-2 rounded-xl font-extrabold text-xs bg-brand-mint text-brand-dark hover:bg-white transition shadow-glow-mint">Guardar Cambios</button>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Parser CSV, Personalización e Interfaz -->
+    <!-- JavaScript Parser CSV, Redondeo e Interfaz -->
     <script>
         const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
 
@@ -440,7 +581,7 @@
             
             const ideaElem = document.getElementById('story-idea-text');
             if (ideaElem) {
-                document.getElementById('input-idea-semana').value = ideaElem.innerText.replace(/^"|"$/g, '');
+                document.getElementById('input-idea-semana').value = ideaElem.innerText.trim().replace(/^"|"$/g, '');
             }
 
             sincronizarConSheet();
@@ -468,7 +609,8 @@
             if (url.includes("/pubhtml")) url = url.replace("/pubhtml", "/pub?output=csv");
 
             const badge = document.getElementById('badge-estado');
-            badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span> Leyendo Google Sheet...`;
+            badge.className = "text-xs bg-amber-500/10 text-amber-400 font-bold px-3.5 py-2 rounded-xl border border-amber-500/30 flex items-center gap-2";
+            badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> Obteniendo datos...`;
 
             try {
                 let response = await fetch(url);
@@ -477,25 +619,34 @@
                 parsearCSVConComillas(csvText);
                 actualizarInterfaz();
 
-                badge.className = "text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5";
-                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Sheet Sincronizado`;
+                badge.className = "text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3.5 py-2 rounded-xl border border-emerald-500/30 flex items-center gap-2";
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Sheet Sincronizado`;
 
             } catch (err) {
                 console.error("Error leyendo CSV:", err);
-                badge.className = "text-xs bg-rose-50 text-rose-700 font-bold px-3 py-1.5 rounded-lg border border-rose-200 flex items-center gap-1.5";
-                badge.innerHTML = `⚠️ Error al leer Sheet`;
+                badge.className = "text-xs bg-rose-500/10 text-rose-400 font-bold px-3.5 py-2 rounded-xl border border-rose-500/30 flex items-center gap-2";
+                badge.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4"></i> Error de Conexión`;
+                try { lucide.createIcons(); } catch(e){}
             }
         }
 
         function redondearValor(str) {
             if (!str) return "";
+            let tienePeso = str.includes('$');
+            let tienePorc = str.includes('%');
+
             let limpio = str.replace('$', '').replace(/\./g, '').replace(',', '.').trim();
             let num = parseFloat(limpio);
-            if (!isNaN(num) && str.includes('$')) {
-                return '$' + Math.round(num).toLocaleString('es-AR');
-            }
-            if (!isNaN(num) && str.includes('%')) {
-                return (num > 0 ? '+' : '') + num.toFixed(1).replace('.', ',') + '%';
+
+            if (!isNaN(num)) {
+                if (tienePorc) {
+                    let signo = num > 0 ? '+' : '';
+                    return signo + num.toFixed(1).replace('.', ',') + '%';
+                }
+                if (tienePeso) {
+                    return '$' + Math.round(num).toLocaleString('es-AR');
+                }
+                return Math.round(num).toLocaleString('es-AR');
             }
             return str;
         }
@@ -506,6 +657,7 @@
                 let cols = [];
                 let current = '';
                 let inQuotes = false;
+
                 for (let i = 0; i < line.length; i++) {
                     let char = line[i];
                     if (char === '"') {
@@ -545,8 +697,25 @@
             });
         }
 
+        function aplicarEstiloVariacion(elemId, texto) {
+            const el = document.getElementById(elemId);
+            if (!el) return;
+            el.innerText = texto;
+            if (texto.includes('-')) {
+                el.className = el.className.replace(/bg-emerald-[^\s]+/g, '').replace(/text-emerald-[^\s]+/g, '');
+                if (!el.className.includes('text-rose')) {
+                    el.classList.add('bg-rose-500/20', 'text-rose-300', 'border-rose-500/30');
+                }
+            } else {
+                el.className = el.className.replace(/bg-rose-[^\s]+/g, '').replace(/text-rose-[^\s]+/g, '');
+                if (!el.className.includes('text-emerald')) {
+                    el.classList.add('bg-emerald-500/20', 'text-emerald-300', 'border-emerald-500/30');
+                }
+            }
+        }
+
         function actualizarInterfaz() {
-            // Web Dashboard
+            // Dashboard
             document.getElementById('val-merval-usd').innerText = marketData.mervalUsd.val;
             document.getElementById('sem-merval-usd').innerText = `Sem: ${marketData.mervalUsd.sem}`;
             document.getElementById('ytd-merval-usd').innerText = `YTD: ${marketData.mervalUsd.ytd}`;
@@ -573,34 +742,36 @@
             document.getElementById('val-btc').innerText = marketData.btc.val;
             document.getElementById('btc-sem').innerText = `Sem: ${marketData.btc.sem}`;
 
-            // Story 9:16
+            // Infografía 9:16
             document.getElementById('story-merval-usd').innerText = marketData.mervalUsd.val;
-            document.getElementById('story-merval-sem').innerText = marketData.mervalUsd.sem;
-            document.getElementById('story-merval-ytd').innerText = marketData.mervalUsd.ytd;
+            aplicarEstiloVariacion('story-merval-sem', `Sem: ${marketData.mervalUsd.sem}`);
+            aplicarEstiloVariacion('story-merval-ytd', `YTD: ${marketData.mervalUsd.ytd}`);
 
             document.getElementById('story-sp500').innerText = marketData.sp500.val;
-            document.getElementById('story-sp500-sem').innerText = marketData.sp500.sem;
-            document.getElementById('story-sp500-ytd').innerText = marketData.sp500.ytd;
+            aplicarEstiloVariacion('story-sp500-sem', `Sem: ${marketData.sp500.sem}`);
+            aplicarEstiloVariacion('story-sp500-ytd', `YTD: ${marketData.sp500.ytd}`);
 
             document.getElementById('story-mep').innerText = marketData.mep.val;
-            document.getElementById('story-mep-sem').innerText = marketData.mep.sem;
-            document.getElementById('story-mep-ytd').innerText = marketData.mep.ytd;
+            aplicarEstiloVariacion('story-mep-sem', `Sem: ${marketData.mep.sem}`);
+            aplicarEstiloVariacion('story-mep-ytd', `YTD: ${marketData.mep.ytd}`);
 
             document.getElementById('story-riesgo').innerText = marketData.riesgo.val;
-            document.getElementById('story-riesgo-sem').innerText = marketData.riesgo.sem;
-            document.getElementById('story-riesgo-ytd').innerText = marketData.riesgo.ytd;
+            aplicarEstiloVariacion('story-riesgo-sem', `Sem: ${marketData.riesgo.sem}`);
+            aplicarEstiloVariacion('story-riesgo-ytd', `YTD: ${marketData.riesgo.ytd}`);
 
             document.getElementById('story-ccl').innerText = marketData.ccl.val;
-            document.getElementById('story-ccl-sem').innerText = marketData.ccl.sem;
-            document.getElementById('story-ccl-ytd').innerText = marketData.ccl.ytd;
+            aplicarEstiloVariacion('story-ccl-sem', `Sem: ${marketData.ccl.sem}`);
+            aplicarEstiloVariacion('story-ccl-ytd', `YTD: ${marketData.ccl.ytd}`);
 
             document.getElementById('story-btc').innerText = marketData.btc.val;
-            document.getElementById('story-btc-sem').innerText = marketData.btc.sem;
-            document.getElementById('story-btc-ytd').innerText = marketData.btc.ytd;
+            aplicarEstiloVariacion('story-btc-sem', `Sem: ${marketData.btc.sem}`);
+            aplicarEstiloVariacion('story-btc-ytd', `YTD: ${marketData.btc.ytd}`);
 
             document.getElementById('story-merval-ars').innerText = marketData.mervalArs.val;
-            document.getElementById('story-merval-ars-sem').innerText = marketData.mervalArs.sem;
-            document.getElementById('story-merval-ars-ytd').innerText = marketData.mervalArs.ytd;
+            aplicarEstiloVariacion('story-merval-ars-sem', `Sem: ${marketData.mervalArs.sem}`);
+            aplicarEstiloVariacion('story-merval-ars-ytd', `YTD: ${marketData.mervalArs.ytd}`);
+            
+            try { lucide.createIcons(); } catch(e){}
         }
 
         function actualizarVisibilidadActivos() {
@@ -633,7 +804,7 @@
         function descargarInfografia() {
             const element = document.getElementById('story-infographic');
             
-            html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+            html2canvas(element, { scale: 3, useCORS: true, backgroundColor: '#070C1A' }).then(canvas => {
                 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
                 if (isMobile) {
@@ -642,33 +813,34 @@
                         imageWin.document.write(`
                             <html>
                                 <head>
-                                    <title>Guardar Imagen</title>
+                                    <title>Guardar Infografía — Cubo Finanzas</title>
                                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                                     <style>
-                                        body { margin: 0; background: #1A3644; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; color: white; text-align: center; padding: 20px; box-sizing: border-box; }
-                                        img { max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-                                        p { margin-top: 15px; font-size: 14px; color: #A0D8C3; font-weight: bold; }
+                                        body { margin: 0; background: #070C1A; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: system-ui, -apple-system, sans-serif; color: white; text-align: center; padding: 20px; box-sizing: border-box; }
+                                        img { max-width: 100%; max-height: 80vh; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+                                        p { margin-top: 18px; font-size: 13px; color: #A0D8C3; font-weight: 600; }
                                     </style>
                                 </head>
                                 <body>
                                     <img src="${canvas.toDataURL('image/png')}" />
-                                    <p>💡 Mantené pulsada la imagen y seleccioná "Guardar en Fotos" / "Agregar a Fotos"</p>
+                                    <p>💡 Mantené presionada la imagen para agregarla a tus Fotos y compartir en Historias</p>
                                 </body>
                             </html>
                         `);
                     } else {
-                        const link = document.createElement('a');
-                        link.download = 'Cierre_de_la_semana_francombina7.png';
-                        link.href = canvas.toDataURL('image/png');
-                        link.click();
+                        descargarDirecto(canvas);
                     }
                 } else {
-                    const link = document.createElement('a');
-                    link.download = 'Cierre_de_la_semana_francombina7.png';
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
+                    descargarDirecto(canvas);
                 }
             });
+        }
+
+        function descargarDirecto(canvas) {
+            const link = document.createElement('a');
+            link.download = 'Cubo_Finanzas_Cierre_Semanal.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         }
 
         function abrirModalEdicion() { document.getElementById('modal-edicion').classList.remove('hidden'); }
