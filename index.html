@@ -360,53 +360,74 @@
                     <!-- Contenido Story: Grilla dinámica -->
                     <div class="relative z-10 space-y-1.5 my-auto">
                         
-                        <!-- Tarjetas de Variables de Mercado -->
+                        <!-- Tarjetas de Variables de Mercado (Con Sem y YTD) -->
                         <div id="story-grid-container" class="grid grid-cols-2 gap-1.5">
                             <!-- Merval USD -->
                             <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-merval-usd">
                                 <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">MERVAL USD</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-merval-usd">$1.739</span></div>
-                                <span class="text-[7px] text-rose-400 font-mono font-bold" id="story-merval-sem">Sem: -0,8%</span>
+                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                                    <span class="text-rose-400" id="story-merval-sem">Sem: -0,8%</span>
+                                    <span class="text-rose-400" id="story-merval-ytd">YTD: -13,2%</span>
+                                </div>
                             </div>
                             <!-- S&P 500 -->
                             <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-sp500">
                                 <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">S&P 500</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-sp500">$7.663</span></div>
-                                <span class="text-[7px] text-emerald-400 font-mono font-bold" id="story-sp500-sem">Sem: +0,1%</span>
+                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                                    <span class="text-emerald-400" id="story-sp500-sem">Sem: +0,1%</span>
+                                    <span class="text-emerald-400" id="story-sp500-ytd">YTD: +11,9%</span>
+                                </div>
                             </div>
                             <!-- Dólar MEP -->
                             <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-mep">
                                 <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">DÓLAR MEP</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-mep">$1.554</span></div>
-                                <span class="text-[7px] text-emerald-400 font-mono font-bold" id="story-mep-sem">Sem: +0,7%</span>
+                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                                    <span class="text-emerald-400" id="story-mep-sem">Sem: +0,7%</span>
+                                    <span class="text-emerald-400" id="story-mep-ytd">YTD: +4,6%</span>
+                                </div>
                             </div>
                             <!-- Riesgo País -->
                             <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-riesgo">
                                 <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">RIESGO PAÍS</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-riesgo">674</span></div>
-                                <span class="text-[7px] text-rose-400 font-mono font-bold" id="story-riesgo-sem">Sem: -0,1%</span>
+                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                                    <span class="text-rose-400" id="story-riesgo-sem">Sem: -0,1%</span>
+                                    <span class="text-emerald-400" id="story-riesgo-ytd">YTD: +18,0%</span>
+                                </div>
                             </div>
                             <!-- Dólar CCL -->
                             <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between hidden" id="story-card-ccl">
                                 <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">DÓLAR CCL</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-ccl">$1.638</span></div>
-                                <span class="text-[7px] text-emerald-400 font-mono font-bold" id="story-ccl-sem">Sem: +1,1%</span>
+                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                                    <span class="text-emerald-400" id="story-ccl-sem">Sem: +1,1%</span>
+                                    <span class="text-emerald-400" id="story-ccl-ytd">YTD: +7,5%</span>
+                                </div>
                             </div>
                             <!-- Bitcoin -->
                             <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between hidden" id="story-card-btc">
                                 <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">BITCOIN</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-btc">$81.086</span></div>
-                                <span class="text-[7px] text-rose-400 font-mono font-bold" id="story-btc-sem">Sem: -0,9%</span>
+                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                                    <span class="text-rose-400" id="story-btc-sem">Sem: -0,9%</span>
+                                    <span class="text-rose-400" id="story-btc-ytd">YTD: -8,6%</span>
+                                </div>
                             </div>
                             <!-- Merval ARS -->
                             <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between hidden" id="story-card-merval-ars">
                                 <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">MERVAL ARS</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-merval-ars">$2.8M</span></div>
-                                <span class="text-[7px] text-emerald-400 font-mono font-bold" id="story-merval-ars-sem">Sem: +0,7%</span>
+                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                                    <span class="text-emerald-400" id="story-merval-ars-sem">Sem: +0,7%</span>
+                                    <span class="text-rose-400" id="story-merval-ars-ytd">YTD: -6,6%</span>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Mini Tablas Top 3 Ganadores y Perdedores en Story -->
+                        <!-- Mini Tablas Top 3 Ganadores y Perdedores en Story (Sin Emojis de círculos) -->
                         <div class="grid grid-cols-2 gap-1.5 font-mono">
                             <div id="story-box-ganadores" class="bg-white/[0.03] border border-emerald-500/20 p-1.5 rounded-lg">
-                                <p class="text-[7.5px] font-bold text-emerald-400 mb-1 flex items-center gap-1">🟢 Top 3 Subas</p>
+                                <p class="text-[7.5px] font-bold text-emerald-400 mb-1">Top 3 Subas</p>
                                 <div id="story-ganadores" class="space-y-0.5 text-[7px] text-gray-300"></div>
                             </div>
                             <div id="story-box-perdedores" class="bg-white/[0.03] border border-rose-500/20 p-1.5 rounded-lg">
-                                <p class="text-[7.5px] font-bold text-rose-400 mb-1 flex items-center gap-1">🔴 Top 3 Bajas</p>
+                                <p class="text-[7.5px] font-bold text-rose-400 mb-1">Top 3 Bajas</p>
                                 <div id="story-perdedores" class="space-y-0.5 text-[7px] text-gray-300"></div>
                             </div>
                         </div>
@@ -754,27 +775,48 @@
             document.getElementById('val-btc').innerText = marketData.btc.val;
             document.getElementById('btc-sem').innerText = `Sem: ${marketData.btc.sem}`;
 
-            // Story 9:16
+            // Story 9:16 (Valores y porcentajes Semanal + YTD)
             document.getElementById('story-merval-usd').innerText = marketData.mervalUsd.val;
             document.getElementById('story-merval-sem').innerText = `Sem: ${marketData.mervalUsd.sem}`;
+            document.getElementById('story-merval-ytd').innerText = `YTD: ${marketData.mervalUsd.ytd}`;
+            document.getElementById('story-merval-sem').className = marketData.mervalUsd.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            document.getElementById('story-merval-ytd').className = marketData.mervalUsd.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
 
             document.getElementById('story-sp500').innerText = marketData.sp500.val;
             document.getElementById('story-sp500-sem').innerText = `Sem: ${marketData.sp500.sem}`;
+            document.getElementById('story-sp500-ytd').innerText = `YTD: ${marketData.sp500.ytd}`;
+            document.getElementById('story-sp500-sem').className = marketData.sp500.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            document.getElementById('story-sp500-ytd').className = marketData.sp500.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
 
             document.getElementById('story-mep').innerText = marketData.mep.val;
             document.getElementById('story-mep-sem').innerText = `Sem: ${marketData.mep.sem}`;
+            document.getElementById('story-mep-ytd').innerText = `YTD: ${marketData.mep.ytd}`;
+            document.getElementById('story-mep-sem').className = marketData.mep.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            document.getElementById('story-mep-ytd').className = marketData.mep.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
 
             document.getElementById('story-riesgo').innerText = marketData.riesgo.val;
             document.getElementById('story-riesgo-sem').innerText = `Sem: ${marketData.riesgo.sem}`;
+            document.getElementById('story-riesgo-ytd').innerText = `YTD: ${marketData.riesgo.ytd}`;
+            document.getElementById('story-riesgo-sem').className = marketData.riesgo.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            document.getElementById('story-riesgo-ytd').className = marketData.riesgo.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
 
             document.getElementById('story-ccl').innerText = marketData.ccl.val;
             document.getElementById('story-ccl-sem').innerText = `Sem: ${marketData.ccl.sem}`;
+            document.getElementById('story-ccl-ytd').innerText = `YTD: ${marketData.ccl.ytd}`;
+            document.getElementById('story-ccl-sem').className = marketData.ccl.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            document.getElementById('story-ccl-ytd').className = marketData.ccl.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
 
             document.getElementById('story-btc').innerText = marketData.btc.val;
             document.getElementById('story-btc-sem').innerText = `Sem: ${marketData.btc.sem}`;
+            document.getElementById('story-btc-ytd').innerText = `YTD: ${marketData.btc.ytd}`;
+            document.getElementById('story-btc-sem').className = marketData.btc.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            document.getElementById('story-btc-ytd').className = marketData.btc.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
 
             document.getElementById('story-merval-ars').innerText = marketData.mervalArs.val;
             document.getElementById('story-merval-ars-sem').innerText = `Sem: ${marketData.mervalArs.sem}`;
+            document.getElementById('story-merval-ars-ytd').innerText = `YTD: ${marketData.mervalArs.ytd}`;
+            document.getElementById('story-merval-ars-sem').className = marketData.mervalArs.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            document.getElementById('story-merval-ars-ytd').className = marketData.mervalArs.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
         }
 
         function actualizarVisibilidadActivos() {
