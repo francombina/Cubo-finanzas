@@ -9,7 +9,7 @@
     <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -20,14 +20,12 @@
                     },
                     colors: {
                         cubo: {
-                            navy: '#0B132B',
-                            dark: '#1C2541',
-                            teal: '#3A506B',
-                            cyan: '#48E5C2',
-                            mint: '#A0D8C3',
-                            bg: '#070B19',
-                            card: '#131C35',
-                            accent: '#5BC0BE'
+                            bg: '#0f172a',      // Gris pizarra muy oscuro y sobrio
+                            card: '#1e293b',    // Gris pizarra intermedio para tarjetas
+                            border: '#334155',  // Líneas divisorias sutiles
+                            accent: '#38bdf8',  // Celeste limpio institucional
+                            muted: '#94a3b8',   // Gris texto secundario
+                            green: '#34d399'    // Verde claro sutil para positivos
                         }
                     }
                 }
@@ -39,139 +37,136 @@
     <!-- html2canvas para exportar la infografía a PNG -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
-<body class="bg-cubo-bg text-white font-sans antialiased min-h-screen pb-12 selection:bg-cubo-cyan selection:text-cubo-navy">
+<body class="bg-cubo-bg text-slate-100 font-sans antialiased min-h-screen pb-12 selection:bg-cubo-accent selection:text-slate-900">
 
-    <!-- Header Principal (Desfijado/Normal) -->
-    <header class="bg-cubo-dark/80 backdrop-blur-md border-b border-white/10 relative">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+    <!-- Header Principal -->
+    <header class="bg-cubo-card/90 backdrop-blur-md border-b border-cubo-border sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <div class="bg-gradient-to-tr from-cubo-cyan to-cubo-accent p-2.5 rounded-xl text-cubo-navy font-black text-2xl tracking-tighter shadow-lg shadow-cubo-cyan/20">
+                <div class="bg-cubo-border text-cubo-accent p-2 rounded-lg font-mono font-bold text-sm border border-cubo-accent/30 tracking-tight">
                     FC
                 </div>
                 <div>
-                    <h1 class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-200 to-cubo-cyan bg-clip-text text-transparent">FRANCISCO COMBINA</h1>
-                    <p class="text-xs text-cubo-cyan/80 font-medium font-mono">Terminal & Generador de Historias</p>
+                    <h1 class="text-lg font-bold tracking-tight text-white">FRANCISCO COMBINA</h1>
+                    <p class="text-[11px] text-cubo-muted font-mono">Terminal & Generador de Historias</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-2 flex-wrap">
-                <button onclick="sincronizarConSheet()" class="flex items-center gap-1.5 bg-cubo-teal/50 hover:bg-cubo-teal text-white px-3.5 py-2 rounded-xl text-xs font-bold transition border border-white/10 shadow-sm">
-                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Sincronizar Sheet
+                <button onclick="sincronizarConSheet()" class="flex items-center gap-1.5 bg-cubo-card hover:bg-cubo-border text-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-border">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cubo-accent"></i> Sincronizar Sheet
                 </button>
-                <button onclick="toggleConfigPanel()" class="flex items-center gap-1.5 bg-cubo-cyan text-cubo-navy hover:bg-cubo-accent px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-md shadow-cubo-cyan/10">
-                    <i data-lucide="settings" class="w-4 h-4"></i> Configuración URLs
+                <button onclick="toggleConfigPanel()" class="flex items-center gap-1.5 bg-cubo-accent/10 hover:bg-cubo-accent/20 text-cubo-accent px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-accent/30">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i> Configuración URLs
                 </button>
-                <button onclick="abrirModalEdicion()" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition border border-white/10">
-                    <i data-lucide="edit-3" class="w-4 h-4"></i> Edición Manual
+                <button onclick="abrirModalEdicion()" class="flex items-center gap-1.5 bg-cubo-card hover:bg-cubo-border text-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-border">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5 text-cubo-muted"></i> Edición Manual
                 </button>
             </div>
         </div>
     </header>
 
     <!-- Contenido Principal -->
-    <main class="max-w-6xl mx-auto px-4 mt-6 space-y-8">
+    <main class="max-w-6xl mx-auto px-4 mt-6 space-y-6">
 
         <!-- PANEL DE CONFIGURACIÓN DE URLS DE GOOGLE SHEETS -->
-        <section id="panel-configuracion" class="bg-cubo-card border border-cubo-cyan/30 p-6 rounded-2xl shadow-2xl hidden space-y-4">
-            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+        <section id="panel-configuracion" class="bg-cubo-card border border-cubo-border p-5 rounded-xl shadow-lg hidden space-y-4">
+            <div class="flex justify-between items-center border-b border-cubo-border pb-3">
                 <div class="flex items-center gap-2">
-                    <span class="p-2 bg-cubo-dark text-cubo-cyan rounded-xl border border-white/10"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></span>
+                    <span class="p-1.5 bg-cubo-bg text-cubo-accent rounded-lg border border-cubo-border"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i></span>
                     <div>
-                        <h3 class="font-extrabold text-lg text-white">Configuración de Planillas (CSV)</h3>
-                        <p class="text-xs text-gray-400">Enlaces de solapas configurados.</p>
+                        <h3 class="font-bold text-sm text-white">Configuración de Planillas (CSV)</h3>
+                        <p class="text-[11px] text-cubo-muted">Enlaces de solapas configurados.</p>
                     </div>
                 </div>
-                <button onclick="toggleConfigPanel()" class="text-gray-400 hover:text-white font-bold text-sm">✕ Cerrar</button>
+                <button onclick="toggleConfigPanel()" class="text-cubo-muted hover:text-white text-xs font-medium">✕ Cerrar</button>
             </div>
 
-            <div class="space-y-3 font-mono">
+            <div class="space-y-3 font-mono text-xs">
                 <div>
-                    <label class="block font-bold text-gray-300 text-xs mb-1">URL Hoja "Datos" (Principal)</label>
-                    <input type="text" id="cfg-sheet-url" class="w-full border border-white/10 p-2.5 rounded-xl text-xs bg-cubo-dark text-cubo-cyan focus:outline-none focus:border-cubo-cyan">
+                    <label class="block font-medium text-slate-300 mb-1">URL Hoja "Datos" (Principal)</label>
+                    <input type="text" id="cfg-sheet-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-accent focus:outline-none focus:border-cubo-accent">
                 </div>
                 <div>
-                    <label class="block font-bold text-gray-300 text-xs mb-1">URL Hoja "Subas_EEUU" (Ganadores)</label>
-                    <input type="text" id="cfg-subas-url" class="w-full border border-white/10 p-2.5 rounded-xl text-xs bg-cubo-dark text-cubo-cyan focus:outline-none focus:border-cubo-cyan">
+                    <label class="block font-medium text-slate-300 mb-1">URL Hoja "Subas_EEUU" (Ganadores)</label>
+                    <input type="text" id="cfg-subas-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-accent focus:outline-none focus:border-cubo-accent">
                 </div>
                 <div>
-                    <label class="block font-bold text-gray-300 text-xs mb-1">URL Hoja "Bajas_EEUU" (Perdedores)</label>
-                    <input type="text" id="cfg-bajas-url" class="w-full border border-white/10 p-2.5 rounded-xl text-xs bg-cubo-dark text-cubo-cyan focus:outline-none focus:border-cubo-cyan">
+                    <label class="block font-medium text-slate-300 mb-1">URL Hoja "Bajas_EEUU" (Perdedores)</label>
+                    <input type="text" id="cfg-bajas-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-accent focus:outline-none focus:border-cubo-accent">
                 </div>
             </div>
 
-            <div class="flex justify-between items-center border-t border-white/10 pt-4">
-                <span class="text-[11px] text-gray-400">Se guardan localmente para futuras sesiones.</span>
-                <button onclick="guardarSheetURLs()" class="bg-cubo-cyan text-cubo-navy hover:bg-cubo-accent px-5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow">
-                    <i data-lucide="save" class="w-4 h-4"></i> Guardar y Sincronizar
+            <div class="flex justify-between items-center border-t border-cubo-border pt-3">
+                <span class="text-[11px] text-cubo-muted">Se guardan localmente para futuras sesiones.</span>
+                <button onclick="guardarSheetURLs()" class="bg-cubo-accent text-slate-950 hover:bg-sky-400 px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                    <i data-lucide="save" class="w-3.5 h-3.5"></i> Guardar y Sincronizar
                 </button>
             </div>
         </section>
 
         <!-- Estado de Conexión -->
-        <div class="bg-cubo-card/60 border border-white/10 p-4 rounded-2xl shadow-lg backdrop-blur-md flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-3">
-                <span class="p-2 bg-cubo-dark text-cubo-cyan rounded-xl border border-white/10"><i data-lucide="activity" class="w-5 h-5"></i></span>
+        <div class="bg-cubo-card border border-cubo-border p-3.5 rounded-xl shadow flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-2.5">
+                <span class="p-1.5 bg-cubo-bg text-cubo-accent rounded-lg border border-cubo-border"><i data-lucide="activity" class="w-4 h-4"></i></span>
                 <div>
-                    <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Origen de Datos</p>
-                    <p class="text-xs text-cubo-cyan font-medium font-mono mt-0.5">Sincronización exacta desde Google Sheets</p>
+                    <p class="text-[11px] text-cubo-muted uppercase tracking-wider font-semibold">Origen de Datos</p>
+                    <p class="text-xs text-slate-200 font-mono mt-0.5">Sincronización exacta desde Google Sheets</p>
                 </div>
             </div>
-            <span id="badge-estado" class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-500/20 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Google Sheet Vinculado
+            <span id="badge-estado" class="text-xs bg-emerald-500/10 text-emerald-400 font-medium px-3 py-1 rounded-lg border border-emerald-500/20 flex items-center gap-1.5 font-mono">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Google Sheet Vinculado
             </span>
         </div>
 
         <!-- 1. TARJETAS PRINCIPALES (MÉTRICAS CLAVE) -->
         <section>
-            <div class="flex justify-between items-end mb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i data-lucide="bar-chart-2" class="w-5 h-5 text-cubo-cyan"></i>
-                        Indicadores Principales de Mercado
-                    </h2>
-                    <p class="text-sm text-gray-400">Valores y porcentajes actualizados</p>
-                </div>
+            <div class="mb-3">
+                <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="bar-chart-2" class="w-4 h-4 text-cubo-accent"></i>
+                    Indicadores Principales de Mercado
+                </h2>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                 
                 <!-- S&P Merval USD -->
-                <div class="bg-cubo-card p-5 rounded-2xl border border-white/10 shadow-lg hover:border-cubo-cyan/30 transition">
-                    <span class="text-xs font-bold uppercase text-gray-400 block mb-1 tracking-wider">S&P Merval en USD</span>
-                    <div class="text-2xl font-black text-white font-mono mb-2" id="val-merval-usd">$1.739</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-bold flex-wrap font-mono">
-                        <span id="sem-merval-usd" class="text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-lg border border-rose-500/20">Sem: -0,8%</span>
-                        <span id="ytd-merval-usd" class="text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-lg border border-rose-500/20">YTD: -13,2%</span>
+                <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow hover:border-cubo-accent/40 transition">
+                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider block mb-1">S&P Merval en USD</span>
+                    <div class="text-xl font-bold text-white font-mono mb-2" id="val-merval-usd">$1.739</div>
+                    <div class="flex items-center gap-1.5 text-[11px] font-medium font-mono">
+                        <span id="sem-merval-usd" class="text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded border border-rose-500/20">Sem: -0,8%</span>
+                        <span id="ytd-merval-usd" class="text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded border border-rose-500/20">YTD: -13,2%</span>
                     </div>
                 </div>
 
                 <!-- SP500 -->
-                <div class="bg-cubo-card p-5 rounded-2xl border border-white/10 shadow-lg hover:border-cubo-cyan/30 transition">
-                    <span class="text-xs font-bold uppercase text-gray-400 block mb-1 tracking-wider">S&P 500</span>
-                    <div class="text-2xl font-black text-white font-mono mb-2" id="val-sp500">$7.663</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-bold flex-wrap font-mono">
-                        <span id="sem-sp500" class="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">Sem: +0,1%</span>
-                        <span id="ytd-sp500" class="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">YTD: +11,9%</span>
+                <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow hover:border-cubo-accent/40 transition">
+                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider block mb-1">S&P 500</span>
+                    <div class="text-xl font-bold text-white font-mono mb-2" id="val-sp500">$7.663</div>
+                    <div class="flex items-center gap-1.5 text-[11px] font-medium font-mono">
+                        <span id="sem-sp500" class="text-cubo-green bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">Sem: +0,1%</span>
+                        <span id="ytd-sp500" class="text-cubo-green bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">YTD: +11,9%</span>
                     </div>
                 </div>
 
                 <!-- Dólar MEP -->
-                <div class="bg-cubo-card p-5 rounded-2xl border border-white/10 shadow-lg hover:border-cubo-cyan/30 transition">
-                    <span class="text-xs font-bold uppercase text-gray-400 block mb-1 tracking-wider">Dólar MEP</span>
-                    <div class="text-2xl font-black text-white font-mono mb-2" id="val-mep">$1.554</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-bold flex-wrap font-mono">
-                        <span id="sem-mep" class="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">Sem: +0,7%</span>
-                        <span id="ytd-mep" class="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">YTD: +4,6%</span>
+                <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow hover:border-cubo-accent/40 transition">
+                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider block mb-1">Dólar MEP</span>
+                    <div class="text-xl font-bold text-white font-mono mb-2" id="val-mep">$1.554</div>
+                    <div class="flex items-center gap-1.5 text-[11px] font-medium font-mono">
+                        <span id="sem-mep" class="text-cubo-green bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">Sem: +0,7%</span>
+                        <span id="ytd-mep" class="text-cubo-green bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">YTD: +4,6%</span>
                     </div>
                 </div>
 
                 <!-- Riesgo País -->
-                <div class="bg-cubo-card p-5 rounded-2xl border border-white/10 shadow-lg hover:border-cubo-cyan/30 transition border-l-4 border-l-cubo-cyan">
-                    <span class="text-xs font-bold uppercase text-gray-400 block mb-1 tracking-wider">Riesgo País</span>
-                    <div class="text-2xl font-black text-white font-mono mb-2" id="val-riesgo">674</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-bold flex-wrap font-mono">
-                        <span id="sem-riesgo" class="text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-lg border border-rose-500/20">Sem: -0,1%</span>
-                        <span id="ytd-riesgo" class="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">YTD: +18,0%</span>
+                <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow hover:border-cubo-accent/40 transition border-l-2 border-l-cubo-accent">
+                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider block mb-1">Riesgo País</span>
+                    <div class="text-xl font-bold text-white font-mono mb-2" id="val-riesgo">674</div>
+                    <div class="flex items-center gap-1.5 text-[11px] font-medium font-mono">
+                        <span id="sem-riesgo" class="text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded border border-rose-500/20">Sem: -0,1%</span>
+                        <span id="ytd-riesgo" class="text-cubo-green bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">YTD: +18,0%</span>
                     </div>
                 </div>
 
@@ -179,39 +174,39 @@
         </section>
 
         <!-- 2. BLOQUE DE DIVISAS, CRIPTO & MERVAL ARS -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             
             <!-- S&P Merval ARS -->
-            <div class="bg-cubo-card p-5 rounded-2xl border border-white/10 shadow-lg space-y-2">
-                <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">S&P Merval (ARS)</span>
-                    <span class="text-[10px] bg-cubo-cyan/10 text-cubo-cyan font-bold px-2 py-0.5 rounded-lg border border-cubo-cyan/20">Local</span>
+            <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow space-y-2">
+                <div class="flex justify-between items-center border-b border-cubo-border pb-2">
+                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider">S&P Merval (ARS)</span>
+                    <span class="text-[10px] bg-cubo-bg text-cubo-accent font-mono font-medium px-2 py-0.5 rounded border border-cubo-border">Local</span>
                 </div>
                 <div class="pt-1">
-                    <span class="text-2xl font-black text-white font-mono" id="val-merval-ars">$2.848.945</span>
-                    <div class="flex gap-2 text-xs font-bold font-mono mt-2">
-                        <span class="text-emerald-400" id="merval-ars-sem">Sem: +0,7%</span>
+                    <span class="text-xl font-bold text-white font-mono" id="val-merval-ars">$2.848.945</span>
+                    <div class="flex gap-2 text-xs font-medium font-mono mt-2">
+                        <span class="text-cubo-green" id="merval-ars-sem">Sem: +0,7%</span>
                         <span class="text-rose-400" id="merval-ars-ytd">YTD: -6,6%</span>
                     </div>
                 </div>
             </div>
 
             <!-- Dólar CCL & BTC -->
-            <div class="bg-cubo-card p-5 rounded-2xl border border-white/10 shadow-lg space-y-3">
-                <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">CCL & Cripto</span>
-                    <span class="text-[10px] bg-cubo-cyan/10 text-cubo-cyan font-bold px-2 py-0.5 rounded-lg border border-cubo-cyan/20">Referencias</span>
+            <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow space-y-2.5">
+                <div class="flex justify-between items-center border-b border-cubo-border pb-2">
+                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider">CCL & Cripto</span>
+                    <span class="text-[10px] bg-cubo-bg text-cubo-accent font-mono font-medium px-2 py-0.5 rounded border border-cubo-border">Referencias</span>
                 </div>
                 <div class="grid grid-cols-2 gap-2 text-xs">
-                    <div class="bg-cubo-dark p-2.5 rounded-xl border border-white/5">
-                        <span class="text-[10px] text-gray-400 font-bold block">DÓLAR CCL</span>
-                        <span class="font-black text-white font-mono text-sm" id="val-ccl">$1.638</span>
-                        <span class="text-[10px] text-emerald-400 font-mono font-bold block mt-0.5" id="ccl-sem">Sem: +1,1%</span>
+                    <div class="bg-cubo-bg p-2.5 rounded-lg border border-cubo-border">
+                        <span class="text-[10px] text-cubo-muted font-semibold block">DÓLAR CCL</span>
+                        <span class="font-bold text-white font-mono text-sm" id="val-ccl">$1.638</span>
+                        <span class="text-[10px] text-cubo-green font-mono font-medium block mt-0.5" id="ccl-sem">Sem: +1,1%</span>
                     </div>
-                    <div class="bg-cubo-dark p-2.5 rounded-xl border border-white/5">
-                        <span class="text-[10px] text-gray-400 font-bold block">BTC</span>
-                        <span class="font-black text-white font-mono text-sm" id="val-btc">$81.086</span>
-                        <span class="text-[10px] text-rose-400 font-mono font-bold block mt-0.5" id="btc-sem">Sem: -0,9%</span>
+                    <div class="bg-cubo-bg p-2.5 rounded-lg border border-cubo-border">
+                        <span class="text-[10px] text-cubo-muted font-semibold block">BTC</span>
+                        <span class="font-bold text-white font-mono text-sm" id="val-btc">$81.086</span>
+                        <span class="text-[10px] text-rose-400 font-mono font-medium block mt-0.5" id="btc-sem">Sem: -0,9%</span>
                     </div>
                 </div>
             </div>
@@ -219,53 +214,53 @@
         </section>
 
         <!-- SECCIÓN APARTE: TOP 5 GANADORES Y PERDEDORES DE EEUU -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             <!-- Top Ganadores -->
-            <div class="bg-cubo-card p-6 rounded-2xl border border-white/10 shadow-xl space-y-3">
-                <div class="flex justify-between items-center border-b border-white/10 pb-3">
+            <div class="bg-cubo-card p-5 rounded-xl border border-cubo-border shadow space-y-3">
+                <div class="flex justify-between items-center border-b border-cubo-border pb-3">
                     <div class="flex items-center gap-2">
-                        <span class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20"><i data-lucide="trending-up" class="w-5 h-5"></i></span>
-                        <h3 class="font-bold text-lg text-white">Principales Ganadores (EEUU)</h3>
+                        <span class="p-1.5 bg-emerald-500/10 text-cubo-green rounded-lg border border-emerald-500/20"><i data-lucide="trending-up" class="w-4 h-4"></i></span>
+                        <h3 class="font-bold text-sm text-white">Principales Ganadores (EEUU)</h3>
                     </div>
-                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 font-bold px-2.5 py-1 rounded-xl border border-emerald-500/20 font-mono">Top 5 Subas</span>
+                    <span class="text-[10px] bg-emerald-500/10 text-cubo-green font-medium px-2 py-0.5 rounded border border-emerald-500/20 font-mono">Top 5 Subas</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs font-mono">
                         <thead>
-                            <tr class="text-gray-400 border-b border-white/10">
-                                <th class="pb-2">Ticker</th>
-                                <th class="pb-2">Empresa</th>
-                                <th class="pb-2 text-right">Variación Semanal</th>
+                            <tr class="text-cubo-muted border-b border-cubo-border">
+                                <th class="pb-2 font-medium">Ticker</th>
+                                <th class="pb-2 font-medium">Empresa</th>
+                                <th class="pb-2 font-medium text-right">Var. Semanal</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-ganadores" class="divide-y divide-white/5 text-gray-300">
-                            <tr><td colspan="3" class="py-3 text-center text-gray-500">Cargando datos...</td></tr>
+                        <tbody id="tabla-ganadores" class="divide-y divide-cubo-border/40 text-slate-300">
+                            <tr><td colspan="3" class="py-3 text-center text-cubo-muted">Cargando datos...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
             <!-- Top Perdedores -->
-            <div class="bg-cubo-card p-6 rounded-2xl border border-white/10 shadow-xl space-y-3">
-                <div class="flex justify-between items-center border-b border-white/10 pb-3">
+            <div class="bg-cubo-card p-5 rounded-xl border border-cubo-border shadow space-y-3">
+                <div class="flex justify-between items-center border-b border-cubo-border pb-3">
                     <div class="flex items-center gap-2">
-                        <span class="p-2 bg-rose-500/10 text-rose-400 rounded-xl border border-rose-500/20"><i data-lucide="trending-down" class="w-5 h-5"></i></span>
-                        <h3 class="font-bold text-lg text-white">Principales Perdedores (EEUU)</h3>
+                        <span class="p-1.5 bg-rose-500/10 text-rose-400 rounded-lg border border-rose-500/20"><i data-lucide="trending-down" class="w-4 h-4"></i></span>
+                        <h3 class="font-bold text-sm text-white">Principales Perdedores (EEUU)</h3>
                     </div>
-                    <span class="text-[10px] bg-rose-500/10 text-rose-400 font-bold px-2.5 py-1 rounded-xl border border-rose-500/20 font-mono">Top 5 Bajas</span>
+                    <span class="text-[10px] bg-rose-500/10 text-rose-400 font-medium px-2 py-0.5 rounded border border-rose-500/20 font-mono">Top 5 Bajas</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs font-mono">
                         <thead>
-                            <tr class="text-gray-400 border-b border-white/10">
-                                <th class="pb-2">Ticker</th>
-                                <th class="pb-2">Empresa</th>
-                                <th class="pb-2 text-right">Variación Semanal</th>
+                            <tr class="text-cubo-muted border-b border-cubo-border">
+                                <th class="pb-2 font-medium">Ticker</th>
+                                <th class="pb-2 font-medium">Empresa</th>
+                                <th class="pb-2 font-medium text-right">Var. Semanal</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-perdedores" class="divide-y divide-white/5 text-gray-300">
-                            <tr><td colspan="3" class="py-3 text-center text-gray-500">Cargando datos...</td></tr>
+                        <tbody id="tabla-perdedores" class="divide-y divide-cubo-border/40 text-slate-300">
+                            <tr><td colspan="3" class="py-3 text-center text-cubo-muted">Cargando datos...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -273,178 +268,174 @@
 
         </section>
 
-        <!-- 3. GENERADOR DE INFOGRAFÍA PARA HISTORIAS (COMPACTO Y LISTO PARA SCREENSHOT) -->
-        <section class="bg-cubo-card rounded-2xl border border-white/10 p-4 sm:p-6 shadow-xl space-y-4">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 pb-4">
+        <!-- 3. GENERADOR DE INFOGRAFÍA PARA HISTORIAS -->
+        <section class="bg-cubo-card rounded-xl border border-cubo-border p-4 sm:p-5 shadow space-y-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-cubo-border pb-3">
                 <div>
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i data-lucide="image" class="w-5 h-5 text-cubo-cyan"></i>
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="image" class="w-4 h-4 text-cubo-accent"></i>
                         Infografía para Historias
                     </h3>
-                    <p class="text-xs text-gray-400">Diseño compacto adaptado a pantalla para captura directa</p>
+                    <p class="text-xs text-cubo-muted">Diseño compacto adaptado a pantalla para captura directa</p>
                 </div>
             </div>
 
             <!-- PANEL DE PERSONALIZACIÓN -->
-            <div class="bg-cubo-dark p-3.5 rounded-2xl border border-white/10 space-y-3">
-                <h4 class="text-xs font-extrabold uppercase tracking-wider text-cubo-cyan flex items-center gap-1.5 font-mono">
-                    <i data-lucide="sliders" class="w-4 h-4"></i> Personalizar Contenido
+            <div class="bg-cubo-bg p-3.5 rounded-xl border border-cubo-border space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-cubo-accent flex items-center gap-1.5 font-mono">
+                    <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Personalizar Contenido
                 </h4>
 
                 <!-- Checkboxes de Activos y Top -->
                 <div>
-                    <label class="block text-[11px] font-bold text-gray-300 mb-2">Elementos a incluir en la historia:</label>
+                    <label class="block text-[11px] font-semibold text-slate-300 mb-2">Elementos a incluir en la historia:</label>
                     <div class="flex flex-wrap gap-2 text-xs">
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded-xl border border-white/10 cursor-pointer">
-                            <input type="checkbox" id="chk-merval-usd" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-cyan">
-                            <span class="font-semibold text-white text-[11px]">Merval USD</span>
+                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
+                            <input type="checkbox" id="chk-merval-usd" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
+                            <span class="text-slate-200 text-[11px]">Merval USD</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded-xl border border-white/10 cursor-pointer">
-                            <input type="checkbox" id="chk-sp500" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-cyan">
-                            <span class="font-semibold text-white text-[11px]">S&P 500</span>
+                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
+                            <input type="checkbox" id="chk-sp500" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
+                            <span class="text-slate-200 text-[11px]">S&P 500</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded-xl border border-white/10 cursor-pointer">
-                            <input type="checkbox" id="chk-mep" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-cyan">
-                            <span class="font-semibold text-white text-[11px]">Dólar MEP</span>
+                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
+                            <input type="checkbox" id="chk-mep" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
+                            <span class="text-slate-200 text-[11px]">Dólar MEP</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded-xl border border-white/10 cursor-pointer">
-                            <input type="checkbox" id="chk-riesgo" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-cyan">
-                            <span class="font-semibold text-white text-[11px]">Riesgo País</span>
+                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
+                            <input type="checkbox" id="chk-riesgo" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
+                            <span class="text-slate-200 text-[11px]">Riesgo País</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded-xl border border-white/10 cursor-pointer">
-                            <input type="checkbox" id="chk-ccl" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-cyan">
-                            <span class="font-semibold text-white text-[11px]">Dólar CCL</span>
+                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
+                            <input type="checkbox" id="chk-ccl" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
+                            <span class="text-slate-200 text-[11px]">Dólar CCL</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded-xl border border-white/10 cursor-pointer">
-                            <input type="checkbox" id="chk-btc" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-cyan">
-                            <span class="font-semibold text-white text-[11px]">BTC</span>
+                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
+                            <input type="checkbox" id="chk-btc" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
+                            <span class="text-slate-200 text-[11px]">BTC</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded-xl border border-white/10 cursor-pointer">
-                            <input type="checkbox" id="chk-merval-ars" onchange="actualizarVisibilidadActivos()" class="accent-cubo-cyan">
-                            <span class="font-semibold text-white text-[11px]">Merval ARS</span>
+                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
+                            <input type="checkbox" id="chk-merval-ars" onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
+                            <span class="text-slate-200 text-[11px]">Merval ARS</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/30 cursor-pointer">
-                            <input type="checkbox" id="chk-story-ganadores" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-cyan">
-                            <span class="font-semibold text-emerald-400 text-[11px]">Top Ganadores</span>
+                        <label class="flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 cursor-pointer">
+                            <input type="checkbox" id="chk-story-ganadores" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
+                            <span class="text-cubo-green text-[11px]">Top Ganadores</span>
                         </label>
-                        <label class="flex items-center gap-1.5 bg-rose-500/10 px-2.5 py-1 rounded-xl border border-rose-500/30 cursor-pointer">
-                            <input type="checkbox" id="chk-story-perdedores" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-cyan">
-                            <span class="font-semibold text-rose-400 text-[11px]">Top Perdedores</span>
+                        <label class="flex items-center gap-1.5 bg-rose-500/10 px-2.5 py-1 rounded border border-rose-500/20 cursor-pointer">
+                            <input type="checkbox" id="chk-story-perdedores" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
+                            <span class="text-rose-400 text-[11px]">Top Perdedores</span>
                         </label>
                     </div>
                 </div>
 
                 <!-- Textarea Idea -->
                 <div>
-                    <label class="block text-[11px] font-bold text-gray-300 mb-1">Frase / Idea de la Semana:</label>
-                    <textarea id="input-idea-semana" oninput="actualizarTextoIdea()" rows="2" class="w-full border border-white/10 p-2 rounded-xl text-xs text-white bg-cubo-card focus:border-cubo-cyan focus:outline-none" placeholder="Escribí acá tu reflexión..."></textarea>
+                    <label class="block text-[11px] font-semibold text-slate-300 mb-1">Frase / Idea de la Semana:</label>
+                    <textarea id="input-idea-semana" oninput="actualizarTextoIdea()" rows="2" class="w-full border border-cubo-border p-2 rounded-lg text-xs text-white bg-cubo-card focus:border-cubo-accent focus:outline-none" placeholder="Escribí acá tu reflexión..."></textarea>
                 </div>
             </div>
 
-            <!-- TARJETA COMPACTA DE 480px -->
-            <div class="flex justify-center bg-black/40 p-2 sm:p-4 rounded-2xl border border-white/10 overflow-x-auto">
-                <div id="story-infographic" class="w-[320px] h-[480px] bg-[#091026] text-white p-3 rounded-3xl flex flex-col justify-between shadow-2xl relative overflow-hidden border border-white/15 my-auto">
+            <!-- TARJETA COMPACTA DE 480px (Estética Sobria / Modo Historia) -->
+            <div class="flex justify-center bg-cubo-bg p-3 rounded-xl border border-cubo-border overflow-x-auto">
+                <div id="story-infographic" class="w-[320px] h-[480px] bg-[#0b1329] text-white p-3.5 rounded-2xl flex flex-col justify-between shadow-2xl relative overflow-hidden border border-slate-700/60 my-auto">
                     
-                    <!-- Glow Accents -->
-                    <div class="absolute -top-12 -right-12 w-36 h-36 bg-cubo-cyan/20 rounded-full blur-2xl pointer-events-none"></div>
-                    <div class="absolute -bottom-12 -left-12 w-36 h-36 bg-cubo-accent/20 rounded-full blur-2xl pointer-events-none"></div>
-
                     <!-- Header con Etiqueta Cierre Semanal -->
-                    <div class="relative z-10 border-b border-white/10 pb-1.5 flex justify-between items-center">
-                        <span class="text-[8.5px] font-mono font-bold text-cubo-cyan bg-cubo-cyan/10 border border-cubo-cyan/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                    <div class="relative z-10 border-b border-slate-700/60 pb-2 flex justify-between items-center">
+                        <span class="text-[8.5px] font-mono font-semibold text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded uppercase tracking-wider">
                             CIERRE SEMANAL
                         </span>
-                        <span class="text-[8.5px] font-mono text-gray-400">Principales Variables</span>
+                        <span class="text-[8.5px] font-mono text-slate-400">Principales Variables</span>
                     </div>
 
                     <!-- Contenido Story: Grilla dinámica -->
                     <div class="relative z-10 space-y-1.5 my-auto">
                         
-                        <!-- Tarjetas de Variables de Mercado (Con Sem y YTD) -->
+                        <!-- Tarjetas de Variables de Mercado -->
                         <div id="story-grid-container" class="grid grid-cols-2 gap-1.5">
                             <!-- Merval USD -->
-                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-merval-usd">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">MERVAL USD</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-merval-usd">$1.739</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                            <div class="bg-slate-800/60 p-1.5 rounded border border-slate-700/50 flex flex-col justify-between" id="story-card-merval-usd">
+                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">MERVAL USD</span><span class="text-[8px] font-bold font-mono text-white" id="story-merval-usd">$1.739</span></div>
+                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
                                     <span class="text-rose-400" id="story-merval-sem">Sem: -0,8%</span>
                                     <span class="text-rose-400" id="story-merval-ytd">YTD: -13,2%</span>
                                 </div>
                             </div>
                             <!-- S&P 500 -->
-                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-sp500">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">S&P 500</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-sp500">$7.663</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                            <div class="bg-slate-800/60 p-1.5 rounded border border-slate-700/50 flex flex-col justify-between" id="story-card-sp500">
+                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">S&P 500</span><span class="text-[8px] font-bold font-mono text-white" id="story-sp500">$7.663</span></div>
+                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
                                     <span class="text-emerald-400" id="story-sp500-sem">Sem: +0,1%</span>
                                     <span class="text-emerald-400" id="story-sp500-ytd">YTD: +11,9%</span>
                                 </div>
                             </div>
                             <!-- Dólar MEP -->
-                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-mep">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">DÓLAR MEP</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-mep">$1.554</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                            <div class="bg-slate-800/60 p-1.5 rounded border border-slate-700/50 flex flex-col justify-between" id="story-card-mep">
+                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">DÓLAR MEP</span><span class="text-[8px] font-bold font-mono text-white" id="story-mep">$1.554</span></div>
+                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
                                     <span class="text-emerald-400" id="story-mep-sem">Sem: +0,7%</span>
                                     <span class="text-emerald-400" id="story-mep-ytd">YTD: +4,6%</span>
                                 </div>
                             </div>
                             <!-- Riesgo País -->
-                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between" id="story-card-riesgo">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">RIESGO PAÍS</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-riesgo">674</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                            <div class="bg-slate-800/60 p-1.5 rounded border border-slate-700/50 flex flex-col justify-between" id="story-card-riesgo">
+                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">RIESGO PAÍS</span><span class="text-[8px] font-bold font-mono text-white" id="story-riesgo">674</span></div>
+                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
                                     <span class="text-rose-400" id="story-riesgo-sem">Sem: -0,1%</span>
                                     <span class="text-emerald-400" id="story-riesgo-ytd">YTD: +18,0%</span>
                                 </div>
                             </div>
                             <!-- Dólar CCL -->
-                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between hidden" id="story-card-ccl">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">DÓLAR CCL</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-ccl">$1.638</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                            <div class="bg-slate-800/60 p-1.5 rounded border border-slate-700/50 flex flex-col justify-between hidden" id="story-card-ccl">
+                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">DÓLAR CCL</span><span class="text-[8px] font-bold font-mono text-white" id="story-ccl">$1.638</span></div>
+                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
                                     <span class="text-emerald-400" id="story-ccl-sem">Sem: +1,1%</span>
                                     <span class="text-emerald-400" id="story-ccl-ytd">YTD: +7,5%</span>
                                 </div>
                             </div>
                             <!-- Bitcoin -->
-                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between hidden" id="story-card-btc">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">BITCOIN</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-btc">$81.086</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                            <div class="bg-slate-800/60 p-1.5 rounded border border-slate-700/50 flex flex-col justify-between hidden" id="story-card-btc">
+                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">BITCOIN</span><span class="text-[8px] font-bold font-mono text-white" id="story-btc">$81.086</span></div>
+                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
                                     <span class="text-rose-400" id="story-btc-sem">Sem: -0,9%</span>
                                     <span class="text-rose-400" id="story-btc-ytd">YTD: -8,6%</span>
                                 </div>
                             </div>
                             <!-- Merval ARS -->
-                            <div class="bg-white/[0.04] backdrop-blur-md p-1.5 rounded-lg border border-white/10 flex flex-col justify-between hidden" id="story-card-merval-ars">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-bold text-gray-400 font-mono">MERVAL ARS</span><span class="text-[8px] font-extrabold font-mono text-white" id="story-merval-ars">$2.8M</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-bold mt-0.5">
+                            <div class="bg-slate-800/60 p-1.5 rounded border border-slate-700/50 flex flex-col justify-between hidden" id="story-card-merval-ars">
+                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">MERVAL ARS</span><span class="text-[8px] font-bold font-mono text-white" id="story-merval-ars">$2.8M</span></div>
+                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
                                     <span class="text-emerald-400" id="story-merval-ars-sem">Sem: +0,7%</span>
                                     <span class="text-rose-400" id="story-merval-ars-ytd">YTD: -6,6%</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Mini Tablas Top 3 Ganadores y Perdedores en Story (Sin Emojis de círculos) -->
+                        <!-- Mini Tablas Top 3 Ganadores y Perdedores en Story -->
                         <div class="grid grid-cols-2 gap-1.5 font-mono">
-                            <div id="story-box-ganadores" class="bg-white/[0.03] border border-emerald-500/20 p-1.5 rounded-lg">
-                                <p class="text-[7.5px] font-bold text-emerald-400 mb-1">Top 3 Subas</p>
-                                <div id="story-ganadores" class="space-y-0.5 text-[7px] text-gray-300"></div>
+                            <div id="story-box-ganadores" class="bg-slate-800/40 border border-emerald-500/20 p-1.5 rounded">
+                                <p class="text-[7.5px] font-semibold text-emerald-400 mb-1">Top 3 Subas</p>
+                                <div id="story-ganadores" class="space-y-0.5 text-[7px] text-slate-300"></div>
                             </div>
-                            <div id="story-box-perdedores" class="bg-white/[0.03] border border-rose-500/20 p-1.5 rounded-lg">
-                                <p class="text-[7.5px] font-bold text-rose-400 mb-1">Top 3 Bajas</p>
-                                <div id="story-perdedores" class="space-y-0.5 text-[7px] text-gray-300"></div>
+                            <div id="story-box-perdedores" class="bg-slate-800/40 border border-rose-500/20 p-1.5 rounded">
+                                <p class="text-[7.5px] font-semibold text-rose-400 mb-1">Top 3 Bajas</p>
+                                <div id="story-perdedores" class="space-y-0.5 text-[7px] text-slate-300"></div>
                             </div>
                         </div>
 
                     </div>
 
                     <!-- Idea Card Dinámica Compacta -->
-                    <div class="relative z-10 bg-white/[0.03] backdrop-blur-md border border-white/10 p-1.5 rounded-xl text-center space-y-0.5">
-                        <p id="story-idea-text" class="text-[9px] font-medium leading-tight text-gray-200 italic">
+                    <div class="relative z-10 bg-slate-800/50 border border-slate-700/50 p-1.5 rounded text-center">
+                        <p id="story-idea-text" class="text-[9px] font-normal leading-tight text-slate-300 italic">
                             "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
                         </p>
                     </div>
 
                     <!-- Footer -->
-                    <div class="relative z-10 border-t border-white/10 pt-1.5 flex justify-between items-center text-[8px] text-gray-400 font-mono">
-                        <span class="text-gray-500">mercado & finanzas</span>
-                        <div class="flex items-center gap-1 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full text-cubo-cyan font-bold">
+                    <div class="relative z-10 border-t border-slate-700/60 pt-1.5 flex justify-between items-center text-[8px] text-slate-400 font-mono">
+                        <span class="text-slate-500">mercado & finanzas</span>
+                        <div class="flex items-center gap-1 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-sky-400 font-medium">
                             <i data-lucide="user" class="w-2.5 h-2.5"></i>
                             <span>@francombina7</span>
                         </div>
@@ -457,33 +448,33 @@
     </main>
 
     <!-- Modal de Edición Manual -->
-    <div id="modal-edicion" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-cubo-card border border-white/10 rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 max-h-[85vh] flex flex-col text-white">
-            <div class="flex justify-between items-center border-b border-white/10 pb-3 shrink-0">
-                <h3 class="font-bold text-lg text-white">Edición Manual de Contingencia</h3>
-                <button onclick="cerrarModalEdicion()" class="text-gray-400 hover:text-white font-bold">✕</button>
+    <div id="modal-edicion" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-cubo-card border border-cubo-border rounded-xl shadow-2xl max-w-lg w-full p-5 space-y-4 max-h-[85vh] flex flex-col text-white">
+            <div class="flex justify-between items-center border-b border-cubo-border pb-3 shrink-0">
+                <h3 class="font-bold text-sm text-white">Edición Manual de Contingencia</h3>
+                <button onclick="cerrarModalEdicion()" class="text-cubo-muted hover:text-white text-xs font-semibold">✕</button>
             </div>
-            <div class="overflow-y-auto pr-2 space-y-3 text-sm flex-grow font-mono">
+            <div class="overflow-y-auto pr-2 space-y-3 text-xs flex-grow font-mono">
                 <div>
-                    <label class="block text-[11px] text-gray-400 font-bold mb-1">S&P Merval en USD</label>
-                    <input type="text" id="input-merval-usd" value="$1.739" class="w-full bg-cubo-dark border border-white/10 p-2 rounded-xl text-white">
+                    <label class="block text-[11px] text-cubo-muted font-medium mb-1">S&P Merval en USD</label>
+                    <input type="text" id="input-merval-usd" value="$1.739" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-400 font-bold mb-1">S&P 500</label>
-                    <input type="text" id="input-sp500" value="$7.663" class="w-full bg-cubo-dark border border-white/10 p-2 rounded-xl text-white">
+                    <label class="block text-[11px] text-cubo-muted font-medium mb-1">S&P 500</label>
+                    <input type="text" id="input-sp500" value="$7.663" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-400 font-bold mb-1">Dólar MEP</label>
-                    <input type="text" id="input-mep" value="$1.554" class="w-full bg-cubo-dark border border-white/10 p-2 rounded-xl text-white">
+                    <label class="block text-[11px] text-cubo-muted font-medium mb-1">Dólar MEP</label>
+                    <input type="text" id="input-mep" value="$1.554" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-400 font-bold mb-1">Riesgo País</label>
-                    <input type="text" id="input-riesgo" value="674" class="w-full bg-cubo-dark border border-white/10 p-2 rounded-xl text-white">
+                    <label class="block text-[11px] text-cubo-muted font-medium mb-1">Riesgo País</label>
+                    <input type="text" id="input-riesgo" value="674" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white">
                 </div>
             </div>
-            <div class="flex justify-end gap-2 border-t border-white/10 pt-3 shrink-0">
-                <button onclick="cerrarModalEdicion()" class="px-4 py-2 text-xs font-semibold text-gray-400 hover:bg-white/5 rounded-xl">Cancelar</button>
-                <button onclick="guardarEdicionManual()" class="px-4 py-2 text-xs font-semibold bg-cubo-cyan text-cubo-navy hover:bg-cubo-accent rounded-xl">Guardar Cambios</button>
+            <div class="flex justify-end gap-2 border-t border-cubo-border pt-3 shrink-0">
+                <button onclick="cerrarModalEdicion()" class="px-3.5 py-1.5 text-xs font-medium text-cubo-muted hover:bg-cubo-bg rounded-lg">Cancelar</button>
+                <button onclick="guardarEdicionManual()" class="px-3.5 py-1.5 text-xs font-semibold bg-cubo-accent text-slate-950 hover:bg-sky-400 rounded-lg">Guardar Cambios</button>
             </div>
         </div>
     </div>
@@ -569,7 +560,7 @@
             let bajasUrl = localStorage.getItem('cubo_bajas_csv_url') || DEFAULT_BAJAS_URL;
 
             const badge = document.getElementById('badge-estado');
-            badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> Sincronizando...`;
+            badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Sincronizando...`;
 
             try {
                 let response = await fetch(url);
@@ -598,20 +589,20 @@
                     } catch (e) { console.log("Usando respaldo local Bajas por CORS"); }
                 }
 
-                renderizarTabla('tabla-ganadores', ganadoresActuales, 'text-emerald-400');
+                renderizarTabla('tabla-ganadores', ganadoresActuales, 'text-cubo-green');
                 renderizarTabla('tabla-perdedores', perdedoresActuales, 'text-rose-400');
                 renderizarStoryTop(ganadoresActuales.slice(0, 3), perdedoresActuales.slice(0, 3));
 
-                badge.className = "text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-500/20 flex items-center gap-1.5";
-                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Google Sheets Sincronizado`;
+                badge.className = "text-xs bg-emerald-500/10 text-emerald-400 font-medium px-3 py-1 rounded-lg border border-emerald-500/20 flex items-center gap-1.5 font-mono";
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Google Sheets Sincronizado`;
 
             } catch (err) {
                 console.warn("Aviso CORS detectado, manteniendo valores de respaldo.");
-                renderizarTabla('tabla-ganadores', fallbackGanadores, 'text-emerald-400');
+                renderizarTabla('tabla-ganadores', fallbackGanadores, 'text-cubo-green');
                 renderizarTabla('tabla-perdedores', fallbackPerdedores, 'text-rose-400');
                 renderizarStoryTop(fallbackGanadores.slice(0, 3), fallbackPerdedores.slice(0, 3));
 
-                badge.className = "text-xs bg-amber-500/10 text-amber-400 font-bold px-3 py-1.5 rounded-xl border border-amber-500/20 flex items-center gap-1.5";
+                badge.className = "text-xs bg-amber-500/10 text-amber-400 font-medium px-3 py-1 rounded-lg border border-amber-500/20 flex items-center gap-1.5 font-mono";
                 badge.innerHTML = `⚠️ Modo Local / Respaldo Activo`;
             }
         }
@@ -718,9 +709,9 @@
             datos.forEach(item => {
                 html += `
                     <tr>
-                        <td class="py-2.5 font-bold text-white">${item.ticker}</td>
-                        <td class="py-2.5 text-gray-400 truncate max-w-[180px]">${item.empresa}</td>
-                        <td class="py-2.5 text-right font-bold ${colorClass}">${item.var}</td>
+                        <td class="py-2 font-semibold text-white">${item.ticker}</td>
+                        <td class="py-2 text-cubo-muted truncate max-w-[180px]">${item.empresa}</td>
+                        <td class="py-2 text-right font-semibold ${colorClass}">${item.var}</td>
                     </tr>
                 `;
             });
@@ -730,25 +721,24 @@
         function renderizarStoryTop(ganadores, perdedores) {
             let htmlG = "";
             ganadores.forEach(item => {
-                htmlG += `<div class="flex justify-between items-center"><span class="font-bold text-white">${item.ticker}</span> <span class="text-emerald-400 font-bold">${item.var}</span></div>`;
+                htmlG += `<div class="flex justify-between items-center"><span class="font-semibold text-white">${item.ticker}</span> <span class="text-emerald-400 font-semibold">${item.var}</span></div>`;
             });
             document.getElementById('story-ganadores').innerHTML = htmlG;
 
             let htmlP = "";
             perdedores.forEach(item => {
-                htmlP += `<div class="flex justify-between items-center"><span class="font-bold text-white">${item.ticker}</span> <span class="text-rose-400 font-bold">${item.var}</span></div>`;
+                htmlP += `<div class="flex justify-between items-center"><span class="font-semibold text-white">${item.ticker}</span> <span class="text-rose-400 font-semibold">${item.var}</span></div>`;
             });
             document.getElementById('story-perdedores').innerHTML = htmlP;
         }
 
         function renderizarTablasYStory() {
-            renderizarTabla('tabla-ganadores', fallbackGanadores, 'text-emerald-400');
+            renderizarTabla('tabla-ganadores', fallbackGanadores, 'text-cubo-green');
             renderizarTabla('tabla-perdedores', fallbackPerdedores, 'text-rose-400');
             renderizarStoryTop(fallbackGanadores.slice(0, 3), fallbackPerdedores.slice(0, 3));
         }
 
         function actualizarInterfaz() {
-            // Web Dashboard
             document.getElementById('val-merval-usd').innerText = marketData.mervalUsd.val;
             document.getElementById('sem-merval-usd').innerText = `Sem: ${marketData.mervalUsd.sem}`;
             document.getElementById('ytd-merval-usd').innerText = `YTD: ${marketData.mervalUsd.ytd}`;
@@ -775,7 +765,6 @@
             document.getElementById('val-btc').innerText = marketData.btc.val;
             document.getElementById('btc-sem').innerText = `Sem: ${marketData.btc.sem}`;
 
-            // Story 9:16 (Valores y porcentajes Semanal + YTD)
             document.getElementById('story-merval-usd').innerText = marketData.mervalUsd.val;
             document.getElementById('story-merval-sem').innerText = `Sem: ${marketData.mervalUsd.sem}`;
             document.getElementById('story-merval-ytd').innerText = `YTD: ${marketData.mervalUsd.ytd}`;
@@ -840,7 +829,6 @@
                 }
             });
 
-            // Control de Top Ganadores y Perdedores en Story
             const showGanadores = document.getElementById('chk-story-ganadores').checked;
             const boxGanadores = document.getElementById('story-box-ganadores');
             if (showGanadores) { boxGanadores.classList.remove('hidden'); } else { boxGanadores.classList.add('hidden'); }
