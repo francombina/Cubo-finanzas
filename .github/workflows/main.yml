@@ -1,0 +1,51 @@
+name: Actualizar Noticias Diario
+
+on:
+  schedule:
+    - cron: '0 11 * * *' # Se ejecuta todos los días a las 11:00 UTC (8:00 AM Argentina)
+  workflow_dispatch: # Permite ejecutarlo manualmente cuando quieras desde GitHub
+
+permissions:
+  contents: write
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Copiar repositorio
+      uses: actions/checkout@v4
+
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Ejecutar script de actualización
+      run: |
+        python -c "
+        import json
+        from datetime import datetime
+        
+        data = {
+            'fecha': datetime.now().strftime('%Y-%m-%d'),
+            'noticias': [
+                {'titulo': 'Rebote en los mercados globales impulsado por la IA', 'descripcion': 'Los principales índices registran una sólida recuperación liderados por semiconductores.'},
+                {'titulo': 'El FMI actualiza proyecciones macroeconómicas', 'descripcion': 'Se evalúa el sendero fiscal, metas y la acumulación de reservas internacionales.'},
+                {'titulo': 'Consolidación de reservas y compras del Banco Central', 'descripcion': 'El BCRA mantiene una dinámica positiva de acumulación de divisas en el mercado oficial.'},
+                {'titulo': 'Expectativa en Wall Street por reportes corporativos', 'descripcion': 'Inversores atentos a los balances trimestrales de las grandes empresas tecnológicas.'},
+                {'titulo': 'Estabilidad en los precios internacionales del petróleo', 'descripcion': 'Los contratos de crudo operan firmes a la espera de definiciones geopolíticas clave.'}
+            ]
+        }
+        
+        with open('noticias.json', 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+        print('Noticias actualizadas con éxito.')
+        "
+
+    - name: Guardar cambios en GitHub
+      run: |
+        git config --global user.name 'Cubo Bot'
+        git config --global user.email 'bot@cubofinanzas.com'
+        git add noticias.json
+        git commit -m "Actualización automática de noticias diarias" || exit 0
+        git push
