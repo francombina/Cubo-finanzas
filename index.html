@@ -315,7 +315,7 @@
                         <span class="w-1.5 h-4 bg-cubo-sky rounded-full inline-block"></span>
                         <h3 class="text-sm font-semibold text-white">Infografía para Historias (9:16)</h3>
                     </div>
-                    <p class="text-xs text-cubo-muted mt-0.5">Estética oscura en grises, celestes y verde claro con trama de cubos isométricos.</p>
+                    <p class="text-xs text-cubo-muted mt-0.5">Estética oscura en grises, celestes y verde claro con trama de cubos isométricos e iconos.</p>
                 </div>
                 <button onclick="descargarStoryPNG()" class="flex items-center gap-1.5 bg-cubo-sky hover:bg-sky-300 text-zinc-950 px-4 py-1.5 rounded-lg text-xs font-semibold transition shadow-sm">
                     <i data-lucide="download" class="w-3.5 h-3.5"></i> Descargar PNG
@@ -421,14 +421,17 @@
                             </span>
                         </div>
 
-                        <!-- Contenido Central: Grilla de Activos -->
+                        <!-- Contenido Central: Grilla de Activos con Iconos -->
                         <div class="relative z-10 space-y-2 my-auto py-1">
                             
                             <div id="story-grid-container" class="grid grid-cols-2 gap-1.5 num-tabular">
                                 <!-- Merval USD -->
                                 <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-merval-usd">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">MERVAL USD</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
+                                            <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                                            MERVAL USD
+                                        </span>
                                         <span class="text-[11px] font-bold text-white" id="story-merval-usd">$1.693</span>
                                     </div>
                                     <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
@@ -440,7 +443,10 @@
                                 <!-- S&P 500 -->
                                 <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-sp500">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">S&P 500</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
+                                            <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                                            S&P 500
+                                        </span>
                                         <span class="text-[11px] font-bold text-white" id="story-sp500">$7.719</span>
                                     </div>
                                     <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
@@ -452,7 +458,10 @@
                                 <!-- Dólar MEP -->
                                 <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-mep">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">DÓLAR MEP</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
+                                            <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                            DÓLAR MEP
+                                        </span>
                                         <span class="text-[11px] font-bold text-white" id="story-mep">$1.578</span>
                                     </div>
                                     <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
@@ -464,7 +473,10 @@
                                 <!-- Riesgo País -->
                                 <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-riesgo">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">RIESGO PAÍS</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
+                                            <svg class="w-2.5 h-2.5 text-[#4ADE80]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                            RIESGO PAÍS
+                                        </span>
                                         <span class="text-[11px] font-bold text-white" id="story-riesgo">765</span>
                                     </div>
                                     <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
@@ -476,7 +488,10 @@
                                 <!-- Dólar CCL -->
                                 <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden" id="story-card-ccl">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">DÓLAR CCL</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
+                                            <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                                            DÓLAR CCL
+                                        </span>
                                         <span class="text-[11px] font-bold text-white" id="story-ccl">$1.683</span>
                                     </div>
                                     <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
@@ -488,7 +503,10 @@
                                 <!-- Bitcoin -->
                                 <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden" id="story-card-btc">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">BITCOIN</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
+                                            <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11.767 19.08c4.922.868 9.539-2.532 10.407-7.454.868-4.922-2.532-9.539-7.454-10.407-4.922-.868-9.539 2.532-10.407 7.454-.868 4.922 2.532 9.539 7.454 10.407z"/></svg>
+                                            BITCOIN
+                                        </span>
                                         <span class="text-[11px] font-bold text-white" id="story-btc">$80.544</span>
                                     </div>
                                     <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
@@ -500,7 +518,10 @@
                                 <!-- Merval ARS -->
                                 <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden col-span-2" id="story-card-merval-ars">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">S&P MERVAL (ARS)</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
+                                            <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                                            S&P MERVAL (ARS)
+                                        </span>
                                         <span class="text-[11px] font-bold text-white" id="story-merval-ars">$2.848.945</span>
                                     </div>
                                     <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
@@ -513,11 +534,17 @@
                             <!-- Mini Tablas Top 3 Ganadores y Perdedores en Story -->
                             <div class="grid grid-cols-2 gap-1.5 num-tabular">
                                 <div id="story-box-ganadores" class="bg-[#1E1E22]/90 border border-[#4ADE80]/25 p-2 rounded-lg">
-                                    <p class="text-[8px] font-semibold text-[#4ADE80] mb-1 border-b border-[#2C2C32] pb-0.5">Top 3 Subas</p>
+                                    <p class="text-[8px] font-semibold text-[#4ADE80] mb-1 border-b border-[#2C2C32] pb-0.5 flex items-center gap-1">
+                                        <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+                                        Top 3 Subas
+                                    </p>
                                     <div id="story-ganadores" class="space-y-0.5 text-[8px]"></div>
                                 </div>
                                 <div id="story-box-perdedores" class="bg-[#1E1E22]/90 border border-[#F87171]/25 p-2 rounded-lg">
-                                    <p class="text-[8px] font-semibold text-[#F87171] mb-1 border-b border-[#2C2C32] pb-0.5">Top 3 Bajas</p>
+                                    <p class="text-[8px] font-semibold text-[#F87171] mb-1 border-b border-[#2C2C32] pb-0.5 flex items-center gap-1">
+                                        <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+                                        Top 3 Bajas
+                                    </p>
                                     <div id="story-perdedores" class="space-y-0.5 text-[8px]"></div>
                                 </div>
                             </div>
@@ -531,7 +558,7 @@
                             </p>
                         </div>
 
-                        <!-- Footer de la Historia (Actualizado con estilo idéntico al badge superior verde) -->
+                        <!-- Footer de la Historia -->
                         <div class="relative z-10 border-t border-[#2C2C32] pt-2 flex justify-between items-center text-[8.5px]">
                             <div class="flex items-center gap-1.5 bg-[#1E1E22] border border-[#2E2E34] px-2.5 py-1 rounded-md text-[#A1A1AA] font-medium">
                                 <svg class="w-3 h-3 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
