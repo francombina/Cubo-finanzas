@@ -3,29 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Francisco Combina — Dashboard & Historias</title>
+    <title>Francisco Combina — Monitor de Mercado & Research</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <!-- Google Fonts: Inter & JetBrains Mono para estética financiera clásica -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
                         mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        cubo: {
-                            bg: '#121212',      // Gris carbón neutro muy oscuro (cero tono azul)
-                            card: '#1a1a1a',    // Gris intermedio mate para tarjetas
-                            border: '#2c2c2c',  // Líneas divisorias en gris sobrio
-                            accent: '#38bdf8',  // Celeste limpio institucional
-                            muted: '#9ca3af',   // Gris texto secundario neutro
-                            green: '#34d399'    // Verde claro sutil para positivos
+                        inst: {
+                            bg: '#F4F5F7',         // Gris perla / papel técnico
+                            surface: '#FFFFFF',    // Blanco puro
+                            subtle: '#F8FAFC',     // Gris ultra claro para cabeceras de tabla
+                            border: '#E2E8F0',     // Gris plata para líneas divisorias
+                            borderDark: '#CBD5E1', // Gris medio para bordes activos
+                            text: '#18181B',       // Gris carbón casi negro para lectura nítida
+                            muted: '#64748B',      // Gris plomo para etiquetas secundarias
+                            sky: '#0284C7',        // Celeste institucional sobrio
+                            skyLight: '#E0F2FE',   // Fondo celeste muy suave
+                            skyBorder: '#BAE6FD',  // Borde celeste claro
+                            greenBg: '#DCFCE7',    // Verde claro suave (fondo)
+                            greenText: '#15803D',  // Verde bosque legible (texto)
+                            greenBorder: '#BBF7D0',// Borde verde claro
+                            redBg: '#FEE2E2',      // Rojo suave (fondo)
+                            redText: '#B91C1C',    // Rojo sobrio (texto)
+                            redBorder: '#FECACA'   // Borde rojo claro
                         }
                     }
                 }
@@ -36,231 +46,249 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- html2canvas para exportar la infografía a PNG -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
 </head>
-<body class="bg-cubo-bg text-slate-100 font-sans antialiased min-h-screen pb-12 selection:bg-cubo-accent selection:text-slate-950">
+<body class="bg-inst-bg text-inst-text font-sans antialiased min-h-screen pb-16 selection:bg-inst-skyLight selection:text-inst-sky">
 
-    <!-- Header Principal -->
-    <header class="bg-cubo-card/95 backdrop-blur-md border-b border-cubo-border sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
-                <div class="bg-cubo-border text-cubo-accent p-2 rounded-lg font-mono font-bold text-sm border border-cubo-border tracking-tight">
+    <!-- Barra Superior Institucional -->
+    <header class="bg-inst-surface border-b border-inst-border sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="w-9 h-9 bg-inst-skyLight border border-inst-skyBorder text-inst-sky rounded flex items-center justify-center font-mono font-bold text-sm tracking-tighter">
                     FC
                 </div>
-                <div>
-                    <h1 class="text-lg font-bold tracking-tight text-white">FRANCISCO COMBINA</h1>
-                    <p class="text-[11px] text-cubo-muted font-mono">Terminal & Generador de Historias</p>
+                <div class="border-l border-inst-border pl-3.5">
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base font-bold tracking-tight text-inst-text uppercase">Francisco Combina</h1>
+                        <span class="text-[10px] font-mono uppercase bg-inst-subtle text-inst-muted border border-inst-border px-1.5 py-0.5 rounded">Research</span>
+                    </div>
+                    <p class="text-xs text-inst-muted font-mono">Monitor de Mercado & Coyuntura Financiera</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-2 flex-wrap">
-                <button onclick="sincronizarConSheet()" class="flex items-center gap-1.5 bg-cubo-card hover:bg-[#252525] text-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-border">
-                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cubo-accent"></i> Sincronizar Sheet
+                <span id="badge-estado" class="text-[11px] bg-inst-greenBg text-inst-greenText font-mono font-medium px-2.5 py-1.5 rounded border border-inst-greenBorder flex items-center gap-1.5 mr-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-inst-greenText"></span> Datos Sincronizados
+                </span>
+
+                <button onclick="sincronizarConSheet()" class="flex items-center gap-1.5 bg-inst-surface hover:bg-inst-subtle text-inst-text px-3 py-1.5 rounded text-xs font-medium transition border border-inst-border shadow-2xs">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-inst-sky"></i> Actualizar
                 </button>
-                <button onclick="toggleConfigPanel()" class="flex items-center gap-1.5 bg-cubo-accent/10 hover:bg-cubo-accent/20 text-cubo-accent px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-accent/30">
-                    <i data-lucide="settings" class="w-3.5 h-3.5"></i> Configuración URLs
+                <button onclick="toggleConfigPanel()" class="flex items-center gap-1.5 bg-inst-skyLight/60 hover:bg-inst-skyLight text-inst-sky px-3 py-1.5 rounded text-xs font-medium transition border border-inst-skyBorder">
+                    <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i> Fuentes CSV
                 </button>
-                <button onclick="abrirModalEdicion()" class="flex items-center gap-1.5 bg-cubo-card hover:bg-[#252525] text-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-border">
-                    <i data-lucide="edit-3" class="w-3.5 h-3.5 text-cubo-muted"></i> Edición Manual
+                <button onclick="abrirModalEdicion()" class="flex items-center gap-1.5 bg-inst-surface hover:bg-inst-subtle text-inst-muted hover:text-inst-text px-3 py-1.5 rounded text-xs font-medium transition border border-inst-border">
+                    <i data-lucide="pen-line" class="w-3.5 h-3.5"></i> Manual
                 </button>
             </div>
         </div>
     </header>
 
     <!-- Contenido Principal -->
-    <main class="max-w-6xl mx-auto px-4 mt-6 space-y-6">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 mt-6 space-y-6">
 
         <!-- PANEL DE CONFIGURACIÓN DE URLS DE GOOGLE SHEETS -->
-        <section id="panel-configuracion" class="bg-cubo-card border border-cubo-border p-5 rounded-xl shadow-lg hidden space-y-4">
-            <div class="flex justify-between items-center border-b border-cubo-border pb-3">
+        <section id="panel-configuracion" class="bg-inst-surface border border-inst-border p-5 rounded-md shadow-xs hidden space-y-4">
+            <div class="flex justify-between items-center border-b border-inst-border pb-3">
                 <div class="flex items-center gap-2">
-                    <span class="p-1.5 bg-cubo-bg text-cubo-accent rounded-lg border border-cubo-border"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i></span>
+                    <i data-lucide="database" class="w-4 h-4 text-inst-sky"></i>
                     <div>
-                        <h3 class="font-bold text-sm text-white">Configuración de Planillas (CSV)</h3>
-                        <p class="text-[11px] text-cubo-muted">Enlaces de solapas configurados.</p>
+                        <h3 class="font-semibold text-sm text-inst-text">Conexión de Orígenes de Datos (Google Sheets CSV)</h3>
+                        <p class="text-[11px] text-inst-muted">Rutas de publicación automática para lectura directa.</p>
                     </div>
                 </div>
-                <button onclick="toggleConfigPanel()" class="text-cubo-muted hover:text-white text-xs font-medium">✕ Cerrar</button>
+                <button onclick="toggleConfigPanel()" class="text-inst-muted hover:text-inst-text text-xs font-medium px-2 py-1 rounded hover:bg-inst-subtle">Cerrar ✕</button>
             </div>
 
-            <div class="space-y-3 font-mono text-xs">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
                 <div>
-                    <label class="block font-medium text-slate-300 mb-1">URL Hoja "Datos" (Principal)</label>
-                    <input type="text" id="cfg-sheet-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-accent focus:outline-none focus:border-cubo-accent">
+                    <label class="block font-sans font-medium text-inst-text text-xs mb-1">Hoja "Datos" (Macro & Índices)</label>
+                    <input type="text" id="cfg-sheet-url" class="w-full border border-inst-border p-2 rounded bg-inst-subtle text-inst-text focus:outline-none focus:border-inst-sky focus:bg-inst-surface transition">
                 </div>
                 <div>
-                    <label class="block font-medium text-slate-300 mb-1">URL Hoja "Subas_EEUU" (Ganadores)</label>
-                    <input type="text" id="cfg-subas-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-accent focus:outline-none focus:border-cubo-accent">
+                    <label class="block font-sans font-medium text-inst-text text-xs mb-1">Hoja "Subas_EEUU" (Ganadores)</label>
+                    <input type="text" id="cfg-subas-url" class="w-full border border-inst-border p-2 rounded bg-inst-subtle text-inst-text focus:outline-none focus:border-inst-sky focus:bg-inst-surface transition">
                 </div>
                 <div>
-                    <label class="block font-medium text-slate-300 mb-1">URL Hoja "Bajas_EEUU" (Perdedores)</label>
-                    <input type="text" id="cfg-bajas-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-accent focus:outline-none focus:border-cubo-accent">
+                    <label class="block font-sans font-medium text-inst-text text-xs mb-1">Hoja "Bajas_EEUU" (Perdedores)</label>
+                    <input type="text" id="cfg-bajas-url" class="w-full border border-inst-border p-2 rounded bg-inst-subtle text-inst-text focus:outline-none focus:border-inst-sky focus:bg-inst-surface transition">
                 </div>
             </div>
 
-            <div class="flex justify-between items-center border-t border-cubo-border pt-3">
-                <span class="text-[11px] text-cubo-muted">Se guardan localmente para futuras sesiones.</span>
-                <button onclick="guardarSheetURLs()" class="bg-cubo-accent text-slate-950 hover:bg-sky-400 px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
-                    <i data-lucide="save" class="w-3.5 h-3.5"></i> Guardar y Sincronizar
+            <div class="flex justify-between items-center border-t border-inst-border pt-3">
+                <span class="text-[11px] text-inst-muted">Los enlaces quedan almacenados en la memoria local del navegador.</span>
+                <button onclick="guardarSheetURLs()" class="bg-inst-sky text-white hover:bg-sky-700 px-4 py-1.5 rounded text-xs font-medium transition flex items-center gap-1.5">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i> Aplicar y Sincronizar
                 </button>
             </div>
         </section>
 
-        <!-- Estado de Conexión -->
-        <div class="bg-cubo-card border border-cubo-border p-3.5 rounded-xl shadow flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-2.5">
-                <span class="p-1.5 bg-cubo-bg text-cubo-accent rounded-lg border border-cubo-border"><i data-lucide="activity" class="w-4 h-4"></i></span>
-                <div>
-                    <p class="text-[11px] text-cubo-muted uppercase tracking-wider font-semibold">Origen de Datos</p>
-                    <p class="text-xs text-slate-200 font-mono mt-0.5">Sincronización exacta desde Google Sheets</p>
-                </div>
-            </div>
-            <span id="badge-estado" class="text-xs bg-emerald-500/10 text-emerald-400 font-medium px-3 py-1 rounded-lg border border-emerald-500/20 flex items-center gap-1.5 font-mono">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Google Sheet Vinculado
-            </span>
-        </div>
-
-        <!-- 1. TARJETAS PRINCIPALES (MÉTRICAS CLAVE) -->
+        <!-- 1. BENCHMARKS PRINCIPALES (GRILLA DE 4 COLUMNAS) -->
         <section>
-            <div class="mb-3">
-                <h2 class="text-base font-bold text-white flex items-center gap-2">
-                    <i data-lucide="bar-chart-2" class="w-4 h-4 text-cubo-accent"></i>
-                    Indicadores Principales de Mercado
-                </h2>
+            <div class="flex items-center justify-between mb-2.5">
+                <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-4 bg-inst-sky rounded-xs inline-block"></span>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-inst-muted">Indicadores Clave de Mercado</h2>
+                </div>
+                <span class="text-[11px] font-mono text-inst-muted">Variación Semanal & Acumulado Anual (YTD)</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                 
                 <!-- S&P Merval USD -->
-                <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow hover:border-cubo-accent/40 transition">
-                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider block mb-1">S&P Merval en USD</span>
-                    <div class="text-xl font-bold text-white font-mono mb-2" id="val-merval-usd">$1.739</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-medium font-mono">
-                        <span id="sem-merval-usd" class="text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded border border-rose-500/20">Sem: -0,8%</span>
-                        <span id="ytd-merval-usd" class="text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded border border-rose-500/20">YTD: -13,2%</span>
+                <div class="bg-inst-surface p-4 rounded-md border border-inst-border border-t-2 border-t-inst-sky shadow-2xs flex flex-col justify-between">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-semibold text-inst-muted">S&P Merval (USD)</span>
+                        <span class="text-[10px] font-mono text-inst-sky bg-inst-skyLight px-1.5 py-0.5 rounded border border-inst-skyBorder">CCL</span>
+                    </div>
+                    <div class="text-2xl font-bold text-inst-text font-mono tabular-nums tracking-tight my-1" id="val-merval-usd">$1.693</div>
+                    <div class="flex items-center gap-1.5 text-[11px] font-mono tabular-nums mt-2 pt-2 border-t border-inst-subtle">
+                        <span id="sem-merval-usd" class="px-1.5 py-0.5 rounded border">Sem: -3,4%</span>
+                        <span id="ytd-merval-usd" class="px-1.5 py-0.5 rounded border">YTD: -15,5%</span>
                     </div>
                 </div>
 
                 <!-- SP500 -->
-                <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow hover:border-cubo-accent/40 transition">
-                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider block mb-1">S&P 500</span>
-                    <div class="text-xl font-bold text-white font-mono mb-2" id="val-sp500">$7.663</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-medium font-mono">
-                        <span id="sem-sp500" class="text-cubo-green bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">Sem: +0,1%</span>
-                        <span id="ytd-sp500" class="text-cubo-green bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">YTD: +11,9%</span>
+                <div class="bg-inst-surface p-4 rounded-md border border-inst-border border-t-2 border-t-inst-sky shadow-2xs flex flex-col justify-between">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-semibold text-inst-muted">S&P 500 Index</span>
+                        <span class="text-[10px] font-mono text-inst-muted bg-inst-subtle px-1.5 py-0.5 rounded border border-inst-border">EE.UU.</span>
+                    </div>
+                    <div class="text-2xl font-bold text-inst-text font-mono tabular-nums tracking-tight my-1" id="val-sp500">$7.719</div>
+                    <div class="flex items-center gap-1.5 text-[11px] font-mono tabular-nums mt-2 pt-2 border-t border-inst-subtle">
+                        <span id="sem-sp500" class="px-1.5 py-0.5 rounded border">Sem: +1,3%</span>
+                        <span id="ytd-sp500" class="px-1.5 py-0.5 rounded border">YTD: +12,8%</span>
                     </div>
                 </div>
 
                 <!-- Dólar MEP -->
-                <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow hover:border-cubo-accent/40 transition">
-                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider block mb-1">Dólar MEP</span>
-                    <div class="text-xl font-bold text-white font-mono mb-2" id="val-mep">$1.554</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-medium font-mono">
-                        <span id="sem-mep" class="text-cubo-green bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">Sem: +0,7%</span>
-                        <span id="ytd-mep" class="text-cubo-green bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">YTD: +4,6%</span>
+                <div class="bg-inst-surface p-4 rounded-md border border-inst-border border-t-2 border-t-inst-sky shadow-2xs flex flex-col justify-between">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-semibold text-inst-muted">Dólar MEP</span>
+                        <span class="text-[10px] font-mono text-inst-muted bg-inst-subtle px-1.5 py-0.5 rounded border border-inst-border">FX Local</span>
+                    </div>
+                    <div class="text-2xl font-bold text-inst-text font-mono tabular-nums tracking-tight my-1" id="val-mep">$1.578</div>
+                    <div class="flex items-center gap-1.5 text-[11px] font-mono tabular-nums mt-2 pt-2 border-t border-inst-subtle">
+                        <span id="sem-mep" class="px-1.5 py-0.5 rounded border">Sem: +0,9%</span>
+                        <span id="ytd-mep" class="px-1.5 py-0.5 rounded border">YTD: +6,2%</span>
                     </div>
                 </div>
 
                 <!-- Riesgo País -->
-                <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow hover:border-cubo-accent/40 transition border-l-2 border-l-cubo-accent">
-                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider block mb-1">Riesgo País</span>
-                    <div class="text-xl font-bold text-white font-mono mb-2" id="val-riesgo">674</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-medium font-mono">
-                        <span id="sem-riesgo" class="text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded border border-rose-500/20">Sem: -0,1%</span>
-                        <span id="ytd-riesgo" class="text-cubo-green bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">YTD: +18,0%</span>
+                <div class="bg-inst-surface p-4 rounded-md border border-inst-border border-t-2 border-t-emerald-500 shadow-2xs flex flex-col justify-between">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-semibold text-inst-muted">Riesgo País (EMBI+)</span>
+                        <span class="text-[10px] font-mono text-inst-greenText bg-inst-greenBg px-1.5 py-0.5 rounded border border-inst-greenBorder">Soberano</span>
+                    </div>
+                    <div class="text-2xl font-bold text-inst-text font-mono tabular-nums tracking-tight my-1" id="val-riesgo">765</div>
+                    <div class="flex items-center gap-1.5 text-[11px] font-mono tabular-nums mt-2 pt-2 border-t border-inst-subtle">
+                        <span id="sem-riesgo" class="px-1.5 py-0.5 rounded border">Sem: +13,3%</span>
+                        <span id="ytd-riesgo" class="px-1.5 py-0.5 rounded border">YTD: +34,0%</span>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- 2. BLOQUE DE DIVISAS, CRIPTO & MERVAL ARS -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- 2. PANEL SECUNDARIO: PARIDADES CAMBIARIAS, CRIPTO & MERVAL ARS -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
             
             <!-- S&P Merval ARS -->
-            <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow space-y-2">
-                <div class="flex justify-between items-center border-b border-cubo-border pb-2">
-                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider">S&P Merval (ARS)</span>
-                    <span class="text-[10px] bg-cubo-bg text-cubo-accent font-mono font-medium px-2 py-0.5 rounded border border-cubo-border">Local</span>
+            <div class="bg-inst-surface p-4 rounded-md border border-inst-border flex flex-col justify-between">
+                <div class="flex justify-between items-center border-b border-inst-border pb-2 mb-2">
+                    <span class="text-xs font-semibold text-inst-text">S&P Merval (ARS)</span>
+                    <span class="text-[10px] bg-inst-skyLight text-inst-sky font-mono font-medium px-2 py-0.5 rounded border border-inst-skyBorder">Índice Pesos</span>
                 </div>
-                <div class="pt-1">
-                    <span class="text-xl font-bold text-white font-mono" id="val-merval-ars">$2.848.945</span>
-                    <div class="flex gap-2 text-xs font-medium font-mono mt-2">
-                        <span class="text-cubo-green" id="merval-ars-sem">Sem: +0,7%</span>
-                        <span class="text-rose-400" id="merval-ars-ytd">YTD: -6,6%</span>
+                <div class="flex items-baseline justify-between pt-1">
+                    <span class="text-xl font-bold text-inst-text font-mono tabular-nums" id="val-merval-ars">$2.848.945</span>
+                    <div class="flex gap-1.5 text-[11px] font-mono tabular-nums">
+                        <span id="merval-ars-sem" class="px-1.5 py-0.5 rounded border">Sem: +0,7%</span>
+                        <span id="merval-ars-ytd" class="px-1.5 py-0.5 rounded border">YTD: -6,6%</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Dólar CCL & BTC -->
-            <div class="bg-cubo-card p-4 rounded-xl border border-cubo-border shadow space-y-2.5">
-                <div class="flex justify-between items-center border-b border-cubo-border pb-2">
-                    <span class="text-[11px] font-semibold text-cubo-muted uppercase tracking-wider">CCL & Cripto</span>
-                    <span class="text-[10px] bg-cubo-bg text-cubo-accent font-mono font-medium px-2 py-0.5 rounded border border-cubo-border">Referencias</span>
+            <!-- Dólar CCL -->
+            <div class="bg-inst-surface p-4 rounded-md border border-inst-border flex flex-col justify-between">
+                <div class="flex justify-between items-center border-b border-inst-border pb-2 mb-2">
+                    <span class="text-xs font-semibold text-inst-text">Dólar Contado con Liquidación</span>
+                    <span class="text-[10px] bg-inst-subtle text-inst-muted font-mono font-medium px-2 py-0.5 rounded border border-inst-border">Implícito</span>
                 </div>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <div class="bg-cubo-bg p-2.5 rounded-lg border border-cubo-border">
-                        <span class="text-[10px] text-cubo-muted font-semibold block">DÓLAR CCL</span>
-                        <span class="font-bold text-white font-mono text-sm" id="val-ccl">$1.638</span>
-                        <span class="text-[10px] text-cubo-green font-mono font-medium block mt-0.5" id="ccl-sem">Sem: +1,1%</span>
-                    </div>
-                    <div class="bg-cubo-bg p-2.5 rounded-lg border border-cubo-border">
-                        <span class="text-[10px] text-cubo-muted font-semibold block">BTC</span>
-                        <span class="font-bold text-white font-mono text-sm" id="val-btc">$81.086</span>
-                        <span class="text-[10px] text-rose-400 font-mono font-medium block mt-0.5" id="btc-sem">Sem: -0,9%</span>
-                    </div>
+                <div class="flex items-baseline justify-between pt-1">
+                    <span class="text-xl font-bold text-inst-text font-mono tabular-nums" id="val-ccl">$1.683</span>
+                    <span class="text-[11px] font-mono tabular-nums px-1.5 py-0.5 rounded border" id="ccl-sem">Sem: +1,7%</span>
+                </div>
+            </div>
+
+            <!-- Bitcoin -->
+            <div class="bg-inst-surface p-4 rounded-md border border-inst-border flex flex-col justify-between">
+                <div class="flex justify-between items-center border-b border-inst-border pb-2 mb-2">
+                    <span class="text-xs font-semibold text-inst-text">Bitcoin (BTC / USD)</span>
+                    <span class="text-[10px] bg-inst-subtle text-inst-muted font-mono font-medium px-2 py-0.5 rounded border border-inst-border">Digital</span>
+                </div>
+                <div class="flex items-baseline justify-between pt-1">
+                    <span class="text-xl font-bold text-inst-text font-mono tabular-nums" id="val-btc">$80.544</span>
+                    <span class="text-[11px] font-mono tabular-nums px-1.5 py-0.5 rounded border" id="btc-sem">Sem: +0,7%</span>
                 </div>
             </div>
 
         </section>
 
-        <!-- SECCIÓN APARTE: TOP 5 GANADORES Y PERDEDORES DE EEUU -->
+        <!-- 3. TABLAS DE RENDIMIENTO SEMANAL (EE.UU.) -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             <!-- Top Ganadores -->
-            <div class="bg-cubo-card p-5 rounded-xl border border-cubo-border shadow space-y-3">
-                <div class="flex justify-between items-center border-b border-cubo-border pb-3">
+            <div class="bg-inst-surface rounded-md border border-inst-border overflow-hidden">
+                <div class="bg-inst-subtle px-4 py-3 border-b border-inst-border flex justify-between items-center">
                     <div class="flex items-center gap-2">
-                        <span class="p-1.5 bg-emerald-500/10 text-cubo-green rounded-lg border border-emerald-500/20"><i data-lucide="trending-up" class="w-4 h-4"></i></span>
-                        <h3 class="font-bold text-sm text-white">Principales Ganadores (EEUU)</h3>
+                        <span class="w-2 h-2 rounded-full bg-inst-greenText"></span>
+                        <h3 class="font-bold text-xs uppercase tracking-wider text-inst-text">Mayores Subas Semanales (EE.UU.)</h3>
                     </div>
-                    <span class="text-[10px] bg-emerald-500/10 text-cubo-green font-medium px-2 py-0.5 rounded border border-emerald-500/20 font-mono">Top 5 Subas</span>
+                    <span class="text-[10px] bg-inst-greenBg text-inst-greenText font-mono font-semibold px-2 py-0.5 rounded border border-inst-greenBorder">Top 5 Ganadores</span>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs font-mono">
+                <div class="p-2">
+                    <table class="w-full text-left text-xs font-mono tabular-nums">
                         <thead>
-                            <tr class="text-cubo-muted border-b border-cubo-border">
-                                <th class="pb-2 font-medium">Ticker</th>
-                                <th class="pb-2 font-medium">Empresa</th>
-                                <th class="pb-2 font-medium text-right">Var. Semanal</th>
+                            <tr class="text-inst-muted border-b border-inst-border text-[11px]">
+                                <th class="py-2 px-2 font-medium">Ticker</th>
+                                <th class="py-2 px-2 font-medium font-sans">Compañía</th>
+                                <th class="py-2 px-2 font-medium text-right">Var. Semanal</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-ganadores" class="divide-y divide-cubo-border/40 text-slate-300">
-                            <tr><td colspan="3" class="py-3 text-center text-cubo-muted">Cargando datos...</td></tr>
+                        <tbody id="tabla-ganadores" class="divide-y divide-inst-border/60 text-inst-text">
+                            <tr><td colspan="3" class="py-4 text-center text-inst-muted">Cargando registros...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
             <!-- Top Perdedores -->
-            <div class="bg-cubo-card p-5 rounded-xl border border-cubo-border shadow space-y-3">
-                <div class="flex justify-between items-center border-b border-cubo-border pb-3">
+            <div class="bg-inst-surface rounded-md border border-inst-border overflow-hidden">
+                <div class="bg-inst-subtle px-4 py-3 border-b border-inst-border flex justify-between items-center">
                     <div class="flex items-center gap-2">
-                        <span class="p-1.5 bg-rose-500/10 text-rose-400 rounded-lg border border-rose-500/20"><i data-lucide="trending-down" class="w-4 h-4"></i></span>
-                        <h3 class="font-bold text-sm text-white">Principales Perdedores (EEUU)</h3>
+                        <span class="w-2 h-2 rounded-full bg-inst-redText"></span>
+                        <h3 class="font-bold text-xs uppercase tracking-wider text-inst-text">Mayores Bajas Semanales (EE.UU.)</h3>
                     </div>
-                    <span class="text-[10px] bg-rose-500/10 text-rose-400 font-medium px-2 py-0.5 rounded border border-rose-500/20 font-mono">Top 5 Bajas</span>
+                    <span class="text-[10px] bg-inst-redBg text-inst-redText font-mono font-semibold px-2 py-0.5 rounded border border-inst-redBorder">Top 5 Perdedores</span>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs font-mono">
+                <div class="p-2">
+                    <table class="w-full text-left text-xs font-mono tabular-nums">
                         <thead>
-                            <tr class="text-cubo-muted border-b border-cubo-border">
-                                <th class="pb-2 font-medium">Ticker</th>
-                                <th class="pb-2 font-medium">Empresa</th>
-                                <th class="pb-2 font-medium text-right">Var. Semanal</th>
+                            <tr class="text-inst-muted border-b border-inst-border text-[11px]">
+                                <th class="py-2 px-2 font-medium">Ticker</th>
+                                <th class="py-2 px-2 font-medium font-sans">Compañía</th>
+                                <th class="py-2 px-2 font-medium text-right">Var. Semanal</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-perdedores" class="divide-y divide-cubo-border/40 text-slate-300">
-                            <tr><td colspan="3" class="py-3 text-center text-cubo-muted">Cargando datos...</td></tr>
+                        <tbody id="tabla-perdedores" class="divide-y divide-inst-border/60 text-inst-text">
+                            <tr><td colspan="3" class="py-4 text-center text-inst-muted">Cargando registros...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -268,237 +296,290 @@
 
         </section>
 
-        <!-- 3. GENERADOR DE INFOGRAFÍA PARA HISTORIAS -->
-        <section class="bg-cubo-card rounded-xl border border-cubo-border p-4 sm:p-5 shadow space-y-4">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-cubo-border pb-3">
+        <!-- 4. ESTUDIO DE EXPORTACIÓN PARA REDES (FORMATO 9:16) -->
+        <section class="bg-inst-surface rounded-md border border-inst-border p-5 space-y-5">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-inst-border pb-4">
                 <div>
-                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="image" class="w-4 h-4 text-cubo-accent"></i>
-                        Infografía para Historias
-                    </h3>
-                    <p class="text-xs text-cubo-muted">Diseño compacto adaptado a pantalla para captura directa</p>
+                    <div class="flex items-center gap-2">
+                        <span class="w-1.5 h-4 bg-inst-sky rounded-xs inline-block"></span>
+                        <h3 class="text-sm font-bold text-inst-text uppercase tracking-wider">Generador de Reporte Vertical (9:16)</h3>
+                    </div>
+                    <p class="text-xs text-inst-muted mt-0.5">Composición editorial limpia lista para exportar en alta definición o capturar en pantalla.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="cambiarTemaStory()" id="btn-tema-story" class="flex items-center gap-1.5 bg-inst-subtle hover:bg-inst-border/50 text-inst-text px-3 py-1.5 rounded text-xs font-medium transition border border-inst-border">
+                        <i data-lucide="palette" class="w-3.5 h-3.5 text-inst-sky"></i> Estilo: Papel Claro
+                    </button>
+                    <button onclick="descargarStoryPNG()" class="flex items-center gap-1.5 bg-inst-sky hover:bg-sky-700 text-white px-3.5 py-1.5 rounded text-xs font-medium transition shadow-2xs">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> Descargar PNG
+                    </button>
                 </div>
             </div>
 
-            <!-- PANEL DE PERSONALIZACIÓN -->
-            <div class="bg-cubo-bg p-3.5 rounded-xl border border-cubo-border space-y-3">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-cubo-accent flex items-center gap-1.5 font-mono">
-                    <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Personalizar Contenido
-                </h4>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- COLUMNA IZQUIERDA: CONTROLES DE PERSONALIZACIÓN (5 COLUMNAS) -->
+                <div class="lg:col-span-5 bg-inst-subtle p-4 rounded-md border border-inst-border space-y-4">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-inst-text flex items-center gap-1.5 border-b border-inst-border pb-2">
+                        <i data-lucide="layers" class="w-3.5 h-3.5 text-inst-sky"></i> Parámetros de la Publicación
+                    </h4>
 
-                <!-- Checkboxes de Activos y Top -->
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-300 mb-2">Elementos a incluir en la historia:</label>
-                    <div class="flex flex-wrap gap-2 text-xs">
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
-                            <input type="checkbox" id="chk-merval-usd" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
-                            <span class="text-slate-200 text-[11px]">Merval USD</span>
-                        </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
-                            <input type="checkbox" id="chk-sp500" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
-                            <span class="text-slate-200 text-[11px]">S&P 500</span>
-                        </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
-                            <input type="checkbox" id="chk-mep" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
-                            <span class="text-slate-200 text-[11px]">Dólar MEP</span>
-                        </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
-                            <input type="checkbox" id="chk-riesgo" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
-                            <span class="text-slate-200 text-[11px]">Riesgo País</span>
-                        </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
-                            <input type="checkbox" id="chk-ccl" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
-                            <span class="text-slate-200 text-[11px]">Dólar CCL</span>
-                        </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
-                            <input type="checkbox" id="chk-btc" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
-                            <span class="text-slate-200 text-[11px]">BTC</span>
-                        </label>
-                        <label class="flex items-center gap-1.5 bg-cubo-card px-2.5 py-1 rounded border border-cubo-border cursor-pointer">
-                            <input type="checkbox" id="chk-merval-ars" onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
-                            <span class="text-slate-200 text-[11px]">Merval ARS</span>
-                        </label>
-                        <label class="flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 cursor-pointer">
-                            <input type="checkbox" id="chk-story-ganadores" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
-                            <span class="text-cubo-green text-[11px]">Top Ganadores</span>
-                        </label>
-                        <label class="flex items-center gap-1.5 bg-rose-500/10 px-2.5 py-1 rounded border border-rose-500/20 cursor-pointer">
-                            <input type="checkbox" id="chk-story-perdedores" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-accent">
-                            <span class="text-rose-400 text-[11px]">Top Perdedores</span>
-                        </label>
+                    <div>
+                        <label class="block text-xs font-semibold text-inst-text mb-2">Indicadores Visibles en Grilla:</label>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
+                                <input type="checkbox" id="chk-merval-usd" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
+                                <span class="text-inst-text font-medium text-[11px]">Merval USD</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
+                                <input type="checkbox" id="chk-sp500" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
+                                <span class="text-inst-text font-medium text-[11px]">S&P 500</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
+                                <input type="checkbox" id="chk-mep" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
+                                <span class="text-inst-text font-medium text-[11px]">Dólar MEP</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
+                                <input type="checkbox" id="chk-riesgo" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
+                                <span class="text-inst-text font-medium text-[11px]">Riesgo País</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
+                                <input type="checkbox" id="chk-ccl" onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
+                                <span class="text-inst-text font-medium text-[11px]">Dólar CCL</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
+                                <input type="checkbox" id="chk-btc" onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
+                                <span class="text-inst-text font-medium text-[11px]">Bitcoin</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition col-span-2">
+                                <input type="checkbox" id="chk-merval-ars" onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
+                                <span class="text-inst-text font-medium text-[11px]">S&P Merval en Pesos (ARS)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="pt-1">
+                        <label class="block text-xs font-semibold text-inst-text mb-2">Cuadros de Renta Variable EE.UU.:</label>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <label class="flex items-center gap-2 bg-inst-greenBg/60 px-2.5 py-1.5 rounded border border-inst-greenBorder cursor-pointer">
+                                <input type="checkbox" id="chk-story-ganadores" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-greenText">
+                                <span class="text-inst-greenText font-semibold text-[11px]">Top 3 Subas</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-inst-redBg/60 px-2.5 py-1.5 rounded border border-inst-redBorder cursor-pointer">
+                                <input type="checkbox" id="chk-story-perdedores" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-redText">
+                                <span class="text-inst-redText font-semibold text-[11px]">Top 3 Bajas</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="pt-1">
+                        <label class="block text-xs font-semibold text-inst-text mb-1">Nota Editorial / Conclusión Semanal:</label>
+                        <textarea id="input-idea-semana" oninput="actualizarTextoIdea()" rows="3" class="w-full border border-inst-border p-2.5 rounded text-xs text-inst-text bg-inst-surface focus:border-inst-sky focus:outline-none leading-relaxed" placeholder="Escribí acá tu comentario de cierre..."></textarea>
                     </div>
                 </div>
 
-                <!-- Textarea Idea -->
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-300 mb-1">Frase / Idea de la Semana:</label>
-                    <textarea id="input-idea-semana" oninput="actualizarTextoIdea()" rows="2" class="w-full border border-cubo-border p-2 rounded-lg text-xs text-white bg-cubo-card focus:border-cubo-accent focus:outline-none" placeholder="Escribí acá tu reflexión..."></textarea>
-                </div>
-            </div>
-
-            <!-- TARJETA COMPACTA DE 480px (Estética Gris / Modo Historia) -->
-            <div class="flex justify-center bg-cubo-bg p-3 rounded-xl border border-cubo-border overflow-x-auto">
-                <div id="story-infographic" class="w-[320px] h-[480px] bg-[#141414] text-white p-3.5 rounded-2xl flex flex-col justify-between shadow-2xl relative overflow-hidden border border-[#262626] my-auto">
+                <!-- COLUMNA DERECHA: LIENZO DE PREVISUALIZACIÓN 9:16 (7 COLUMNAS) -->
+                <div class="lg:col-span-7 flex justify-center bg-inst-bg p-6 rounded-md border border-inst-border overflow-x-auto">
                     
-                    <!-- Header con Etiqueta Cierre Semanal -->
-                    <div class="relative z-10 border-b border-[#262626] pb-2 flex justify-between items-center">
-                        <span class="text-[8.5px] font-mono font-semibold text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded uppercase tracking-wider">
-                            CIERRE SEMANAL
-                        </span>
-                        <span class="text-[8.5px] font-mono text-slate-400">Principales Variables</span>
-                    </div>
-
-                    <!-- Contenido Story: Grilla dinámica -->
-                    <div class="relative z-10 space-y-1.5 my-auto">
+                    <!-- TARJETA 9:16 (320x480px - Escala exacta 2:3 / 9:16 adaptable) -->
+                    <div id="story-infographic" class="w-[330px] h-[500px] bg-[#F8FAFC] text-[#18181B] p-4 rounded-xl flex flex-col justify-between shadow-md relative overflow-hidden border border-[#CBD5E1] select-none">
                         
-                        <!-- Tarjetas de Variables de Mercado -->
-                        <div id="story-grid-container" class="grid grid-cols-2 gap-1.5">
-                            <!-- Merval USD -->
-                            <div class="bg-[#1c1c1c] p-1.5 rounded border border-[#2b2b2b] flex flex-col justify-between" id="story-card-merval-usd">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">MERVAL USD</span><span class="text-[8px] font-bold font-mono text-white" id="story-merval-usd">$1.739</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
-                                    <span class="text-rose-400" id="story-merval-sem">Sem: -0,8%</span>
-                                    <span class="text-rose-400" id="story-merval-ytd">YTD: -13,2%</span>
-                                </div>
+                        <!-- Banda superior celeste institucional -->
+                        <div class="absolute top-0 left-0 right-0 h-1.5 bg-[#0284C7]"></div>
+
+                        <!-- Header de la Historia -->
+                        <div id="story-header" class="relative z-10 border-b border-[#E2E8F0] pb-2.5 pt-1 flex justify-between items-center">
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-xs bg-[#0284C7]"></span>
+                                <span class="text-[9px] font-mono font-bold text-[#0284C7] uppercase tracking-wider">
+                                    RESUMEN SEMANAL
+                                </span>
                             </div>
-                            <!-- S&P 500 -->
-                            <div class="bg-[#1c1c1c] p-1.5 rounded border border-[#2b2b2b] flex flex-col justify-between" id="story-card-sp500">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">S&P 500</span><span class="text-[8px] font-bold font-mono text-white" id="story-sp500">$7.663</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
-                                    <span class="text-emerald-400" id="story-sp500-sem">Sem: +0,1%</span>
-                                    <span class="text-emerald-400" id="story-sp500-ytd">YTD: +11,9%</span>
-                                </div>
-                            </div>
-                            <!-- Dólar MEP -->
-                            <div class="bg-[#1c1c1c] p-1.5 rounded border border-[#2b2b2b] flex flex-col justify-between" id="story-card-mep">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">DÓLAR MEP</span><span class="text-[8px] font-bold font-mono text-white" id="story-mep">$1.554</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
-                                    <span class="text-emerald-400" id="story-mep-sem">Sem: +0,7%</span>
-                                    <span class="text-emerald-400" id="story-mep-ytd">YTD: +4,6%</span>
-                                </div>
-                            </div>
-                            <!-- Riesgo País -->
-                            <div class="bg-[#1c1c1c] p-1.5 rounded border border-[#2b2b2b] flex flex-col justify-between" id="story-card-riesgo">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">RIESGO PAÍS</span><span class="text-[8px] font-bold font-mono text-white" id="story-riesgo">674</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
-                                    <span class="text-rose-400" id="story-riesgo-sem">Sem: -0,1%</span>
-                                    <span class="text-emerald-400" id="story-riesgo-ytd">YTD: +18,0%</span>
-                                </div>
-                            </div>
-                            <!-- Dólar CCL -->
-                            <div class="bg-[#1c1c1c] p-1.5 rounded border border-[#2b2b2b] flex flex-col justify-between hidden" id="story-card-ccl">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">DÓLAR CCL</span><span class="text-[8px] font-bold font-mono text-white" id="story-ccl">$1.638</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
-                                    <span class="text-emerald-400" id="story-ccl-sem">Sem: +1,1%</span>
-                                    <span class="text-emerald-400" id="story-ccl-ytd">YTD: +7,5%</span>
-                                </div>
-                            </div>
-                            <!-- Bitcoin -->
-                            <div class="bg-[#1c1c1c] p-1.5 rounded border border-[#2b2b2b] flex flex-col justify-between hidden" id="story-card-btc">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">BITCOIN</span><span class="text-[8px] font-bold font-mono text-white" id="story-btc">$81.086</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
-                                    <span class="text-rose-400" id="story-btc-sem">Sem: -0,9%</span>
-                                    <span class="text-rose-400" id="story-btc-ytd">YTD: -8,6%</span>
-                                </div>
-                            </div>
-                            <!-- Merval ARS -->
-                            <div class="bg-[#1c1c1c] p-1.5 rounded border border-[#2b2b2b] flex flex-col justify-between hidden" id="story-card-merval-ars">
-                                <div class="flex justify-between items-center"><span class="text-[7.5px] font-semibold text-slate-400 font-mono">MERVAL ARS</span><span class="text-[8px] font-bold font-mono text-white" id="story-merval-ars">$2.8M</span></div>
-                                <div class="flex justify-between text-[6.5px] font-mono font-medium mt-0.5">
-                                    <span class="text-emerald-400" id="story-merval-ars-sem">Sem: +0,7%</span>
-                                    <span class="text-rose-400" id="story-merval-ars-ytd">YTD: -6,6%</span>
-                                </div>
-                            </div>
+                            <span id="story-subtitulo" class="text-[8.5px] font-mono text-[#64748B] bg-[#E0F2FE] text-[#0369A1] px-1.5 py-0.5 rounded border border-[#BAE6FD] font-semibold">
+                                Coyuntura & Mercados
+                            </span>
                         </div>
 
-                        <!-- Mini Tablas Top 3 Ganadores y Perdedores en Story -->
-                        <div class="grid grid-cols-2 gap-1.5 font-mono">
-                            <div id="story-box-ganadores" class="bg-[#1c1c1c] border border-emerald-500/20 p-1.5 rounded">
-                                <p class="text-[7.5px] font-semibold text-emerald-400 mb-1">Top 3 Subas</p>
-                                <div id="story-ganadores" class="space-y-0.5 text-[7px] text-slate-300"></div>
+                        <!-- Cuerpo Central: Grilla de Activos -->
+                        <div class="relative z-10 space-y-2 my-auto py-1">
+                            
+                            <div id="story-grid-container" class="grid grid-cols-2 gap-1.5 tabular-nums">
+                                <!-- Merval USD -->
+                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs" id="story-card-merval-usd">
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">MERVAL USD</span>
+                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-merval-usd">$1.693</span>
+                                    </div>
+                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                        <span id="story-merval-sem">Sem: -3,4%</span>
+                                        <span id="story-merval-ytd">YTD: -15,5%</span>
+                                    </div>
+                                </div>
+
+                                <!-- S&P 500 -->
+                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs" id="story-card-sp500">
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">S&P 500</span>
+                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-sp500">$7.719</span>
+                                    </div>
+                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                        <span id="story-sp500-sem">Sem: +1,3%</span>
+                                        <span id="story-sp500-ytd">YTD: +12,8%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Dólar MEP -->
+                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs" id="story-card-mep">
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">DÓLAR MEP</span>
+                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-mep">$1.578</span>
+                                    </div>
+                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                        <span id="story-mep-sem">Sem: +0,9%</span>
+                                        <span id="story-mep-ytd">YTD: +6,2%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Riesgo País -->
+                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs" id="story-card-riesgo">
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">RIESGO PAÍS</span>
+                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-riesgo">765</span>
+                                    </div>
+                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                        <span id="story-riesgo-sem">Sem: +13,3%</span>
+                                        <span id="story-riesgo-ytd">YTD: +34,0%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Dólar CCL -->
+                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs hidden" id="story-card-ccl">
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">DÓLAR CCL</span>
+                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-ccl">$1.683</span>
+                                    </div>
+                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                        <span id="story-ccl-sem">Sem: +1,7%</span>
+                                        <span id="story-ccl-ytd">YTD: +7,5%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Bitcoin -->
+                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs hidden" id="story-card-btc">
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">BITCOIN</span>
+                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-btc">$80.544</span>
+                                    </div>
+                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                        <span id="story-btc-sem">Sem: +0,7%</span>
+                                        <span id="story-btc-ytd">YTD: -8,6%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Merval ARS -->
+                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs hidden col-span-2" id="story-card-merval-ars">
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">S&P MERVAL (ARS)</span>
+                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-merval-ars">$2.848.945</span>
+                                    </div>
+                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                        <span id="story-merval-ars-sem">Sem: +0,7%</span>
+                                        <span id="story-merval-ars-ytd">YTD: -6,6%</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="story-box-perdedores" class="bg-[#1c1c1c] border border-rose-500/20 p-1.5 rounded">
-                                <p class="text-[7.5px] font-semibold text-rose-400 mb-1">Top 3 Bajas</p>
-                                <div id="story-perdedores" class="space-y-0.5 text-[7px] text-slate-300"></div>
+
+                            <!-- Mini Tablas Top 3 Ganadores y Perdedores en Story -->
+                            <div class="grid grid-cols-2 gap-1.5 font-mono tabular-nums">
+                                <div id="story-box-ganadores" class="bg-[#F0FDF4] border border-[#BBF7D0] p-2 rounded">
+                                    <p class="text-[7.5px] font-bold text-[#15803D] uppercase tracking-wider mb-1 border-b border-[#BBF7D0]/60 pb-0.5">Top 3 Subas</p>
+                                    <div id="story-ganadores" class="space-y-1 text-[7.5px]"></div>
+                                </div>
+                                <div id="story-box-perdedores" class="bg-[#FEF2F2] border border-[#FECACA] p-2 rounded">
+                                    <p class="text-[7.5px] font-bold text-[#B91C1C] uppercase tracking-wider mb-1 border-b border-[#FECACA]/60 pb-0.5">Top 3 Bajas</p>
+                                    <div id="story-perdedores" class="space-y-1 text-[7.5px]"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Bloque Editorial / Idea de la Semana -->
+                        <div id="story-idea-box" class="relative z-10 bg-[#E0F2FE]/60 border-l-2 border-[#0284C7] p-2 rounded-r text-left">
+                            <p id="story-idea-text" class="text-[8.5px] font-medium leading-snug text-[#1E293B]">
+                                "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
+                            </p>
+                        </div>
+
+                        <!-- Footer de la Historia -->
+                        <div id="story-footer" class="relative z-10 border-t border-[#E2E8F0] pt-2 flex justify-between items-center text-[8px] font-mono">
+                            <span class="text-[#64748B] font-medium uppercase tracking-wider">Francisco Combina</span>
+                            <div class="flex items-center gap-1 bg-white border border-[#CBD5E1] px-2 py-0.5 rounded text-[#0284C7] font-bold">
+                                <span>@francombina7</span>
                             </div>
                         </div>
 
                     </div>
-
-                    <!-- Idea Card Dinámica Compacta -->
-                    <div class="relative z-10 bg-[#1c1c1c] border border-[#2b2b2b] p-1.5 rounded text-center">
-                        <p id="story-idea-text" class="text-[9px] font-normal leading-tight text-slate-300 italic">
-                            "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
-                        </p>
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="relative z-10 border-t border-[#262626] pt-1.5 flex justify-between items-center text-[8px] text-slate-400 font-mono">
-                        <span class="text-slate-500">mercado & finanzas</span>
-                        <div class="flex items-center gap-1 bg-[#1c1c1c] border border-[#2b2b2b] px-2 py-0.5 rounded text-sky-400 font-medium">
-                            <i data-lucide="user" class="w-2.5 h-2.5"></i>
-                            <span>@francombina7</span>
-                        </div>
-                    </div>
-
                 </div>
+
             </div>
         </section>
 
     </main>
 
     <!-- Modal de Edición Manual -->
-    <div id="modal-edicion" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-cubo-card border border-cubo-border rounded-xl shadow-2xl max-w-lg w-full p-5 space-y-4 max-h-[85vh] flex flex-col text-white">
-            <div class="flex justify-between items-center border-b border-cubo-border pb-3 shrink-0">
-                <h3 class="font-bold text-sm text-white">Edición Manual de Contingencia</h3>
-                <button onclick="cerrarModalEdicion()" class="text-cubo-muted hover:text-white text-xs font-semibold">✕</button>
+    <div id="modal-edicion" class="fixed inset-0 bg-zinc-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-inst-surface border border-inst-border rounded-md shadow-xl max-w-md w-full p-5 space-y-4">
+            <div class="flex justify-between items-center border-b border-inst-border pb-3">
+                <h3 class="font-bold text-sm text-inst-text">Ajuste Manual de Cotizaciones</h3>
+                <button onclick="cerrarModalEdicion()" class="text-inst-muted hover:text-inst-text text-xs font-semibold">✕</button>
             </div>
-            <div class="overflow-y-auto pr-2 space-y-3 text-xs flex-grow font-mono">
+            <div class="space-y-3 text-xs font-mono">
                 <div>
-                    <label class="block text-[11px] text-cubo-muted font-medium mb-1">S&P Merval en USD</label>
-                    <input type="text" id="input-merval-usd" value="$1.739" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white">
+                    <label class="block font-sans text-[11px] text-inst-muted font-medium mb-1">S&P Merval en USD</label>
+                    <input type="text" id="input-merval-usd" value="$1.693" class="w-full bg-inst-subtle border border-inst-border p-2 rounded text-inst-text focus:border-inst-sky focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-cubo-muted font-medium mb-1">S&P 500</label>
-                    <input type="text" id="input-sp500" value="$7.663" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white">
+                    <label class="block font-sans text-[11px] text-inst-muted font-medium mb-1">S&P 500</label>
+                    <input type="text" id="input-sp500" value="$7.719" class="w-full bg-inst-subtle border border-inst-border p-2 rounded text-inst-text focus:border-inst-sky focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-cubo-muted font-medium mb-1">Dólar MEP</label>
-                    <input type="text" id="input-mep" value="$1.554" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white">
+                    <label class="block font-sans text-[11px] text-inst-muted font-medium mb-1">Dólar MEP</label>
+                    <input type="text" id="input-mep" value="$1.578" class="w-full bg-inst-subtle border border-inst-border p-2 rounded text-inst-text focus:border-inst-sky focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-cubo-muted font-medium mb-1">Riesgo País</label>
-                    <input type="text" id="input-riesgo" value="674" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white">
+                    <label class="block font-sans text-[11px] text-inst-muted font-medium mb-1">Riesgo País</label>
+                    <input type="text" id="input-riesgo" value="765" class="w-full bg-inst-subtle border border-inst-border p-2 rounded text-inst-text focus:border-inst-sky focus:outline-none">
                 </div>
             </div>
-            <div class="flex justify-end gap-2 border-t border-cubo-border pt-3 shrink-0">
-                <button onclick="cerrarModalEdicion()" class="px-3.5 py-1.5 text-xs font-medium text-cubo-muted hover:bg-cubo-bg rounded-lg">Cancelar</button>
-                <button onclick="guardarEdicionManual()" class="px-3.5 py-1.5 text-xs font-semibold bg-cubo-accent text-slate-950 hover:bg-sky-400 rounded-lg">Guardar Cambios</button>
+            <div class="flex justify-end gap-2 border-t border-inst-border pt-3">
+                <button onclick="cerrarModalEdicion()" class="px-3.5 py-1.5 text-xs font-medium text-inst-muted hover:bg-inst-subtle rounded border border-transparent">Cancelar</button>
+                <button onclick="guardarEdicionManual()" class="px-4 py-1.5 text-xs font-medium bg-inst-sky text-white hover:bg-sky-700 rounded">Aplicar Cambios</button>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Parser CSV, Personalización e Interfaz -->
+    <!-- Lógica de Sincronización, Formateo y Exportación -->
     <script>
         const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
         const DEFAULT_SUBAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=454584979";
         const DEFAULT_BAJAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=205860665";
 
+        let storyTemaOscuro = false;
+
         let marketData = {
             mervalArs: { val: "$2.848.945", sem: "+0,7%", ytd: "-6,6%" },
-            mervalUsd: { val: "$1.739", sem: "-0,8%", ytd: "-13,2%" },
-            sp500:     { val: "$7.663", sem: "+0,1%", ytd: "+11,9%" },
-            btc:       { val: "$81.086", sem: "-0,9%", ytd: "-8,6%" },
-            mep:       { val: "$1.554", sem: "+0,7%", ytd: "+4,6%" },
-            ccl:       { val: "$1.638", sem: "+1,1%", ytd: "+7,5%" },
-            riesgo:    { val: "674", sem: "-0,1%", ytd: "+18,0%" }
+            mervalUsd: { val: "$1.693", sem: "-3,4%", ytd: "-15,5%" },
+            sp500:     { val: "$7.719", sem: "+1,3%", ytd: "+12,8%" },
+            btc:       { val: "$80.544", sem: "+0,7%", ytd: "-8,6%" },
+            mep:       { val: "$1.578", sem: "+0,9%", ytd: "+6,2%" },
+            ccl:       { val: "$1.683", sem: "+1,7%", ytd: "+7,5%" },
+            riesgo:    { val: "765", sem: "+13,3%", ytd: "+34,0%" }
         };
 
         let fallbackGanadores = [
             { ticker: "SPOT", empresa: "Spotify Technology S.A.", var: "+10,03%" },
-            { ticker: "UNH", empresa: "UnitedHealth Group Incorporated", var: "+5,87%" },
-            { ticker: "HD", empresa: "Home Depot, Inc. (The)", var: "+5,85%" },
+            { ticker: "UNH", empresa: "UnitedHealth Group Inc.", var: "+5,87%" },
+            { ticker: "HD", empresa: "Home Depot, Inc.", var: "+5,85%" },
             { ticker: "TSLA", empresa: "Tesla, Inc.", var: "+5,60%" },
             { ticker: "JNJ", empresa: "Johnson & Johnson", var: "+4,72%" }
         ];
@@ -507,7 +588,7 @@
             { ticker: "META", empresa: "Meta Platforms, Inc.", var: "-8,53%" },
             { ticker: "NFLX", empresa: "Netflix, Inc.", var: "-4,93%" },
             { ticker: "GOOGL", empresa: "Alphabet Inc.", var: "-4,81%" },
-            { ticker: "AMD", empresa: "Advanced Micro Devices, Inc.", var: "-3,94%" },
+            { ticker: "AMD", empresa: "Advanced Micro Devices", var: "-3,94%" },
             { ticker: "AVGO", empresa: "Broadcom Inc.", var: "-1,68%" }
         ];
 
@@ -517,9 +598,10 @@
             
             const ideaElem = document.getElementById('story-idea-text');
             if (ideaElem) {
-                document.getElementById('input-idea-semana').value = ideaElem.innerText.replace(/^"|"$/g, '');
+                document.getElementById('input-idea-semana').value = ideaElem.innerText.replace(/^"|"$/g, '').trim();
             }
 
+            actualizarInterfaz();
             renderizarTablasYStory();
             actualizarVisibilidadActivos();
             sincronizarConSheet();
@@ -552,6 +634,27 @@
             sincronizarConSheet();
         }
 
+        // Asigna clases de píldoras sobrias (verde claro / rojo claro)
+        function obtenerClasesVariacion(strVal) {
+            if (!strVal) return "bg-inst-subtle text-inst-muted border-inst-border";
+            if (strVal.includes('+')) {
+                return "bg-inst-greenBg text-inst-greenText border-inst-greenBorder font-semibold";
+            } else if (strVal.includes('-')) {
+                return "bg-inst-redBg text-inst-redText border-inst-redBorder font-semibold";
+            }
+            return "bg-inst-subtle text-inst-muted border-inst-border";
+        }
+
+        function obtenerColorTextoStory(strVal) {
+            if (!strVal) return storyTemaOscuro ? "text-zinc-400" : "text-[#64748B]";
+            if (strVal.includes('+')) {
+                return storyTemaOscuro ? "text-emerald-400" : "text-[#15803D]";
+            } else if (strVal.includes('-')) {
+                return storyTemaOscuro ? "text-rose-400" : "text-[#B91C1C]";
+            }
+            return storyTemaOscuro ? "text-zinc-400" : "text-[#64748B]";
+        }
+
         async function sincronizarConSheet() {
             let url = localStorage.getItem('cubo_sheet_csv_url') || DEFAULT_SHEET_URL;
             if (url.includes("/pubhtml")) url = url.replace("/pubhtml", "/pub?output=csv");
@@ -560,7 +663,8 @@
             let bajasUrl = localStorage.getItem('cubo_bajas_csv_url') || DEFAULT_BAJAS_URL;
 
             const badge = document.getElementById('badge-estado');
-            badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Sincronizando...`;
+            badge.className = "text-[11px] bg-inst-skyLight text-inst-sky font-mono font-medium px-2.5 py-1.5 rounded border border-inst-skyBorder flex items-center gap-1.5 mr-1";
+            badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-inst-sky animate-ping"></span> Sincronizando...`;
 
             try {
                 let response = await fetch(url);
@@ -577,7 +681,7 @@
                         let textSubas = await resSubas.text();
                         let parsedSubas = extraerTop5DesdeCSV(textSubas);
                         if (parsedSubas.length > 0) ganadoresActuales = parsedSubas;
-                    } catch (e) { console.log("Usando respaldo local Subas por CORS"); }
+                    } catch (e) {}
                 }
 
                 if (bajasUrl) {
@@ -586,24 +690,28 @@
                         let textBajas = await resBajas.text();
                         let parsedBajas = extraerTop5DesdeCSV(textBajas);
                         if (parsedBajas.length > 0) perdedoresActuales = parsedBajas;
-                    } catch (e) { console.log("Usando respaldo local Bajas por CORS"); }
+                    } catch (e) {}
                 }
 
-                renderizarTabla('tabla-ganadores', ganadoresActuales, 'text-cubo-green');
-                renderizarTabla('tabla-perdedores', perdedoresActuales, 'text-rose-400');
+                window._ultimosGanadores = ganadoresActuales;
+                window._ultimosPerdedores = perdedoresActuales;
+
+                renderizarTabla('tabla-ganadores', ganadoresActuales, true);
+                renderizarTabla('tabla-perdedores', perdedoresActuales, false);
                 renderizarStoryTop(ganadoresActuales.slice(0, 3), perdedoresActuales.slice(0, 3));
 
-                badge.className = "text-xs bg-emerald-500/10 text-emerald-400 font-medium px-3 py-1 rounded-lg border border-emerald-500/20 flex items-center gap-1.5 font-mono";
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Google Sheets Sincronizado`;
+                badge.className = "text-[11px] bg-inst-greenBg text-inst-greenText font-mono font-medium px-2.5 py-1.5 rounded border border-inst-greenBorder flex items-center gap-1.5 mr-1";
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-inst-greenText"></span> Google Sheets Activo`;
 
             } catch (err) {
-                console.warn("Aviso CORS detectado, manteniendo valores de respaldo.");
-                renderizarTabla('tabla-ganadores', fallbackGanadores, 'text-cubo-green');
-                renderizarTabla('tabla-perdedores', fallbackPerdedores, 'text-rose-400');
+                window._ultimosGanadores = fallbackGanadores;
+                window._ultimosPerdedores = fallbackPerdedores;
+                renderizarTabla('tabla-ganadores', fallbackGanadores, true);
+                renderizarTabla('tabla-perdedores', fallbackPerdedores, false);
                 renderizarStoryTop(fallbackGanadores.slice(0, 3), fallbackPerdedores.slice(0, 3));
 
-                badge.className = "text-xs bg-amber-500/10 text-amber-400 font-medium px-3 py-1 rounded-lg border border-amber-500/20 flex items-center gap-1.5 font-mono";
-                badge.innerHTML = `⚠️ Modo Local / Respaldo Activo`;
+                badge.className = "text-[11px] bg-inst-subtle text-inst-muted font-mono font-medium px-2.5 py-1.5 rounded border border-inst-border flex items-center gap-1.5 mr-1";
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-inst-muted"></span> Datos Locales`;
             }
         }
 
@@ -704,14 +812,20 @@
             return resultados;
         }
 
-        function renderizarTabla(elementId, datos, colorClass) {
+        function renderizarTabla(elementId, datos, esPositivo) {
             let html = "";
+            const badgeClass = esPositivo 
+                ? "bg-inst-greenBg text-inst-greenText border-inst-greenBorder" 
+                : "bg-inst-redBg text-inst-redText border-inst-redBorder";
+
             datos.forEach(item => {
                 html += `
-                    <tr>
-                        <td class="py-2 font-semibold text-white">${item.ticker}</td>
-                        <td class="py-2 text-cubo-muted truncate max-w-[180px]">${item.empresa}</td>
-                        <td class="py-2 text-right font-semibold ${colorClass}">${item.var}</td>
+                    <tr class="hover:bg-inst-subtle/80 transition">
+                        <td class="py-2 px-2 font-bold text-inst-text">${item.ticker}</td>
+                        <td class="py-2 px-2 font-sans text-inst-muted truncate max-w-[190px]">${item.empresa}</td>
+                        <td class="py-2 px-2 text-right">
+                            <span class="px-1.5 py-0.5 rounded border text-[11px] font-semibold ${badgeClass}">${item.var}</span>
+                        </td>
                     </tr>
                 `;
             });
@@ -719,93 +833,148 @@
         }
 
         function renderizarStoryTop(ganadores, perdedores) {
+            const textTickerClass = storyTemaOscuro ? "text-zinc-100" : "text-[#18181B]";
+            const gainColor = storyTemaOscuro ? "text-emerald-400" : "text-[#15803D]";
+            const lossColor = storyTemaOscuro ? "text-rose-400" : "text-[#B91C1C]";
+
             let htmlG = "";
             ganadores.forEach(item => {
-                htmlG += `<div class="flex justify-between items-center"><span class="font-semibold text-white">${item.ticker}</span> <span class="text-emerald-400 font-semibold">${item.var}</span></div>`;
+                htmlG += `<div class="flex justify-between items-center"><span class="font-bold ${textTickerClass}">${item.ticker}</span> <span class="${gainColor} font-bold">${item.var}</span></div>`;
             });
             document.getElementById('story-ganadores').innerHTML = htmlG;
 
             let htmlP = "";
             perdedores.forEach(item => {
-                htmlP += `<div class="flex justify-between items-center"><span class="font-semibold text-white">${item.ticker}</span> <span class="text-rose-400 font-semibold">${item.var}</span></div>`;
+                htmlP += `<div class="flex justify-between items-center"><span class="font-bold ${textTickerClass}">${item.ticker}</span> <span class="${lossColor} font-bold">${item.var}</span></div>`;
             });
             document.getElementById('story-perdedores').innerHTML = htmlP;
         }
 
         function renderizarTablasYStory() {
-            renderizarTabla('tabla-ganadores', fallbackGanadores, 'text-cubo-green');
-            renderizarTabla('tabla-perdedores', fallbackPerdedores, 'text-rose-400');
+            window._ultimosGanadores = fallbackGanadores;
+            window._ultimosPerdedores = fallbackPerdedores;
+            renderizarTabla('tabla-ganadores', fallbackGanadores, true);
+            renderizarTabla('tabla-perdedores', fallbackPerdedores, false);
             renderizarStoryTop(fallbackGanadores.slice(0, 3), fallbackPerdedores.slice(0, 3));
         }
 
+        function aplicarPildora(id, prefijo, valor) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.innerText = `${prefijo}: ${valor}`;
+            el.className = `px-1.5 py-0.5 rounded border text-[11px] font-mono tabular-nums ${obtenerClasesVariacion(valor)}`;
+        }
+
         function actualizarInterfaz() {
+            // Valores principales Dashboard
             document.getElementById('val-merval-usd').innerText = marketData.mervalUsd.val;
-            document.getElementById('sem-merval-usd').innerText = `Sem: ${marketData.mervalUsd.sem}`;
-            document.getElementById('ytd-merval-usd').innerText = `YTD: ${marketData.mervalUsd.ytd}`;
+            aplicarPildora('sem-merval-usd', 'Sem', marketData.mervalUsd.sem);
+            aplicarPildora('ytd-merval-usd', 'YTD', marketData.mervalUsd.ytd);
 
             document.getElementById('val-sp500').innerText = marketData.sp500.val;
-            document.getElementById('sem-sp500').innerText = `Sem: ${marketData.sp500.sem}`;
-            document.getElementById('ytd-sp500').innerText = `YTD: ${marketData.sp500.ytd}`;
+            aplicarPildora('sem-sp500', 'Sem', marketData.sp500.sem);
+            aplicarPildora('ytd-sp500', 'YTD', marketData.sp500.ytd);
 
             document.getElementById('val-mep').innerText = marketData.mep.val;
-            document.getElementById('sem-mep').innerText = `Sem: ${marketData.mep.sem}`;
-            document.getElementById('ytd-mep').innerText = `YTD: ${marketData.mep.ytd}`;
+            aplicarPildora('sem-mep', 'Sem', marketData.mep.sem);
+            aplicarPildora('ytd-mep', 'YTD', marketData.mep.ytd);
 
             document.getElementById('val-riesgo').innerText = marketData.riesgo.val;
-            document.getElementById('sem-riesgo').innerText = `Sem: ${marketData.riesgo.sem}`;
-            document.getElementById('ytd-riesgo').innerText = `YTD: ${marketData.riesgo.ytd}`;
+            aplicarPildora('sem-riesgo', 'Sem', marketData.riesgo.sem);
+            aplicarPildora('ytd-riesgo', 'YTD', marketData.riesgo.ytd);
 
             document.getElementById('val-merval-ars').innerText = marketData.mervalArs.val;
-            document.getElementById('merval-ars-sem').innerText = `Sem: ${marketData.mervalArs.sem}`;
-            document.getElementById('merval-ars-ytd').innerText = `YTD: ${marketData.mervalArs.ytd}`;
+            aplicarPildora('merval-ars-sem', 'Sem', marketData.mervalArs.sem);
+            aplicarPildora('merval-ars-ytd', 'YTD', marketData.mervalArs.ytd);
 
             document.getElementById('val-ccl').innerText = marketData.ccl.val;
-            document.getElementById('ccl-sem').innerText = `Sem: ${marketData.ccl.sem}`;
+            aplicarPildora('ccl-sem', 'Sem', marketData.ccl.sem);
 
             document.getElementById('val-btc').innerText = marketData.btc.val;
-            document.getElementById('btc-sem').innerText = `Sem: ${marketData.btc.sem}`;
+            aplicarPildora('btc-sem', 'Sem', marketData.btc.sem);
 
-            document.getElementById('story-merval-usd').innerText = marketData.mervalUsd.val;
-            document.getElementById('story-merval-sem').innerText = `Sem: ${marketData.mervalUsd.sem}`;
-            document.getElementById('story-merval-ytd').innerText = `YTD: ${marketData.mervalUsd.ytd}`;
-            document.getElementById('story-merval-sem').className = marketData.mervalUsd.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
-            document.getElementById('story-merval-ytd').className = marketData.mervalUsd.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            // Actualizar Story 9:16
+            const itemsStory = [
+                { prefix: 'story-merval', valId: 'story-merval-usd', data: marketData.mervalUsd },
+                { prefix: 'story-sp500',  valId: 'story-sp500',      data: marketData.sp500 },
+                { prefix: 'story-mep',    valId: 'story-mep',        data: marketData.mep },
+                { prefix: 'story-riesgo', valId: 'story-riesgo',     data: marketData.riesgo },
+                { prefix: 'story-ccl',    valId: 'story-ccl',        data: marketData.ccl },
+                { prefix: 'story-btc',    valId: 'story-btc',        data: marketData.btc },
+                { prefix: 'story-merval-ars', valId: 'story-merval-ars', data: marketData.mervalArs }
+            ];
 
-            document.getElementById('story-sp500').innerText = marketData.sp500.val;
-            document.getElementById('story-sp500-sem').innerText = `Sem: ${marketData.sp500.sem}`;
-            document.getElementById('story-sp500-ytd').innerText = `YTD: ${marketData.sp500.ytd}`;
-            document.getElementById('story-sp500-sem').className = marketData.sp500.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
-            document.getElementById('story-sp500-ytd').className = marketData.sp500.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            itemsStory.forEach(item => {
+                const valEl = document.getElementById(item.valId);
+                const semEl = document.getElementById(`${item.prefix}-sem`);
+                const ytdEl = document.getElementById(`${item.prefix}-ytd`);
 
-            document.getElementById('story-mep').innerText = marketData.mep.val;
-            document.getElementById('story-mep-sem').innerText = `Sem: ${marketData.mep.sem}`;
-            document.getElementById('story-mep-ytd').innerText = `YTD: ${marketData.mep.ytd}`;
-            document.getElementById('story-mep-sem').className = marketData.mep.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
-            document.getElementById('story-mep-ytd').className = marketData.mep.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+                if (valEl) valEl.innerText = item.data.val;
+                if (semEl) {
+                    semEl.innerText = `Sem: ${item.data.sem}`;
+                    semEl.className = obtenerColorTextoStory(item.data.sem);
+                }
+                if (ytdEl) {
+                    ytdEl.innerText = `YTD: ${item.data.ytd}`;
+                    ytdEl.className = obtenerColorTextoStory(item.data.ytd);
+                }
+            });
+        }
 
-            document.getElementById('story-riesgo').innerText = marketData.riesgo.val;
-            document.getElementById('story-riesgo-sem').innerText = `Sem: ${marketData.riesgo.sem}`;
-            document.getElementById('story-riesgo-ytd').innerText = `YTD: ${marketData.riesgo.ytd}`;
-            document.getElementById('story-riesgo-sem').className = marketData.riesgo.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
-            document.getElementById('story-riesgo-ytd').className = marketData.riesgo.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+        function cambiarTemaStory() {
+            storyTemaOscuro = !storyTemaOscuro;
+            const container = document.getElementById('story-infographic');
+            const btn = document.getElementById('btn-tema-story');
+            const cards = container.querySelectorAll('.story-card');
+            const vals = container.querySelectorAll('.story-val');
+            const boxG = document.getElementById('story-box-ganadores');
+            const boxP = document.getElementById('story-box-perdedores');
+            const ideaBox = document.getElementById('story-idea-box');
+            const ideaText = document.getElementById('story-idea-text');
 
-            document.getElementById('story-ccl').innerText = marketData.ccl.val;
-            document.getElementById('story-ccl-sem').innerText = `Sem: ${marketData.ccl.sem}`;
-            document.getElementById('story-ccl-ytd').innerText = `YTD: ${marketData.ccl.ytd}`;
-            document.getElementById('story-ccl-sem').className = marketData.ccl.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
-            document.getElementById('story-ccl-ytd').className = marketData.ccl.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            if (storyTemaOscuro) {
+                // Modo Grafito Puro (Cero Azul)
+                container.className = "w-[330px] h-[500px] bg-[#141414] text-zinc-100 p-4 rounded-xl flex flex-col justify-between shadow-md relative overflow-hidden border border-[#2e2e2e] select-none";
+                btn.innerHTML = `<i data-lucide="palette" class="w-3.5 h-3.5 text-inst-sky"></i> Estilo: Grafito Oscuro`;
+                cards.forEach(c => c.className = c.className.replace('bg-white', 'bg-[#1f1f1f]').replace('border-[#E2E8F0]', 'border-[#2e2e2e]'));
+                vals.forEach(v => v.className = v.className.replace('text-[#18181B]', 'text-white'));
+                boxG.className = "bg-[#18261e] border border-emerald-500/30 p-2 rounded";
+                boxP.className = "bg-[#291818] border border-rose-500/30 p-2 rounded";
+                ideaBox.className = "relative z-10 bg-[#1f1f1f] border-l-2 border-[#38bdf8] p-2 rounded-r text-left";
+                ideaText.className = "text-[8.5px] font-medium leading-snug text-zinc-200";
+            } else {
+                // Modo Papel Institucional Claro
+                container.className = "w-[330px] h-[500px] bg-[#F8FAFC] text-[#18181B] p-4 rounded-xl flex flex-col justify-between shadow-md relative overflow-hidden border border-[#CBD5E1] select-none";
+                btn.innerHTML = `<i data-lucide="palette" class="w-3.5 h-3.5 text-inst-sky"></i> Estilo: Papel Claro`;
+                cards.forEach(c => c.className = c.className.replace('bg-[#1f1f1f]', 'bg-white').replace('border-[#2e2e2e]', 'border-[#E2E8F0]'));
+                vals.forEach(v => v.className = v.className.replace('text-white', 'text-[#18181B]'));
+                boxG.className = "bg-[#F0FDF4] border border-[#BBF7D0] p-2 rounded";
+                boxP.className = "bg-[#FEF2F2] border border-[#FECACA] p-2 rounded";
+                ideaBox.className = "relative z-10 bg-[#E0F2FE]/60 border-l-2 border-[#0284C7] p-2 rounded-r text-left";
+                ideaText.className = "text-[8.5px] font-medium leading-snug text-[#1E293B]";
+            }
 
-            document.getElementById('story-btc').innerText = marketData.btc.val;
-            document.getElementById('story-btc-sem').innerText = `Sem: ${marketData.btc.sem}`;
-            document.getElementById('story-btc-ytd').innerText = `YTD: ${marketData.btc.ytd}`;
-            document.getElementById('story-btc-sem').className = marketData.btc.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
-            document.getElementById('story-btc-ytd').className = marketData.btc.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+            try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+            actualizarInterfaz();
+            renderizarStoryTop(
+                (window._ultimosGanadores || fallbackGanadores).slice(0, 3),
+                (window._ultimosPerdedores || fallbackPerdedores).slice(0, 3)
+            );
+            actualizarVisibilidadActivos();
+        }
 
-            document.getElementById('story-merval-ars').innerText = marketData.mervalArs.val;
-            document.getElementById('story-merval-ars-sem').innerText = `Sem: ${marketData.mervalArs.sem}`;
-            document.getElementById('story-merval-ars-ytd').innerText = `YTD: ${marketData.mervalArs.ytd}`;
-            document.getElementById('story-merval-ars-sem').className = marketData.mervalArs.sem.includes('+') ? 'text-emerald-400' : 'text-rose-400';
-            document.getElementById('story-merval-ars-ytd').className = marketData.mervalArs.ytd.includes('+') ? 'text-emerald-400' : 'text-rose-400';
+        function descargarStoryPNG() {
+            const node = document.getElementById('story-infographic');
+            html2canvas(node, {
+                scale: 3,
+                useCORS: true,
+                backgroundColor: storyTemaOscuro ? '#141414' : '#F8FAFC'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `resumen-semanal-fc.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
         }
 
         function actualizarVisibilidadActivos() {
