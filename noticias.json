@@ -1,0 +1,25 @@
+{
+  "fecha": "2026-10-27",
+  "noticias": [
+    {
+      "titulo": "Rebote en los mercados globales impulsado por la IA",
+      "descripcion": "Los principales índices registran una sólida recuperación liderados por el sector tecnológico."
+    },
+    {
+      "titulo": "El FMI actualiza proyecciones macroeconómicas",
+      "descripcion": "Se evalúa el sendero fiscal y la acumulación de reservas internacionales."
+    },
+    {
+      "titulo": "Consolidación de reservas y compras del Banco Central",
+      "descripcion": "El BCRA mantiene una dinámica positiva de acumulación de divisas en el MULC."
+    },
+    {
+      "titulo": "Expectativa en Wall Street por reportes corporativos",
+      "descripcion": "Inversores atentos a los balances trimestrales de las principales tecnológicas."
+    },
+    {
+      "titulo": "Estabilidad en los precios internacionales del petróleo",
+      "descripcion": "Los contratos de crudo operan firmes a la espera de definiciones geopolíticas."
+    }
+  ]
+}
