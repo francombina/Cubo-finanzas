@@ -3,39 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Francisco Combina — Monitor de Mercado & Research</title>
+    <title>Francisco Combina — Monitor de Mercado & Historias</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter & JetBrains Mono para estética financiera clásica -->
+    <!-- Google Fonts: DM Sans (Equivalente Google Sans) & Roboto Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        // Prioriza Google Sans si está instalada en el sistema, sino usa DM Sans (idéntica al chat)
+                        sans: ['"Google Sans"', '"DM Sans"', 'Roboto', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        mono: ['"Google Sans Mono"', '"Roboto Mono"', 'monospace'],
                     },
                     colors: {
-                        inst: {
-                            bg: '#F4F5F7',         // Gris perla / papel técnico
-                            surface: '#FFFFFF',    // Blanco puro
-                            subtle: '#F8FAFC',     // Gris ultra claro para cabeceras de tabla
-                            border: '#E2E8F0',     // Gris plata para líneas divisorias
-                            borderDark: '#CBD5E1', // Gris medio para bordes activos
-                            text: '#18181B',       // Gris carbón casi negro para lectura nítida
-                            muted: '#64748B',      // Gris plomo para etiquetas secundarias
-                            sky: '#0284C7',        // Celeste institucional sobrio
-                            skyLight: '#E0F2FE',   // Fondo celeste muy suave
-                            skyBorder: '#BAE6FD',  // Borde celeste claro
-                            greenBg: '#DCFCE7',    // Verde claro suave (fondo)
-                            greenText: '#15803D',  // Verde bosque legible (texto)
-                            greenBorder: '#BBF7D0',// Borde verde claro
-                            redBg: '#FEE2E2',      // Rojo suave (fondo)
-                            redText: '#B91C1C',    // Rojo sobrio (texto)
-                            redBorder: '#FECACA'   // Borde rojo claro
+                        cubo: {
+                            bg: '#111113',         // Carbón profundo neutro (sin tinte azul)
+                            surface: '#18181B',    // Gris grafito para tarjetas (Zinc 900)
+                            elevated: '#222226',   // Gris intermedio para cajas internas
+                            border: '#2E2E34',     // Borde gris acero sutil
+                            text: '#F4F4F6',       // Blanco suave
+                            muted: '#A1A1AA',      // Gris medio (Zinc 400)
+                            sky: '#38BDF8',        // Celeste claro limpio
+                            skySoft: '#0284C7',    // Celeste institucional para bordes
+                            green: '#4ADE80',      // Verde claro fresco
+                            red: '#F87171'         // Rojo coral suave
                         }
                     }
                 }
@@ -48,43 +43,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
-            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+            font-family: 'Google Sans', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            letter-spacing: -0.01em;
         }
-        .tabular-nums {
+        .num-tabular {
             font-variant-numeric: tabular-nums;
         }
     </style>
 </head>
-<body class="bg-inst-bg text-inst-text font-sans antialiased min-h-screen pb-16 selection:bg-inst-skyLight selection:text-inst-sky">
+<body class="bg-cubo-bg text-cubo-text font-sans antialiased min-h-screen pb-16 selection:bg-cubo-sky/30 selection:text-white">
 
-    <!-- Barra Superior Institucional -->
-    <header class="bg-inst-surface border-b border-inst-border sticky top-0 z-40">
+    <!-- Header Principal -->
+    <header class="bg-cubo-surface/90 backdrop-blur-md border-b border-cubo-border sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3.5">
-                <div class="w-9 h-9 bg-inst-skyLight border border-inst-skyBorder text-inst-sky rounded flex items-center justify-center font-mono font-bold text-sm tracking-tighter">
-                    FC
+                <!-- Icono con mini cubo isométrico -->
+                <div class="w-9 h-9 bg-cubo-elevated border border-cubo-sky/40 text-cubo-sky rounded-lg flex items-center justify-center shadow-inner">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
                 </div>
-                <div class="border-l border-inst-border pl-3.5">
+                <div>
                     <div class="flex items-center gap-2">
-                        <h1 class="text-base font-bold tracking-tight text-inst-text uppercase">Francisco Combina</h1>
-                        <span class="text-[10px] font-mono uppercase bg-inst-subtle text-inst-muted border border-inst-border px-1.5 py-0.5 rounded">Research</span>
+                        <h1 class="text-base font-bold tracking-tight text-white">FRANCISCO COMBINA</h1>
+                        <span class="text-[11px] font-medium bg-cubo-elevated text-cubo-sky border border-cubo-border px-2 py-0.5 rounded-md">Cubo Finanzas</span>
                     </div>
-                    <p class="text-xs text-inst-muted font-mono">Monitor de Mercado & Coyuntura Financiera</p>
+                    <p class="text-xs text-cubo-muted">Monitor de Mercado & Generador de Historias</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-2 flex-wrap">
-                <span id="badge-estado" class="text-[11px] bg-inst-greenBg text-inst-greenText font-mono font-medium px-2.5 py-1.5 rounded border border-inst-greenBorder flex items-center gap-1.5 mr-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-inst-greenText"></span> Datos Sincronizados
+                <span id="badge-estado" class="text-xs bg-cubo-green/10 text-cubo-green font-medium px-3 py-1.5 rounded-lg border border-cubo-green/25 flex items-center gap-1.5 mr-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cubo-green"></span> Google Sheets Activo
                 </span>
 
-                <button onclick="sincronizarConSheet()" class="flex items-center gap-1.5 bg-inst-surface hover:bg-inst-subtle text-inst-text px-3 py-1.5 rounded text-xs font-medium transition border border-inst-border shadow-2xs">
-                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-inst-sky"></i> Actualizar
+                <button onclick="sincronizarConSheet()" class="flex items-center gap-1.5 bg-cubo-elevated hover:bg-cubo-border text-cubo-text px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-border">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cubo-sky"></i> Sincronizar
                 </button>
-                <button onclick="toggleConfigPanel()" class="flex items-center gap-1.5 bg-inst-skyLight/60 hover:bg-inst-skyLight text-inst-sky px-3 py-1.5 rounded text-xs font-medium transition border border-inst-skyBorder">
+                <button onclick="toggleConfigPanel()" class="flex items-center gap-1.5 bg-cubo-sky/10 hover:bg-cubo-sky/20 text-cubo-sky px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-sky/30">
                     <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i> Fuentes CSV
                 </button>
-                <button onclick="abrirModalEdicion()" class="flex items-center gap-1.5 bg-inst-surface hover:bg-inst-subtle text-inst-muted hover:text-inst-text px-3 py-1.5 rounded text-xs font-medium transition border border-inst-border">
+                <button onclick="abrirModalEdicion()" class="flex items-center gap-1.5 bg-cubo-elevated hover:bg-cubo-border text-cubo-muted hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-border">
                     <i data-lucide="pen-line" class="w-3.5 h-3.5"></i> Manual
                 </button>
             </div>
@@ -95,200 +96,200 @@
     <main class="max-w-6xl mx-auto px-4 sm:px-6 mt-6 space-y-6">
 
         <!-- PANEL DE CONFIGURACIÓN DE URLS DE GOOGLE SHEETS -->
-        <section id="panel-configuracion" class="bg-inst-surface border border-inst-border p-5 rounded-md shadow-xs hidden space-y-4">
-            <div class="flex justify-between items-center border-b border-inst-border pb-3">
+        <section id="panel-configuracion" class="bg-cubo-surface border border-cubo-border p-5 rounded-xl hidden space-y-4">
+            <div class="flex justify-between items-center border-b border-cubo-border pb-3">
                 <div class="flex items-center gap-2">
-                    <i data-lucide="database" class="w-4 h-4 text-inst-sky"></i>
+                    <i data-lucide="database" class="w-4 h-4 text-cubo-sky"></i>
                     <div>
-                        <h3 class="font-semibold text-sm text-inst-text">Conexión de Orígenes de Datos (Google Sheets CSV)</h3>
-                        <p class="text-[11px] text-inst-muted">Rutas de publicación automática para lectura directa.</p>
+                        <h3 class="font-semibold text-sm text-white">Conexión de Orígenes de Datos (Google Sheets CSV)</h3>
+                        <p class="text-xs text-cubo-muted">Enlaces de solapas configurados para lectura directa.</p>
                     </div>
                 </div>
-                <button onclick="toggleConfigPanel()" class="text-inst-muted hover:text-inst-text text-xs font-medium px-2 py-1 rounded hover:bg-inst-subtle">Cerrar ✕</button>
+                <button onclick="toggleConfigPanel()" class="text-cubo-muted hover:text-white text-xs font-medium px-2 py-1 rounded hover:bg-cubo-elevated">Cerrar ✕</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                 <div>
-                    <label class="block font-sans font-medium text-inst-text text-xs mb-1">Hoja "Datos" (Macro & Índices)</label>
-                    <input type="text" id="cfg-sheet-url" class="w-full border border-inst-border p-2 rounded bg-inst-subtle text-inst-text focus:outline-none focus:border-inst-sky focus:bg-inst-surface transition">
+                    <label class="block font-medium text-cubo-muted mb-1">Hoja "Datos" (Principal)</label>
+                    <input type="text" id="cfg-sheet-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-sky font-mono text-[11px] focus:outline-none focus:border-cubo-sky">
                 </div>
                 <div>
-                    <label class="block font-sans font-medium text-inst-text text-xs mb-1">Hoja "Subas_EEUU" (Ganadores)</label>
-                    <input type="text" id="cfg-subas-url" class="w-full border border-inst-border p-2 rounded bg-inst-subtle text-inst-text focus:outline-none focus:border-inst-sky focus:bg-inst-surface transition">
+                    <label class="block font-medium text-cubo-muted mb-1">Hoja "Subas_EEUU" (Ganadores)</label>
+                    <input type="text" id="cfg-subas-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-sky font-mono text-[11px] focus:outline-none focus:border-cubo-sky">
                 </div>
                 <div>
-                    <label class="block font-sans font-medium text-inst-text text-xs mb-1">Hoja "Bajas_EEUU" (Perdedores)</label>
-                    <input type="text" id="cfg-bajas-url" class="w-full border border-inst-border p-2 rounded bg-inst-subtle text-inst-text focus:outline-none focus:border-inst-sky focus:bg-inst-surface transition">
+                    <label class="block font-medium text-cubo-muted mb-1">Hoja "Bajas_EEUU" (Perdedores)</label>
+                    <input type="text" id="cfg-bajas-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-sky font-mono text-[11px] focus:outline-none focus:border-cubo-sky">
                 </div>
             </div>
 
-            <div class="flex justify-between items-center border-t border-inst-border pt-3">
-                <span class="text-[11px] text-inst-muted">Los enlaces quedan almacenados en la memoria local del navegador.</span>
-                <button onclick="guardarSheetURLs()" class="bg-inst-sky text-white hover:bg-sky-700 px-4 py-1.5 rounded text-xs font-medium transition flex items-center gap-1.5">
-                    <i data-lucide="check" class="w-3.5 h-3.5"></i> Aplicar y Sincronizar
+            <div class="flex justify-between items-center border-t border-cubo-border pt-3">
+                <span class="text-xs text-cubo-muted">Se guardan localmente en tu navegador.</span>
+                <button onclick="guardarSheetURLs()" class="bg-cubo-sky text-zinc-950 hover:bg-sky-300 px-4 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i> Guardar y Sincronizar
                 </button>
             </div>
         </section>
 
-        <!-- 1. BENCHMARKS PRINCIPALES (GRILLA DE 4 COLUMNAS) -->
+        <!-- 1. INDICADORES PRINCIPALES DE MERCADO -->
         <section>
-            <div class="flex items-center justify-between mb-2.5">
+            <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center gap-2">
-                    <span class="w-1.5 h-4 bg-inst-sky rounded-xs inline-block"></span>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-inst-muted">Indicadores Clave de Mercado</h2>
+                    <span class="w-1.5 h-4 bg-cubo-sky rounded-full inline-block"></span>
+                    <h2 class="text-sm font-semibold text-white">Indicadores Principales de Mercado</h2>
                 </div>
-                <span class="text-[11px] font-mono text-inst-muted">Variación Semanal & Acumulado Anual (YTD)</span>
+                <span class="text-xs text-cubo-muted">Variación Semanal & Acumulado Anual (YTD)</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                 
                 <!-- S&P Merval USD -->
-                <div class="bg-inst-surface p-4 rounded-md border border-inst-border border-t-2 border-t-inst-sky shadow-2xs flex flex-col justify-between">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-semibold text-inst-muted">S&P Merval (USD)</span>
-                        <span class="text-[10px] font-mono text-inst-sky bg-inst-skyLight px-1.5 py-0.5 rounded border border-inst-skyBorder">CCL</span>
+                <div class="bg-cubo-surface p-4 rounded-xl border border-cubo-border hover:border-cubo-sky/40 transition flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-xs font-medium text-cubo-muted">S&P Merval en USD</span>
+                        <span class="text-[10px] font-medium text-cubo-sky bg-cubo-sky/10 px-2 py-0.5 rounded border border-cubo-sky/20">CCL</span>
                     </div>
-                    <div class="text-2xl font-bold text-inst-text font-mono tabular-nums tracking-tight my-1" id="val-merval-usd">$1.693</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-mono tabular-nums mt-2 pt-2 border-t border-inst-subtle">
-                        <span id="sem-merval-usd" class="px-1.5 py-0.5 rounded border">Sem: -3,4%</span>
-                        <span id="ytd-merval-usd" class="px-1.5 py-0.5 rounded border">YTD: -15,5%</span>
+                    <div class="text-2xl font-bold text-white num-tabular tracking-tight my-1" id="val-merval-usd">$1.693</div>
+                    <div class="flex items-center gap-1.5 text-xs num-tabular mt-2 pt-2 border-t border-cubo-border/60">
+                        <span id="sem-merval-usd" class="px-2 py-0.5 rounded-md border">Sem: -3,4%</span>
+                        <span id="ytd-merval-usd" class="px-2 py-0.5 rounded-md border">YTD: -15,5%</span>
                     </div>
                 </div>
 
                 <!-- SP500 -->
-                <div class="bg-inst-surface p-4 rounded-md border border-inst-border border-t-2 border-t-inst-sky shadow-2xs flex flex-col justify-between">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-semibold text-inst-muted">S&P 500 Index</span>
-                        <span class="text-[10px] font-mono text-inst-muted bg-inst-subtle px-1.5 py-0.5 rounded border border-inst-border">EE.UU.</span>
+                <div class="bg-cubo-surface p-4 rounded-xl border border-cubo-border hover:border-cubo-sky/40 transition flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-xs font-medium text-cubo-muted">S&P 500</span>
+                        <span class="text-[10px] font-medium text-cubo-muted bg-cubo-elevated px-2 py-0.5 rounded border border-cubo-border">EE.UU.</span>
                     </div>
-                    <div class="text-2xl font-bold text-inst-text font-mono tabular-nums tracking-tight my-1" id="val-sp500">$7.719</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-mono tabular-nums mt-2 pt-2 border-t border-inst-subtle">
-                        <span id="sem-sp500" class="px-1.5 py-0.5 rounded border">Sem: +1,3%</span>
-                        <span id="ytd-sp500" class="px-1.5 py-0.5 rounded border">YTD: +12,8%</span>
+                    <div class="text-2xl font-bold text-white num-tabular tracking-tight my-1" id="val-sp500">$7.719</div>
+                    <div class="flex items-center gap-1.5 text-xs num-tabular mt-2 pt-2 border-t border-cubo-border/60">
+                        <span id="sem-sp500" class="px-2 py-0.5 rounded-md border">Sem: +1,3%</span>
+                        <span id="ytd-sp500" class="px-2 py-0.5 rounded-md border">YTD: +12,8%</span>
                     </div>
                 </div>
 
                 <!-- Dólar MEP -->
-                <div class="bg-inst-surface p-4 rounded-md border border-inst-border border-t-2 border-t-inst-sky shadow-2xs flex flex-col justify-between">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-semibold text-inst-muted">Dólar MEP</span>
-                        <span class="text-[10px] font-mono text-inst-muted bg-inst-subtle px-1.5 py-0.5 rounded border border-inst-border">FX Local</span>
+                <div class="bg-cubo-surface p-4 rounded-xl border border-cubo-border hover:border-cubo-sky/40 transition flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-xs font-medium text-cubo-muted">Dólar MEP</span>
+                        <span class="text-[10px] font-medium text-cubo-muted bg-cubo-elevated px-2 py-0.5 rounded border border-cubo-border">Local</span>
                     </div>
-                    <div class="text-2xl font-bold text-inst-text font-mono tabular-nums tracking-tight my-1" id="val-mep">$1.578</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-mono tabular-nums mt-2 pt-2 border-t border-inst-subtle">
-                        <span id="sem-mep" class="px-1.5 py-0.5 rounded border">Sem: +0,9%</span>
-                        <span id="ytd-mep" class="px-1.5 py-0.5 rounded border">YTD: +6,2%</span>
+                    <div class="text-2xl font-bold text-white num-tabular tracking-tight my-1" id="val-mep">$1.578</div>
+                    <div class="flex items-center gap-1.5 text-xs num-tabular mt-2 pt-2 border-t border-cubo-border/60">
+                        <span id="sem-mep" class="px-2 py-0.5 rounded-md border">Sem: +0,9%</span>
+                        <span id="ytd-mep" class="px-2 py-0.5 rounded-md border">YTD: +6,2%</span>
                     </div>
                 </div>
 
                 <!-- Riesgo País -->
-                <div class="bg-inst-surface p-4 rounded-md border border-inst-border border-t-2 border-t-emerald-500 shadow-2xs flex flex-col justify-between">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-semibold text-inst-muted">Riesgo País (EMBI+)</span>
-                        <span class="text-[10px] font-mono text-inst-greenText bg-inst-greenBg px-1.5 py-0.5 rounded border border-inst-greenBorder">Soberano</span>
+                <div class="bg-cubo-surface p-4 rounded-xl border border-cubo-border border-l-2 border-l-cubo-sky hover:border-cubo-sky/40 transition flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-xs font-medium text-cubo-muted">Riesgo País</span>
+                        <span class="text-[10px] font-medium text-cubo-green bg-cubo-green/10 px-2 py-0.5 rounded border border-cubo-green/20">EMBI+</span>
                     </div>
-                    <div class="text-2xl font-bold text-inst-text font-mono tabular-nums tracking-tight my-1" id="val-riesgo">765</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-mono tabular-nums mt-2 pt-2 border-t border-inst-subtle">
-                        <span id="sem-riesgo" class="px-1.5 py-0.5 rounded border">Sem: +13,3%</span>
-                        <span id="ytd-riesgo" class="px-1.5 py-0.5 rounded border">YTD: +34,0%</span>
+                    <div class="text-2xl font-bold text-white num-tabular tracking-tight my-1" id="val-riesgo">765</div>
+                    <div class="flex items-center gap-1.5 text-xs num-tabular mt-2 pt-2 border-t border-cubo-border/60">
+                        <span id="sem-riesgo" class="px-2 py-0.5 rounded-md border">Sem: +13,3%</span>
+                        <span id="ytd-riesgo" class="px-2 py-0.5 rounded-md border">YTD: +34,0%</span>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- 2. PANEL SECUNDARIO: PARIDADES CAMBIARIAS, CRIPTO & MERVAL ARS -->
+        <!-- 2. BLOQUE SECUNDARIO: MERVAL ARS, CCL & BTC -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
             
             <!-- S&P Merval ARS -->
-            <div class="bg-inst-surface p-4 rounded-md border border-inst-border flex flex-col justify-between">
-                <div class="flex justify-between items-center border-b border-inst-border pb-2 mb-2">
-                    <span class="text-xs font-semibold text-inst-text">S&P Merval (ARS)</span>
-                    <span class="text-[10px] bg-inst-skyLight text-inst-sky font-mono font-medium px-2 py-0.5 rounded border border-inst-skyBorder">Índice Pesos</span>
+            <div class="bg-cubo-surface p-4 rounded-xl border border-cubo-border flex flex-col justify-between">
+                <div class="flex justify-between items-center border-b border-cubo-border pb-2 mb-2.5">
+                    <span class="text-xs font-medium text-cubo-muted">S&P Merval (ARS)</span>
+                    <span class="text-[10px] bg-cubo-sky/10 text-cubo-sky font-medium px-2 py-0.5 rounded border border-cubo-sky/20">Pesos</span>
                 </div>
-                <div class="flex items-baseline justify-between pt-1">
-                    <span class="text-xl font-bold text-inst-text font-mono tabular-nums" id="val-merval-ars">$2.848.945</span>
-                    <div class="flex gap-1.5 text-[11px] font-mono tabular-nums">
-                        <span id="merval-ars-sem" class="px-1.5 py-0.5 rounded border">Sem: +0,7%</span>
-                        <span id="merval-ars-ytd" class="px-1.5 py-0.5 rounded border">YTD: -6,6%</span>
+                <div class="flex items-baseline justify-between">
+                    <span class="text-xl font-bold text-white num-tabular" id="val-merval-ars">$2.848.945</span>
+                    <div class="flex gap-1.5 text-xs num-tabular">
+                        <span id="merval-ars-sem" class="px-2 py-0.5 rounded-md border">Sem: +0,7%</span>
+                        <span id="merval-ars-ytd" class="px-2 py-0.5 rounded-md border">YTD: -6,6%</span>
                     </div>
                 </div>
             </div>
 
             <!-- Dólar CCL -->
-            <div class="bg-inst-surface p-4 rounded-md border border-inst-border flex flex-col justify-between">
-                <div class="flex justify-between items-center border-b border-inst-border pb-2 mb-2">
-                    <span class="text-xs font-semibold text-inst-text">Dólar Contado con Liquidación</span>
-                    <span class="text-[10px] bg-inst-subtle text-inst-muted font-mono font-medium px-2 py-0.5 rounded border border-inst-border">Implícito</span>
+            <div class="bg-cubo-surface p-4 rounded-xl border border-cubo-border flex flex-col justify-between">
+                <div class="flex justify-between items-center border-b border-cubo-border pb-2 mb-2.5">
+                    <span class="text-xs font-medium text-cubo-muted">Dólar CCL</span>
+                    <span class="text-[10px] bg-cubo-elevated text-cubo-muted font-medium px-2 py-0.5 rounded border border-cubo-border">Referencia</span>
                 </div>
-                <div class="flex items-baseline justify-between pt-1">
-                    <span class="text-xl font-bold text-inst-text font-mono tabular-nums" id="val-ccl">$1.683</span>
-                    <span class="text-[11px] font-mono tabular-nums px-1.5 py-0.5 rounded border" id="ccl-sem">Sem: +1,7%</span>
+                <div class="flex items-baseline justify-between">
+                    <span class="text-xl font-bold text-white num-tabular" id="val-ccl">$1.683</span>
+                    <span class="text-xs num-tabular px-2 py-0.5 rounded-md border" id="ccl-sem">Sem: +1,7%</span>
                 </div>
             </div>
 
             <!-- Bitcoin -->
-            <div class="bg-inst-surface p-4 rounded-md border border-inst-border flex flex-col justify-between">
-                <div class="flex justify-between items-center border-b border-inst-border pb-2 mb-2">
-                    <span class="text-xs font-semibold text-inst-text">Bitcoin (BTC / USD)</span>
-                    <span class="text-[10px] bg-inst-subtle text-inst-muted font-mono font-medium px-2 py-0.5 rounded border border-inst-border">Digital</span>
+            <div class="bg-cubo-surface p-4 rounded-xl border border-cubo-border flex flex-col justify-between">
+                <div class="flex justify-between items-center border-b border-cubo-border pb-2 mb-2.5">
+                    <span class="text-xs font-medium text-cubo-muted">Bitcoin (BTC)</span>
+                    <span class="text-[10px] bg-cubo-elevated text-cubo-muted font-medium px-2 py-0.5 rounded border border-cubo-border">Cripto</span>
                 </div>
-                <div class="flex items-baseline justify-between pt-1">
-                    <span class="text-xl font-bold text-inst-text font-mono tabular-nums" id="val-btc">$80.544</span>
-                    <span class="text-[11px] font-mono tabular-nums px-1.5 py-0.5 rounded border" id="btc-sem">Sem: +0,7%</span>
+                <div class="flex items-baseline justify-between">
+                    <span class="text-xl font-bold text-white num-tabular" id="val-btc">$80.544</span>
+                    <span class="text-xs num-tabular px-2 py-0.5 rounded-md border" id="btc-sem">Sem: +0,7%</span>
                 </div>
             </div>
 
         </section>
 
-        <!-- 3. TABLAS DE RENDIMIENTO SEMANAL (EE.UU.) -->
+        <!-- 3. TOP 5 GANADORES Y PERDEDORES DE EE.UU. -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             <!-- Top Ganadores -->
-            <div class="bg-inst-surface rounded-md border border-inst-border overflow-hidden">
-                <div class="bg-inst-subtle px-4 py-3 border-b border-inst-border flex justify-between items-center">
+            <div class="bg-cubo-surface rounded-xl border border-cubo-border overflow-hidden">
+                <div class="bg-cubo-elevated/60 px-4 py-3 border-b border-cubo-border flex justify-between items-center">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-inst-greenText"></span>
-                        <h3 class="font-bold text-xs uppercase tracking-wider text-inst-text">Mayores Subas Semanales (EE.UU.)</h3>
+                        <span class="w-2 h-2 rounded-full bg-cubo-green"></span>
+                        <h3 class="font-semibold text-xs text-white">Principales Ganadores (EE.UU.)</h3>
                     </div>
-                    <span class="text-[10px] bg-inst-greenBg text-inst-greenText font-mono font-semibold px-2 py-0.5 rounded border border-inst-greenBorder">Top 5 Ganadores</span>
+                    <span class="text-[11px] bg-cubo-green/10 text-cubo-green font-medium px-2 py-0.5 rounded border border-cubo-green/25">Top 5 Subas</span>
                 </div>
-                <div class="p-2">
-                    <table class="w-full text-left text-xs font-mono tabular-nums">
+                <div class="p-3">
+                    <table class="w-full text-left text-xs num-tabular">
                         <thead>
-                            <tr class="text-inst-muted border-b border-inst-border text-[11px]">
-                                <th class="py-2 px-2 font-medium">Ticker</th>
-                                <th class="py-2 px-2 font-medium font-sans">Compañía</th>
-                                <th class="py-2 px-2 font-medium text-right">Var. Semanal</th>
+                            <tr class="text-cubo-muted border-b border-cubo-border text-[11px]">
+                                <th class="pb-2 font-medium">Ticker</th>
+                                <th class="pb-2 font-medium">Empresa</th>
+                                <th class="pb-2 font-medium text-right">Var. Semanal</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-ganadores" class="divide-y divide-inst-border/60 text-inst-text">
-                            <tr><td colspan="3" class="py-4 text-center text-inst-muted">Cargando registros...</td></tr>
+                        <tbody id="tabla-ganadores" class="divide-y divide-cubo-border/50 text-cubo-text">
+                            <tr><td colspan="3" class="py-4 text-center text-cubo-muted">Cargando datos...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
             <!-- Top Perdedores -->
-            <div class="bg-inst-surface rounded-md border border-inst-border overflow-hidden">
-                <div class="bg-inst-subtle px-4 py-3 border-b border-inst-border flex justify-between items-center">
+            <div class="bg-cubo-surface rounded-xl border border-cubo-border overflow-hidden">
+                <div class="bg-cubo-elevated/60 px-4 py-3 border-b border-cubo-border flex justify-between items-center">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-inst-redText"></span>
-                        <h3 class="font-bold text-xs uppercase tracking-wider text-inst-text">Mayores Bajas Semanales (EE.UU.)</h3>
+                        <span class="w-2 h-2 rounded-full bg-cubo-red"></span>
+                        <h3 class="font-semibold text-xs text-white">Principales Perdedores (EE.UU.)</h3>
                     </div>
-                    <span class="text-[10px] bg-inst-redBg text-inst-redText font-mono font-semibold px-2 py-0.5 rounded border border-inst-redBorder">Top 5 Perdedores</span>
+                    <span class="text-[11px] bg-cubo-red/10 text-cubo-red font-medium px-2 py-0.5 rounded border border-cubo-red/25">Top 5 Bajas</span>
                 </div>
-                <div class="p-2">
-                    <table class="w-full text-left text-xs font-mono tabular-nums">
+                <div class="p-3">
+                    <table class="w-full text-left text-xs num-tabular">
                         <thead>
-                            <tr class="text-inst-muted border-b border-inst-border text-[11px]">
-                                <th class="py-2 px-2 font-medium">Ticker</th>
-                                <th class="py-2 px-2 font-medium font-sans">Compañía</th>
-                                <th class="py-2 px-2 font-medium text-right">Var. Semanal</th>
+                            <tr class="text-cubo-muted border-b border-cubo-border text-[11px]">
+                                <th class="pb-2 font-medium">Ticker</th>
+                                <th class="pb-2 font-medium">Empresa</th>
+                                <th class="pb-2 font-medium text-right">Var. Semanal</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-perdedores" class="divide-y divide-inst-border/60 text-inst-text">
-                            <tr><td colspan="3" class="py-4 text-center text-inst-muted">Cargando registros...</td></tr>
+                        <tbody id="tabla-perdedores" class="divide-y divide-cubo-border/50 text-cubo-text">
+                            <tr><td colspan="3" class="py-4 text-center text-cubo-muted">Cargando datos...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -296,193 +297,218 @@
 
         </section>
 
-        <!-- 4. ESTUDIO DE EXPORTACIÓN PARA REDES (FORMATO 9:16) -->
-        <section class="bg-inst-surface rounded-md border border-inst-border p-5 space-y-5">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-inst-border pb-4">
+        <!-- 4. GENERADOR DE INFOGRAFÍA PARA HISTORIAS (CON CUBOS GEOMÉTRICOS DE FONDO) -->
+        <section class="bg-cubo-surface rounded-xl border border-cubo-border p-5 space-y-5">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cubo-border pb-4">
                 <div>
                     <div class="flex items-center gap-2">
-                        <span class="w-1.5 h-4 bg-inst-sky rounded-xs inline-block"></span>
-                        <h3 class="text-sm font-bold text-inst-text uppercase tracking-wider">Generador de Reporte Vertical (9:16)</h3>
+                        <span class="w-1.5 h-4 bg-cubo-sky rounded-full inline-block"></span>
+                        <h3 class="text-sm font-semibold text-white">Infografía para Historias (9:16)</h3>
                     </div>
-                    <p class="text-xs text-inst-muted mt-0.5">Composición editorial limpia lista para exportar en alta definición o capturar en pantalla.</p>
+                    <p class="text-xs text-cubo-muted mt-0.5">Estética oscura en grises, celestes y verde claro con trama de cubos isométricos.</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="cambiarTemaStory()" id="btn-tema-story" class="flex items-center gap-1.5 bg-inst-subtle hover:bg-inst-border/50 text-inst-text px-3 py-1.5 rounded text-xs font-medium transition border border-inst-border">
-                        <i data-lucide="palette" class="w-3.5 h-3.5 text-inst-sky"></i> Estilo: Papel Claro
-                    </button>
-                    <button onclick="descargarStoryPNG()" class="flex items-center gap-1.5 bg-inst-sky hover:bg-sky-700 text-white px-3.5 py-1.5 rounded text-xs font-medium transition shadow-2xs">
-                        <i data-lucide="download" class="w-3.5 h-3.5"></i> Descargar PNG
-                    </button>
-                </div>
+                <button onclick="descargarStoryPNG()" class="flex items-center gap-1.5 bg-cubo-sky hover:bg-sky-300 text-zinc-950 px-4 py-1.5 rounded-lg text-xs font-semibold transition shadow-sm">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i> Descargar PNG
+                </button>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
-                <!-- COLUMNA IZQUIERDA: CONTROLES DE PERSONALIZACIÓN (5 COLUMNAS) -->
-                <div class="lg:col-span-5 bg-inst-subtle p-4 rounded-md border border-inst-border space-y-4">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-inst-text flex items-center gap-1.5 border-b border-inst-border pb-2">
-                        <i data-lucide="layers" class="w-3.5 h-3.5 text-inst-sky"></i> Parámetros de la Publicación
+                <!-- PANEL DE PERSONALIZACIÓN (5 COLUMNAS) -->
+                <div class="lg:col-span-5 bg-cubo-bg p-4 rounded-xl border border-cubo-border space-y-4">
+                    <h4 class="text-xs font-semibold text-cubo-sky flex items-center gap-1.5 border-b border-cubo-border pb-2.5">
+                        <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Personalizar Contenido
                     </h4>
 
                     <div>
-                        <label class="block text-xs font-semibold text-inst-text mb-2">Indicadores Visibles en Grilla:</label>
+                        <label class="block text-xs font-medium text-cubo-muted mb-2">Indicadores a incluir en la historia:</label>
                         <div class="grid grid-cols-2 gap-2 text-xs">
-                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
-                                <input type="checkbox" id="chk-merval-usd" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
-                                <span class="text-inst-text font-medium text-[11px]">Merval USD</span>
+                            <label class="flex items-center gap-2 bg-cubo-surface px-2.5 py-1.5 rounded-lg border border-cubo-border cursor-pointer hover:border-cubo-sky/50 transition">
+                                <input type="checkbox" id="chk-merval-usd" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-sky">
+                                <span class="text-cubo-text text-xs">Merval USD</span>
                             </label>
-                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
-                                <input type="checkbox" id="chk-sp500" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
-                                <span class="text-inst-text font-medium text-[11px]">S&P 500</span>
+                            <label class="flex items-center gap-2 bg-cubo-surface px-2.5 py-1.5 rounded-lg border border-cubo-border cursor-pointer hover:border-cubo-sky/50 transition">
+                                <input type="checkbox" id="chk-sp500" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-sky">
+                                <span class="text-cubo-text text-xs">S&P 500</span>
                             </label>
-                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
-                                <input type="checkbox" id="chk-mep" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
-                                <span class="text-inst-text font-medium text-[11px]">Dólar MEP</span>
+                            <label class="flex items-center gap-2 bg-cubo-surface px-2.5 py-1.5 rounded-lg border border-cubo-border cursor-pointer hover:border-cubo-sky/50 transition">
+                                <input type="checkbox" id="chk-mep" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-sky">
+                                <span class="text-cubo-text text-xs">Dólar MEP</span>
                             </label>
-                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
-                                <input type="checkbox" id="chk-riesgo" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
-                                <span class="text-inst-text font-medium text-[11px]">Riesgo País</span>
+                            <label class="flex items-center gap-2 bg-cubo-surface px-2.5 py-1.5 rounded-lg border border-cubo-border cursor-pointer hover:border-cubo-sky/50 transition">
+                                <input type="checkbox" id="chk-riesgo" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-sky">
+                                <span class="text-cubo-text text-xs">Riesgo País</span>
                             </label>
-                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
-                                <input type="checkbox" id="chk-ccl" onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
-                                <span class="text-inst-text font-medium text-[11px]">Dólar CCL</span>
+                            <label class="flex items-center gap-2 bg-cubo-surface px-2.5 py-1.5 rounded-lg border border-cubo-border cursor-pointer hover:border-cubo-sky/50 transition">
+                                <input type="checkbox" id="chk-ccl" onchange="actualizarVisibilidadActivos()" class="accent-cubo-sky">
+                                <span class="text-cubo-text text-xs">Dólar CCL</span>
                             </label>
-                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition">
-                                <input type="checkbox" id="chk-btc" onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
-                                <span class="text-inst-text font-medium text-[11px]">Bitcoin</span>
+                            <label class="flex items-center gap-2 bg-cubo-surface px-2.5 py-1.5 rounded-lg border border-cubo-border cursor-pointer hover:border-cubo-sky/50 transition">
+                                <input type="checkbox" id="chk-btc" onchange="actualizarVisibilidadActivos()" class="accent-cubo-sky">
+                                <span class="text-cubo-text text-xs">Bitcoin</span>
                             </label>
-                            <label class="flex items-center gap-2 bg-inst-surface px-2.5 py-1.5 rounded border border-inst-border cursor-pointer hover:border-inst-sky transition col-span-2">
-                                <input type="checkbox" id="chk-merval-ars" onchange="actualizarVisibilidadActivos()" class="accent-inst-sky">
-                                <span class="text-inst-text font-medium text-[11px]">S&P Merval en Pesos (ARS)</span>
+                            <label class="flex items-center gap-2 bg-cubo-surface px-2.5 py-1.5 rounded-lg border border-cubo-border cursor-pointer hover:border-cubo-sky/50 transition col-span-2">
+                                <input type="checkbox" id="chk-merval-ars" onchange="actualizarVisibilidadActivos()" class="accent-cubo-sky">
+                                <span class="text-cubo-text text-xs">S&P Merval (ARS)</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="pt-1">
-                        <label class="block text-xs font-semibold text-inst-text mb-2">Cuadros de Renta Variable EE.UU.:</label>
+                        <label class="block text-xs font-medium text-cubo-muted mb-2">Tablas de Acciones EE.UU.:</label>
                         <div class="grid grid-cols-2 gap-2 text-xs">
-                            <label class="flex items-center gap-2 bg-inst-greenBg/60 px-2.5 py-1.5 rounded border border-inst-greenBorder cursor-pointer">
-                                <input type="checkbox" id="chk-story-ganadores" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-greenText">
-                                <span class="text-inst-greenText font-semibold text-[11px]">Top 3 Subas</span>
+                            <label class="flex items-center gap-2 bg-cubo-green/10 px-2.5 py-1.5 rounded-lg border border-cubo-green/25 cursor-pointer">
+                                <input type="checkbox" id="chk-story-ganadores" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-green">
+                                <span class="text-cubo-green font-medium text-xs">Top 3 Subas</span>
                             </label>
-                            <label class="flex items-center gap-2 bg-inst-redBg/60 px-2.5 py-1.5 rounded border border-inst-redBorder cursor-pointer">
-                                <input type="checkbox" id="chk-story-perdedores" checked onchange="actualizarVisibilidadActivos()" class="accent-inst-redText">
-                                <span class="text-inst-redText font-semibold text-[11px]">Top 3 Bajas</span>
+                            <label class="flex items-center gap-2 bg-cubo-red/10 px-2.5 py-1.5 rounded-lg border border-cubo-red/25 cursor-pointer">
+                                <input type="checkbox" id="chk-story-perdedores" checked onchange="actualizarVisibilidadActivos()" class="accent-cubo-red">
+                                <span class="text-cubo-red font-medium text-xs">Top 3 Bajas</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="pt-1">
-                        <label class="block text-xs font-semibold text-inst-text mb-1">Nota Editorial / Conclusión Semanal:</label>
-                        <textarea id="input-idea-semana" oninput="actualizarTextoIdea()" rows="3" class="w-full border border-inst-border p-2.5 rounded text-xs text-inst-text bg-inst-surface focus:border-inst-sky focus:outline-none leading-relaxed" placeholder="Escribí acá tu comentario de cierre..."></textarea>
+                        <label class="block text-xs font-medium text-cubo-muted mb-1">Frase / Idea de la Semana:</label>
+                        <textarea id="input-idea-semana" oninput="actualizarTextoIdea()" rows="3" class="w-full border border-cubo-border p-2.5 rounded-lg text-xs text-white bg-cubo-surface focus:border-cubo-sky focus:outline-none leading-relaxed" placeholder="Escribí acá tu reflexión..."></textarea>
                     </div>
                 </div>
 
-                <!-- COLUMNA DERECHA: LIENZO DE PREVISUALIZACIÓN 9:16 (7 COLUMNAS) -->
-                <div class="lg:col-span-7 flex justify-center bg-inst-bg p-6 rounded-md border border-inst-border overflow-x-auto">
+                <!-- PREVISUALIZACIÓN DE LA HISTORIA 9:16 (7 COLUMNAS) -->
+                <div class="lg:col-span-7 flex justify-center bg-cubo-bg p-6 rounded-xl border border-cubo-border overflow-x-auto">
                     
-                    <!-- TARJETA 9:16 (320x480px - Escala exacta 2:3 / 9:16 adaptable) -->
-                    <div id="story-infographic" class="w-[330px] h-[500px] bg-[#F8FAFC] text-[#18181B] p-4 rounded-xl flex flex-col justify-between shadow-md relative overflow-hidden border border-[#CBD5E1] select-none">
+                    <!-- LIENZO DE LA HISTORIA (330x500px) -->
+                    <div id="story-infographic" class="w-[330px] h-[500px] bg-[#141417] text-white p-4 rounded-2xl flex flex-col justify-between shadow-2xl relative overflow-hidden border border-[#2C2C32] select-none">
                         
-                        <!-- Banda superior celeste institucional -->
-                        <div class="absolute top-0 left-0 right-0 h-1.5 bg-[#0284C7]"></div>
+                        <!-- FONDO GEOMÉTRICO: FIGURAS DE CUBOS ISOMÉTRICOS 3D (SVG WIREFRAME) -->
+                        <svg class="absolute -top-10 -right-10 w-52 h-52 text-[#38BDF8] opacity-[0.08] pointer-events-none" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Cubo Grande Exterior -->
+                            <polygon points="100,15 175,58 175,142 100,185 25,142 25,58" stroke="currentColor" stroke-width="2"/>
+                            <polyline points="25,58 100,100 175,58" stroke="currentColor" stroke-width="2"/>
+                            <line x1="100" y1="100" x2="100" y2="185" stroke="currentColor" stroke-width="2"/>
+                            <!-- Cubo Interno Concéntrico -->
+                            <polygon points="100,50 145,76 145,126 100,152 55,126 55,76" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/>
+                            <polyline points="55,76 100,101 145,76" stroke="currentColor" stroke-width="1.5"/>
+                            <line x1="100" y1="101" x2="100" y2="152" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+
+                        <svg class="absolute -bottom-12 -left-12 w-56 h-56 text-[#4ADE80] opacity-[0.07] pointer-events-none" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Cluster de 3 Cubos Isométricos -->
+                            <g transform="translate(10, 10)">
+                                <polygon points="90,20 150,55 150,125 90,160 30,125 30,55" stroke="currentColor" stroke-width="2"/>
+                                <polyline points="30,55 90,90 150,55" stroke="currentColor" stroke-width="2"/>
+                                <line x1="90" y1="90" x2="90" y2="160" stroke="currentColor" stroke-width="2"/>
+                            </g>
+                            <g transform="translate(55, 45) scale(0.65)">
+                                <polygon points="90,20 150,55 150,125 90,160 30,125 30,55" stroke="#38BDF8" stroke-width="2.5"/>
+                                <polyline points="30,55 90,90 150,55" stroke="#38BDF8" stroke-width="2.5"/>
+                                <line x1="90" y1="90" x2="90" y2="160" stroke="#38BDF8" stroke-width="2.5"/>
+                            </g>
+                        </svg>
+
+                        <!-- Cubo sutil central de marca de agua -->
+                        <svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 text-white opacity-[0.02] pointer-events-none" viewBox="0 0 100 100" fill="none">
+                            <polygon points="50,5 90,28 90,72 50,95 10,72 10,28" stroke="currentColor" stroke-width="1"/>
+                            <polyline points="10,28 50,50 90,28" stroke="currentColor" stroke-width="1"/>
+                            <line x1="50" y1="50" x2="50" y2="95" stroke="currentColor" stroke-width="1"/>
+                        </svg>
 
                         <!-- Header de la Historia -->
-                        <div id="story-header" class="relative z-10 border-b border-[#E2E8F0] pb-2.5 pt-1 flex justify-between items-center">
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-xs bg-[#0284C7]"></span>
-                                <span class="text-[9px] font-mono font-bold text-[#0284C7] uppercase tracking-wider">
-                                    RESUMEN SEMANAL
+                        <div class="relative z-10 border-b border-[#2C2C32] pb-2 flex justify-between items-center">
+                            <div class="flex items-center gap-1.5 bg-[#38BDF8]/10 border border-[#38BDF8]/30 px-2.5 py-0.5 rounded-md">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#38BDF8]"></span>
+                                <span class="text-[9px] font-bold text-[#38BDF8] uppercase tracking-wider">
+                                    CIERRE SEMANAL
                                 </span>
                             </div>
-                            <span id="story-subtitulo" class="text-[8.5px] font-mono text-[#64748B] bg-[#E0F2FE] text-[#0369A1] px-1.5 py-0.5 rounded border border-[#BAE6FD] font-semibold">
-                                Coyuntura & Mercados
+                            <span class="text-[9px] font-medium text-[#A1A1AA]">
+                                Principales Variables
                             </span>
                         </div>
 
-                        <!-- Cuerpo Central: Grilla de Activos -->
+                        <!-- Contenido Central: Grilla de Activos -->
                         <div class="relative z-10 space-y-2 my-auto py-1">
                             
-                            <div id="story-grid-container" class="grid grid-cols-2 gap-1.5 tabular-nums">
+                            <div id="story-grid-container" class="grid grid-cols-2 gap-1.5 num-tabular">
                                 <!-- Merval USD -->
-                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs" id="story-card-merval-usd">
+                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-merval-usd">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">MERVAL USD</span>
-                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-merval-usd">$1.693</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">MERVAL USD</span>
+                                        <span class="text-[11px] font-bold text-white" id="story-merval-usd">$1.693</span>
                                     </div>
-                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                    <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
                                         <span id="story-merval-sem">Sem: -3,4%</span>
                                         <span id="story-merval-ytd">YTD: -15,5%</span>
                                     </div>
                                 </div>
 
                                 <!-- S&P 500 -->
-                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs" id="story-card-sp500">
+                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-sp500">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">S&P 500</span>
-                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-sp500">$7.719</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">S&P 500</span>
+                                        <span class="text-[11px] font-bold text-white" id="story-sp500">$7.719</span>
                                     </div>
-                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                    <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
                                         <span id="story-sp500-sem">Sem: +1,3%</span>
                                         <span id="story-sp500-ytd">YTD: +12,8%</span>
                                     </div>
                                 </div>
 
                                 <!-- Dólar MEP -->
-                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs" id="story-card-mep">
+                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-mep">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">DÓLAR MEP</span>
-                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-mep">$1.578</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">DÓLAR MEP</span>
+                                        <span class="text-[11px] font-bold text-white" id="story-mep">$1.578</span>
                                     </div>
-                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                    <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
                                         <span id="story-mep-sem">Sem: +0,9%</span>
                                         <span id="story-mep-ytd">YTD: +6,2%</span>
                                     </div>
                                 </div>
 
                                 <!-- Riesgo País -->
-                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs" id="story-card-riesgo">
+                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-riesgo">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">RIESGO PAÍS</span>
-                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-riesgo">765</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">RIESGO PAÍS</span>
+                                        <span class="text-[11px] font-bold text-white" id="story-riesgo">765</span>
                                     </div>
-                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                    <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
                                         <span id="story-riesgo-sem">Sem: +13,3%</span>
                                         <span id="story-riesgo-ytd">YTD: +34,0%</span>
                                     </div>
                                 </div>
 
                                 <!-- Dólar CCL -->
-                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs hidden" id="story-card-ccl">
+                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden" id="story-card-ccl">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">DÓLAR CCL</span>
-                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-ccl">$1.683</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">DÓLAR CCL</span>
+                                        <span class="text-[11px] font-bold text-white" id="story-ccl">$1.683</span>
                                     </div>
-                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                    <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
                                         <span id="story-ccl-sem">Sem: +1,7%</span>
                                         <span id="story-ccl-ytd">YTD: +7,5%</span>
                                     </div>
                                 </div>
 
                                 <!-- Bitcoin -->
-                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs hidden" id="story-card-btc">
+                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden" id="story-card-btc">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">BITCOIN</span>
-                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-btc">$80.544</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">BITCOIN</span>
+                                        <span class="text-[11px] font-bold text-white" id="story-btc">$80.544</span>
                                     </div>
-                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                    <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
                                         <span id="story-btc-sem">Sem: +0,7%</span>
                                         <span id="story-btc-ytd">YTD: -8,6%</span>
                                     </div>
                                 </div>
 
                                 <!-- Merval ARS -->
-                                <div class="story-card bg-white p-2 rounded border border-[#E2E8F0] flex flex-col justify-between shadow-2xs hidden col-span-2" id="story-card-merval-ars">
+                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden col-span-2" id="story-card-merval-ars">
                                     <div class="flex justify-between items-baseline">
-                                        <span class="story-label text-[7.5px] font-bold text-[#64748B] font-mono uppercase">S&P MERVAL (ARS)</span>
-                                        <span class="story-val text-[10px] font-bold font-mono text-[#18181B]" id="story-merval-ars">$2.848.945</span>
+                                        <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase">S&P MERVAL (ARS)</span>
+                                        <span class="text-[11px] font-bold text-white" id="story-merval-ars">$2.848.945</span>
                                     </div>
-                                    <div class="flex justify-between text-[7px] font-mono font-semibold mt-1 pt-1 border-t border-[#F1F5F9]">
+                                    <div class="flex justify-between text-[7.5px] font-medium mt-1 pt-1 border-t border-[#2C2C32]">
                                         <span id="story-merval-ars-sem">Sem: +0,7%</span>
                                         <span id="story-merval-ars-ytd">YTD: -6,6%</span>
                                     </div>
@@ -490,30 +516,35 @@
                             </div>
 
                             <!-- Mini Tablas Top 3 Ganadores y Perdedores en Story -->
-                            <div class="grid grid-cols-2 gap-1.5 font-mono tabular-nums">
-                                <div id="story-box-ganadores" class="bg-[#F0FDF4] border border-[#BBF7D0] p-2 rounded">
-                                    <p class="text-[7.5px] font-bold text-[#15803D] uppercase tracking-wider mb-1 border-b border-[#BBF7D0]/60 pb-0.5">Top 3 Subas</p>
-                                    <div id="story-ganadores" class="space-y-1 text-[7.5px]"></div>
+                            <div class="grid grid-cols-2 gap-1.5 num-tabular">
+                                <div id="story-box-ganadores" class="bg-[#1E1E22]/90 border border-[#4ADE80]/25 p-2 rounded-lg">
+                                    <p class="text-[8px] font-semibold text-[#4ADE80] mb-1 border-b border-[#2C2C32] pb-0.5">Top 3 Subas</p>
+                                    <div id="story-ganadores" class="space-y-0.5 text-[8px]"></div>
                                 </div>
-                                <div id="story-box-perdedores" class="bg-[#FEF2F2] border border-[#FECACA] p-2 rounded">
-                                    <p class="text-[7.5px] font-bold text-[#B91C1C] uppercase tracking-wider mb-1 border-b border-[#FECACA]/60 pb-0.5">Top 3 Bajas</p>
-                                    <div id="story-perdedores" class="space-y-1 text-[7.5px]"></div>
+                                <div id="story-box-perdedores" class="bg-[#1E1E22]/90 border border-[#F87171]/25 p-2 rounded-lg">
+                                    <p class="text-[8px] font-semibold text-[#F87171] mb-1 border-b border-[#2C2C32] pb-0.5">Top 3 Bajas</p>
+                                    <div id="story-perdedores" class="space-y-0.5 text-[8px]"></div>
                                 </div>
                             </div>
 
                         </div>
 
-                        <!-- Bloque Editorial / Idea de la Semana -->
-                        <div id="story-idea-box" class="relative z-10 bg-[#E0F2FE]/60 border-l-2 border-[#0284C7] p-2 rounded-r text-left">
-                            <p id="story-idea-text" class="text-[8.5px] font-medium leading-snug text-[#1E293B]">
+                        <!-- Frase / Idea de la Semana -->
+                        <div class="relative z-10 bg-[#1E1E22]/90 border-l-2 border-[#38BDF8] p-2 rounded-r-lg text-left">
+                            <p id="story-idea-text" class="text-[9px] font-normal leading-snug text-[#E4E4E7]">
                                 "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
                             </p>
                         </div>
 
                         <!-- Footer de la Historia -->
-                        <div id="story-footer" class="relative z-10 border-t border-[#E2E8F0] pt-2 flex justify-between items-center text-[8px] font-mono">
-                            <span class="text-[#64748B] font-medium uppercase tracking-wider">Francisco Combina</span>
-                            <div class="flex items-center gap-1 bg-white border border-[#CBD5E1] px-2 py-0.5 rounded text-[#0284C7] font-bold">
+                        <div class="relative z-10 border-t border-[#2C2C32] pt-2 flex justify-between items-center text-[8.5px]">
+                            <div class="flex items-center gap-1 text-[#A1A1AA] font-medium">
+                                <svg class="w-3 h-3 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                </svg>
+                                <span>mercado & finanzas</span>
+                            </div>
+                            <div class="flex items-center gap-1 bg-[#1E1E22] border border-[#2E2E34] px-2 py-0.5 rounded-md text-[#38BDF8] font-semibold">
                                 <span>@francombina7</span>
                             </div>
                         </div>
@@ -527,44 +558,42 @@
     </main>
 
     <!-- Modal de Edición Manual -->
-    <div id="modal-edicion" class="fixed inset-0 bg-zinc-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-inst-surface border border-inst-border rounded-md shadow-xl max-w-md w-full p-5 space-y-4">
-            <div class="flex justify-between items-center border-b border-inst-border pb-3">
-                <h3 class="font-bold text-sm text-inst-text">Ajuste Manual de Cotizaciones</h3>
-                <button onclick="cerrarModalEdicion()" class="text-inst-muted hover:text-inst-text text-xs font-semibold">✕</button>
+    <div id="modal-edicion" class="fixed inset-0 bg-black/75 backdrop-blur-xs hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-cubo-surface border border-cubo-border rounded-xl shadow-2xl max-w-md w-full p-5 space-y-4">
+            <div class="flex justify-between items-center border-b border-cubo-border pb-3">
+                <h3 class="font-bold text-sm text-white">Edición Manual de Contingencia</h3>
+                <button onclick="cerrarModalEdicion()" class="text-cubo-muted hover:text-white text-xs font-semibold">✕</button>
             </div>
-            <div class="space-y-3 text-xs font-mono">
+            <div class="space-y-3 text-xs num-tabular">
                 <div>
-                    <label class="block font-sans text-[11px] text-inst-muted font-medium mb-1">S&P Merval en USD</label>
-                    <input type="text" id="input-merval-usd" value="$1.693" class="w-full bg-inst-subtle border border-inst-border p-2 rounded text-inst-text focus:border-inst-sky focus:outline-none">
+                    <label class="block text-cubo-muted font-medium mb-1">S&P Merval en USD</label>
+                    <input type="text" id="input-merval-usd" value="$1.693" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white focus:border-cubo-sky focus:outline-none">
                 </div>
                 <div>
-                    <label class="block font-sans text-[11px] text-inst-muted font-medium mb-1">S&P 500</label>
-                    <input type="text" id="input-sp500" value="$7.719" class="w-full bg-inst-subtle border border-inst-border p-2 rounded text-inst-text focus:border-inst-sky focus:outline-none">
+                    <label class="block text-cubo-muted font-medium mb-1">S&P 500</label>
+                    <input type="text" id="input-sp500" value="$7.719" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white focus:border-cubo-sky focus:outline-none">
                 </div>
                 <div>
-                    <label class="block font-sans text-[11px] text-inst-muted font-medium mb-1">Dólar MEP</label>
-                    <input type="text" id="input-mep" value="$1.578" class="w-full bg-inst-subtle border border-inst-border p-2 rounded text-inst-text focus:border-inst-sky focus:outline-none">
+                    <label class="block text-cubo-muted font-medium mb-1">Dólar MEP</label>
+                    <input type="text" id="input-mep" value="$1.578" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white focus:border-cubo-sky focus:outline-none">
                 </div>
                 <div>
-                    <label class="block font-sans text-[11px] text-inst-muted font-medium mb-1">Riesgo País</label>
-                    <input type="text" id="input-riesgo" value="765" class="w-full bg-inst-subtle border border-inst-border p-2 rounded text-inst-text focus:border-inst-sky focus:outline-none">
+                    <label class="block text-cubo-muted font-medium mb-1">Riesgo País</label>
+                    <input type="text" id="input-riesgo" value="765" class="w-full bg-cubo-bg border border-cubo-border p-2 rounded-lg text-white focus:border-cubo-sky focus:outline-none">
                 </div>
             </div>
-            <div class="flex justify-end gap-2 border-t border-inst-border pt-3">
-                <button onclick="cerrarModalEdicion()" class="px-3.5 py-1.5 text-xs font-medium text-inst-muted hover:bg-inst-subtle rounded border border-transparent">Cancelar</button>
-                <button onclick="guardarEdicionManual()" class="px-4 py-1.5 text-xs font-medium bg-inst-sky text-white hover:bg-sky-700 rounded">Aplicar Cambios</button>
+            <div class="flex justify-end gap-2 border-t border-cubo-border pt-3">
+                <button onclick="cerrarModalEdicion()" class="px-3.5 py-1.5 text-xs font-medium text-cubo-muted hover:bg-cubo-elevated rounded-lg">Cancelar</button>
+                <button onclick="guardarEdicionManual()" class="px-4 py-1.5 text-xs font-semibold bg-cubo-sky text-zinc-950 hover:bg-sky-300 rounded-lg">Guardar Cambios</button>
             </div>
         </div>
     </div>
 
-    <!-- Lógica de Sincronización, Formateo y Exportación -->
+    <!-- JavaScript de Sincronización y Renderizado -->
     <script>
         const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
         const DEFAULT_SUBAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=454584979";
         const DEFAULT_BAJAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=205860665";
-
-        let storyTemaOscuro = false;
 
         let marketData = {
             mervalArs: { val: "$2.848.945", sem: "+0,7%", ytd: "-6,6%" },
@@ -634,25 +663,21 @@
             sincronizarConSheet();
         }
 
-        // Asigna clases de píldoras sobrias (verde claro / rojo claro)
         function obtenerClasesVariacion(strVal) {
-            if (!strVal) return "bg-inst-subtle text-inst-muted border-inst-border";
+            if (!strVal) return "bg-cubo-elevated text-cubo-muted border-cubo-border";
             if (strVal.includes('+')) {
-                return "bg-inst-greenBg text-inst-greenText border-inst-greenBorder font-semibold";
+                return "bg-cubo-green/10 text-cubo-green border-cubo-green/25 font-medium";
             } else if (strVal.includes('-')) {
-                return "bg-inst-redBg text-inst-redText border-inst-redBorder font-semibold";
+                return "bg-cubo-red/10 text-cubo-red border-cubo-red/25 font-medium";
             }
-            return "bg-inst-subtle text-inst-muted border-inst-border";
+            return "bg-cubo-elevated text-cubo-muted border-cubo-border";
         }
 
         function obtenerColorTextoStory(strVal) {
-            if (!strVal) return storyTemaOscuro ? "text-zinc-400" : "text-[#64748B]";
-            if (strVal.includes('+')) {
-                return storyTemaOscuro ? "text-emerald-400" : "text-[#15803D]";
-            } else if (strVal.includes('-')) {
-                return storyTemaOscuro ? "text-rose-400" : "text-[#B91C1C]";
-            }
-            return storyTemaOscuro ? "text-zinc-400" : "text-[#64748B]";
+            if (!strVal) return "text-[#A1A1AA]";
+            if (strVal.includes('+')) return "text-[#4ADE80]";
+            if (strVal.includes('-')) return "text-[#F87171]";
+            return "text-[#A1A1AA]";
         }
 
         async function sincronizarConSheet() {
@@ -663,8 +688,8 @@
             let bajasUrl = localStorage.getItem('cubo_bajas_csv_url') || DEFAULT_BAJAS_URL;
 
             const badge = document.getElementById('badge-estado');
-            badge.className = "text-[11px] bg-inst-skyLight text-inst-sky font-mono font-medium px-2.5 py-1.5 rounded border border-inst-skyBorder flex items-center gap-1.5 mr-1";
-            badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-inst-sky animate-ping"></span> Sincronizando...`;
+            badge.className = "text-xs bg-cubo-sky/10 text-cubo-sky font-medium px-3 py-1.5 rounded-lg border border-cubo-sky/25 flex items-center gap-1.5 mr-1";
+            badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-cubo-sky animate-ping"></span> Sincronizando...`;
 
             try {
                 let response = await fetch(url);
@@ -693,25 +718,20 @@
                     } catch (e) {}
                 }
 
-                window._ultimosGanadores = ganadoresActuales;
-                window._ultimosPerdedores = perdedoresActuales;
-
                 renderizarTabla('tabla-ganadores', ganadoresActuales, true);
                 renderizarTabla('tabla-perdedores', perdedoresActuales, false);
                 renderizarStoryTop(ganadoresActuales.slice(0, 3), perdedoresActuales.slice(0, 3));
 
-                badge.className = "text-[11px] bg-inst-greenBg text-inst-greenText font-mono font-medium px-2.5 py-1.5 rounded border border-inst-greenBorder flex items-center gap-1.5 mr-1";
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-inst-greenText"></span> Google Sheets Activo`;
+                badge.className = "text-xs bg-cubo-green/10 text-cubo-green font-medium px-3 py-1.5 rounded-lg border border-cubo-green/25 flex items-center gap-1.5 mr-1";
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-cubo-green"></span> Google Sheets Sincronizado`;
 
             } catch (err) {
-                window._ultimosGanadores = fallbackGanadores;
-                window._ultimosPerdedores = fallbackPerdedores;
                 renderizarTabla('tabla-ganadores', fallbackGanadores, true);
                 renderizarTabla('tabla-perdedores', fallbackPerdedores, false);
                 renderizarStoryTop(fallbackGanadores.slice(0, 3), fallbackPerdedores.slice(0, 3));
 
-                badge.className = "text-[11px] bg-inst-subtle text-inst-muted font-mono font-medium px-2.5 py-1.5 rounded border border-inst-border flex items-center gap-1.5 mr-1";
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-inst-muted"></span> Datos Locales`;
+                badge.className = "text-xs bg-cubo-elevated text-cubo-muted font-medium px-3 py-1.5 rounded-lg border border-cubo-border flex items-center gap-1.5 mr-1";
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-cubo-muted"></span> Modo Local Activo`;
             }
         }
 
@@ -814,18 +834,14 @@
 
         function renderizarTabla(elementId, datos, esPositivo) {
             let html = "";
-            const badgeClass = esPositivo 
-                ? "bg-inst-greenBg text-inst-greenText border-inst-greenBorder" 
-                : "bg-inst-redBg text-inst-redText border-inst-redBorder";
+            const colorClass = esPositivo ? "text-cubo-green" : "text-cubo-red";
 
             datos.forEach(item => {
                 html += `
-                    <tr class="hover:bg-inst-subtle/80 transition">
-                        <td class="py-2 px-2 font-bold text-inst-text">${item.ticker}</td>
-                        <td class="py-2 px-2 font-sans text-inst-muted truncate max-w-[190px]">${item.empresa}</td>
-                        <td class="py-2 px-2 text-right">
-                            <span class="px-1.5 py-0.5 rounded border text-[11px] font-semibold ${badgeClass}">${item.var}</span>
-                        </td>
+                    <tr class="hover:bg-cubo-elevated/40 transition">
+                        <td class="py-2 font-semibold text-white">${item.ticker}</td>
+                        <td class="py-2 text-cubo-muted truncate max-w-[190px]">${item.empresa}</td>
+                        <td class="py-2 text-right font-semibold ${colorClass}">${item.var}</td>
                     </tr>
                 `;
             });
@@ -833,26 +849,20 @@
         }
 
         function renderizarStoryTop(ganadores, perdedores) {
-            const textTickerClass = storyTemaOscuro ? "text-zinc-100" : "text-[#18181B]";
-            const gainColor = storyTemaOscuro ? "text-emerald-400" : "text-[#15803D]";
-            const lossColor = storyTemaOscuro ? "text-rose-400" : "text-[#B91C1C]";
-
             let htmlG = "";
             ganadores.forEach(item => {
-                htmlG += `<div class="flex justify-between items-center"><span class="font-bold ${textTickerClass}">${item.ticker}</span> <span class="${gainColor} font-bold">${item.var}</span></div>`;
+                htmlG += `<div class="flex justify-between items-center"><span class="font-semibold text-white">${item.ticker}</span> <span class="text-[#4ADE80] font-semibold">${item.var}</span></div>`;
             });
             document.getElementById('story-ganadores').innerHTML = htmlG;
 
             let htmlP = "";
             perdedores.forEach(item => {
-                htmlP += `<div class="flex justify-between items-center"><span class="font-bold ${textTickerClass}">${item.ticker}</span> <span class="${lossColor} font-bold">${item.var}</span></div>`;
+                htmlP += `<div class="flex justify-between items-center"><span class="font-semibold text-white">${item.ticker}</span> <span class="text-[#F87171] font-semibold">${item.var}</span></div>`;
             });
             document.getElementById('story-perdedores').innerHTML = htmlP;
         }
 
         function renderizarTablasYStory() {
-            window._ultimosGanadores = fallbackGanadores;
-            window._ultimosPerdedores = fallbackPerdedores;
             renderizarTabla('tabla-ganadores', fallbackGanadores, true);
             renderizarTabla('tabla-perdedores', fallbackPerdedores, false);
             renderizarStoryTop(fallbackGanadores.slice(0, 3), fallbackPerdedores.slice(0, 3));
@@ -862,11 +872,10 @@
             const el = document.getElementById(id);
             if (!el) return;
             el.innerText = `${prefijo}: ${valor}`;
-            el.className = `px-1.5 py-0.5 rounded border text-[11px] font-mono tabular-nums ${obtenerClasesVariacion(valor)}`;
+            el.className = `px-2 py-0.5 rounded-md border text-xs num-tabular ${obtenerClasesVariacion(valor)}`;
         }
 
         function actualizarInterfaz() {
-            // Valores principales Dashboard
             document.getElementById('val-merval-usd').innerText = marketData.mervalUsd.val;
             aplicarPildora('sem-merval-usd', 'Sem', marketData.mervalUsd.sem);
             aplicarPildora('ytd-merval-usd', 'YTD', marketData.mervalUsd.ytd);
@@ -921,57 +930,15 @@
             });
         }
 
-        function cambiarTemaStory() {
-            storyTemaOscuro = !storyTemaOscuro;
-            const container = document.getElementById('story-infographic');
-            const btn = document.getElementById('btn-tema-story');
-            const cards = container.querySelectorAll('.story-card');
-            const vals = container.querySelectorAll('.story-val');
-            const boxG = document.getElementById('story-box-ganadores');
-            const boxP = document.getElementById('story-box-perdedores');
-            const ideaBox = document.getElementById('story-idea-box');
-            const ideaText = document.getElementById('story-idea-text');
-
-            if (storyTemaOscuro) {
-                // Modo Grafito Puro (Cero Azul)
-                container.className = "w-[330px] h-[500px] bg-[#141414] text-zinc-100 p-4 rounded-xl flex flex-col justify-between shadow-md relative overflow-hidden border border-[#2e2e2e] select-none";
-                btn.innerHTML = `<i data-lucide="palette" class="w-3.5 h-3.5 text-inst-sky"></i> Estilo: Grafito Oscuro`;
-                cards.forEach(c => c.className = c.className.replace('bg-white', 'bg-[#1f1f1f]').replace('border-[#E2E8F0]', 'border-[#2e2e2e]'));
-                vals.forEach(v => v.className = v.className.replace('text-[#18181B]', 'text-white'));
-                boxG.className = "bg-[#18261e] border border-emerald-500/30 p-2 rounded";
-                boxP.className = "bg-[#291818] border border-rose-500/30 p-2 rounded";
-                ideaBox.className = "relative z-10 bg-[#1f1f1f] border-l-2 border-[#38bdf8] p-2 rounded-r text-left";
-                ideaText.className = "text-[8.5px] font-medium leading-snug text-zinc-200";
-            } else {
-                // Modo Papel Institucional Claro
-                container.className = "w-[330px] h-[500px] bg-[#F8FAFC] text-[#18181B] p-4 rounded-xl flex flex-col justify-between shadow-md relative overflow-hidden border border-[#CBD5E1] select-none";
-                btn.innerHTML = `<i data-lucide="palette" class="w-3.5 h-3.5 text-inst-sky"></i> Estilo: Papel Claro`;
-                cards.forEach(c => c.className = c.className.replace('bg-[#1f1f1f]', 'bg-white').replace('border-[#2e2e2e]', 'border-[#E2E8F0]'));
-                vals.forEach(v => v.className = v.className.replace('text-white', 'text-[#18181B]'));
-                boxG.className = "bg-[#F0FDF4] border border-[#BBF7D0] p-2 rounded";
-                boxP.className = "bg-[#FEF2F2] border border-[#FECACA] p-2 rounded";
-                ideaBox.className = "relative z-10 bg-[#E0F2FE]/60 border-l-2 border-[#0284C7] p-2 rounded-r text-left";
-                ideaText.className = "text-[8.5px] font-medium leading-snug text-[#1E293B]";
-            }
-
-            try { if (window.lucide) lucide.createIcons(); } catch (e) {}
-            actualizarInterfaz();
-            renderizarStoryTop(
-                (window._ultimosGanadores || fallbackGanadores).slice(0, 3),
-                (window._ultimosPerdedores || fallbackPerdedores).slice(0, 3)
-            );
-            actualizarVisibilidadActivos();
-        }
-
         function descargarStoryPNG() {
             const node = document.getElementById('story-infographic');
             html2canvas(node, {
                 scale: 3,
                 useCORS: true,
-                backgroundColor: storyTemaOscuro ? '#141414' : '#F8FAFC'
+                backgroundColor: '#141417'
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `resumen-semanal-fc.png`;
+                link.download = `cierre-semanal-cubo.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
