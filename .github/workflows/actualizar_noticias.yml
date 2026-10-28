@@ -2,8 +2,8 @@ name: Actualizar Noticias Diario
 
 on:
   schedule:
-    - cron: '0 11 * * *' # Se ejecuta todos los días a las 11:00 UTC (8:00 AM Argentina)
-  workflow_dispatch: # Permite ejecutarlo manualmente cuando quieras desde GitHub
+    - cron: '0 11 * * *' # 8:00 AM Argentina
+  workflow_dispatch: # Permite probarlo manualmente
 
 permissions:
   contents: write
@@ -12,40 +12,83 @@ jobs:
   actualizar:
     runs-on: ubuntu-latest
     steps:
-    - name: Copiar repositorio
-      uses: actions/checkout@v4
+      - name: Copiar repositorio
+        uses: actions/checkout@v4
 
-    - name: Configurar Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Ejecutar script de actualización
-      run: |
-        python -c "
-        import json
-        from datetime import datetime
-        
-        data = {
-            'fecha': datetime.now().strftime('%Y-%m-%d'),
-            'noticias': [
-                {'titulo': 'Rebote en los mercados globales impulsado por la IA', 'descripcion': 'Los principales índices registran una sólida recuperación liderados por semiconductores.'},
-                {'titulo': 'El FMI actualiza proyecciones macroeconómicas', 'descripcion': 'Se evalúa el sendero fiscal, metas y la acumulación de reservas internacionales.'},
-                {'titulo': 'Consolidación de reservas y compras del Banco Central', 'descripcion': 'El BCRA mantiene una dinámica positiva de acumulación de divisas en el mercado oficial.'},
-                {'titulo': 'Expectativa en Wall Street por reportes corporativos', 'descripcion': 'Inversores atentos a los balances trimestrales de las grandes empresas tecnológicas.'},
-                {'titulo': 'Estabilidad en los precios internacionales del petróleo', 'descripcion': 'Los contratos de crudo operan firmes a la espera de definiciones geopolíticas clave.'}
-            ]
-        }
-        
-        with open('noticias.json', 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
-        print('Noticias actualizadas con éxito.')
-        "
+      - name: Buscar noticias reales del dia (RSS Finanzas)
+        run: |
+          cat << 'EOF' > generar_noticias.py
+          import urllib.request
+          import xml.etree.ElementTree as ET
+          import json
+          from datetime import datetime, timedelta
+          import html
+          import re
 
-    - name: Guardar cambios en GitHub
-      run: |
-        git config --global user.name 'Cubo Bot'
-        git config --global user.email 'bot@cubofinanzas.com'
-        git add noticias.json
-        git commit -m "Actualización automática de noticias diarias" || exit 0
-        git push
+          # Consulta en vivo a Google News RSS (Finanzas, Merval, Dolar, Economia Argentina y Wall Street)
+          url = "https://news.google.com/rss/search?q=(economia+OR+mercados+OR+dolar+OR+merval+OR+finanzas+OR+wall+street)+when:1d&hl=es-419&gl=AR&ceid=AR:es-419"
+
+          req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+          noticias = []
+
+          try:
+              with urllib.request.urlopen(req, timeout=15) as response:
+                  xml_data = response.read()
+              
+              root = ET.fromstring(xml_data)
+              items = root.findall('.//item')
+              
+              for item in items:
+                  if len(noticias) >= 5:
+                      break
+                  
+                  raw_title = item.find('title').text if item.find('title') is not None else ''
+                  source_el = item.find('source')
+                  fuente = source_el.text if source_el is not None else 'Mercado'
+                  
+                  # Separar el título limpio del nombre del diario (Google News pone "Título - Diario")
+                  partes = raw_title.rsplit(' - ', 1)
+                  titulo_limpio = partes[0].strip()
+                  if len(partes) > 1 and fuente == 'Mercado':
+                      fuente = partes[1].strip()
+                  
+                  # Evitar noticias duplicadas o muy cortas
+                  if len(titulo_limpio) < 20 or any(n['titulo'] == titulo_limpio for n in noticias):
+                      continue
+                  
+                  noticias.append({
+                      'titulo': titulo_limpio,
+                      'descripcion': f"Fuente: {fuente} • Cobertura actualizada de mercados y economía."
+                  })
+          except Exception as e:
+              print(f"Error consultando RSS: {e}")
+
+          # Hora Argentina (UTC-3)
+          fecha_ar = (datetime.utcnow() - timedelta(hours=3)).strftime('%d/%m/%Y %H:%M hs')
+
+          if len(noticias) > 0:
+              data = {
+                  'fecha': fecha_ar,
+                  'noticias': noticias
+              }
+              with open('noticias.json', 'w', encoding='utf-8') as f:
+                  json.dump(data, f, ensure_ascii=False, indent=4)
+              print("Archivo noticias.json actualizado con noticias reales del día.")
+          else:
+              print("No se encontraron noticias nuevas.")
+          EOF
+          python generar_noticias.py
+          rm generar_noticias.py
+
+      - name: Guardar cambios en GitHub
+        run: |
+          git config --global user.name 'Cubo Bot'
+          git config --global user.email 'bot@cubofinanzas.com'
+          git add noticias.json
+          git commit -m "Actualización automática de noticias en vivo" || exit 0
+          git push
