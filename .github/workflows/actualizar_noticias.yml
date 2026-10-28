@@ -20,55 +20,97 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Buscar noticias reales del dia (RSS Finanzas)
+      - name: Buscar 5 noticias diversificadas por categoria
         run: |
           cat << 'EOF' > generar_noticias.py
           import urllib.request
+          import urllib.parse
           import xml.etree.ElementTree as ET
           import json
           from datetime import datetime, timedelta
-          import html
           import re
 
-          # Consulta en vivo a Google News RSS (Finanzas, Merval, Dolar, Economia Argentina y Wall Street)
-          url = "https://news.google.com/rss/search?q=(economia+OR+mercados+OR+dolar+OR+merval+OR+finanzas+OR+wall+street)+when:1d&hl=es-419&gl=AR&ceid=AR:es-419"
+          # 5 consultas separadas para garantizar variedad temática (1 noticia por vertical)
+          categorias = [
+              {
+                  "etiqueta": "Dólar & BCRA",
+                  "query": '(dolar OR "banco central" OR reservas OR MEP OR CCL) when:1d'
+              },
+              {
+                  "etiqueta": "Mercados Locales",
+                  "query": '(merval OR "riesgo pais" OR bonos OR acciones) argentina when:1d'
+              },
+              {
+                  "etiqueta": "Macro & Finanzas",
+                  "query": '(inflacion OR tesoro OR licitacion OR "tasas de interes" OR FMI) argentina when:1d'
+              },
+              {
+                  "etiqueta": "Wall Street",
+                  "query": '("wall street" OR "S&P 500" OR Reserva Federal OR Nasdaq) when:1d'
+              },
+              {
+                  "etiqueta": "Energía, Agro & Cripto",
+                  "query": '(petroleo OR "vaca muerta" OR soja OR oro OR bitcoin) mercado when:1d'
+              }
+          ]
 
-          req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+          stopwords = {'el', 'la', 'los', 'las', 'de', 'del', 'en', 'y', 'a', 'por', 'para', 'con', 'un', 'una', 'que', 'se', 'al', 'como', 'mas', 'pero', 'su', 'sus', 'hoy', 'este', 'esta', 'entre', 'tras', 'ante'}
+
+          def obtener_palabras_clave(texto):
+              palabras = re.findall(r'\w+', texto.lower())
+              return set(p for p in palabras if len(p) > 3 and p not in stopwords)
+
+          def es_similar(titulo_nuevo, titulos_existentes):
+              kws_nuevo = obtener_palabras_clave(titulo_nuevo)
+              if not kws_nuevo:
+                  return False
+              for t in titulos_existentes:
+                  kws_exist = obtener_palabras_clave(t)
+                  # Si comparten 3 o más palabras clave sustantivas, se descarta por repetida
+                  if len(kws_nuevo.intersection(kws_exist)) >= 3:
+                      return True
+              return False
+
           noticias = []
+          titulos_usados = []
 
-          try:
-              with urllib.request.urlopen(req, timeout=15) as response:
-                  xml_data = response.read()
+          for cat in categorias:
+              q_encoded = urllib.parse.quote(cat["query"])
+              url = f"https://news.google.com/rss/search?q={q_encoded}&hl=es-419&gl=AR&ceid=AR:es-419"
+              req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
               
-              root = ET.fromstring(xml_data)
-              items = root.findall('.//item')
-              
-              for item in items:
-                  if len(noticias) >= 5:
+              try:
+                  with urllib.request.urlopen(req, timeout=15) as response:
+                      xml_data = response.read()
+                  
+                  root = ET.fromstring(xml_data)
+                  items = root.findall('.//item')
+                  
+                  for item in items:
+                      raw_title = item.find('title').text if item.find('title') is not None else ''
+                      source_el = item.find('source')
+                      fuente = source_el.text if source_el is not None else 'Mercado'
+                      
+                      partes = raw_title.rsplit(' - ', 1)
+                      titulo_limpio = partes[0].strip()
+                      if len(partes) > 1 and fuente == 'Mercado':
+                          fuente = partes[1].strip()
+                      
+                      if len(titulo_limpio) < 25:
+                          continue
+                      
+                      if es_similar(titulo_limpio, titulos_usados):
+                          continue
+                      
+                      noticias.append({
+                          'titulo': titulo_limpio,
+                          'descripcion': f"{cat['etiqueta']} • Fuente: {fuente}"
+                      })
+                      titulos_usados.append(titulo_limpio)
                       break
-                  
-                  raw_title = item.find('title').text if item.find('title') is not None else ''
-                  source_el = item.find('source')
-                  fuente = source_el.text if source_el is not None else 'Mercado'
-                  
-                  # Separar el título limpio del nombre del diario (Google News pone "Título - Diario")
-                  partes = raw_title.rsplit(' - ', 1)
-                  titulo_limpio = partes[0].strip()
-                  if len(partes) > 1 and fuente == 'Mercado':
-                      fuente = partes[1].strip()
-                  
-                  # Evitar noticias duplicadas o muy cortas
-                  if len(titulo_limpio) < 20 or any(n['titulo'] == titulo_limpio for n in noticias):
-                      continue
-                  
-                  noticias.append({
-                      'titulo': titulo_limpio,
-                      'descripcion': f"Fuente: {fuente} • Cobertura actualizada de mercados y economía."
-                  })
-          except Exception as e:
-              print(f"Error consultando RSS: {e}")
+              except Exception as e:
+                  print(f"Error en categoria {cat['etiqueta']}: {e}")
 
-          # Hora Argentina (UTC-3)
           fecha_ar = (datetime.utcnow() - timedelta(hours=3)).strftime('%d/%m/%Y %H:%M hs')
 
           if len(noticias) > 0:
@@ -78,9 +120,9 @@ jobs:
               }
               with open('noticias.json', 'w', encoding='utf-8') as f:
                   json.dump(data, f, ensure_ascii=False, indent=4)
-              print("Archivo noticias.json actualizado con noticias reales del día.")
+              print(f"Se guardaron {len(noticias)} noticias diversificadas.")
           else:
-              print("No se encontraron noticias nuevas.")
+              print("No se encontraron noticias.")
           EOF
           python generar_noticias.py
           rm generar_noticias.py
@@ -90,5 +132,5 @@ jobs:
           git config --global user.name 'Cubo Bot'
           git config --global user.email 'bot@cubofinanzas.com'
           git add noticias.json
-          git commit -m "Actualización automática de noticias en vivo" || exit 0
+          git commit -m "Actualización automática de noticias diversificadas" || exit 0
           git push
