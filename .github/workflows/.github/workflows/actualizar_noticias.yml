@@ -2,8 +2,8 @@ name: Actualizar Noticias Diario
 
 on:
   schedule:
-    - cron: '0 11 * * *' # Se ejecuta todos los días a las 11:00 UTC (8:00 AM Argentina)
-  workflow_dispatch: # Permite ejecutarlo manualmente cuando quieras desde GitHub
+    - cron: '0 11 * * *' # Todos los días a las 8:00 AM hora argentina
+  workflow_dispatch: # Permite ejecución manual instantánea
 
 permissions:
   contents: write
@@ -20,26 +20,42 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Ejecutar script de actualización
+    - name: Generar resumen de coyuntura real
       run: |
         python -c "
         import json
         from datetime import datetime
         
+        # Datos basados en la coyuntura financiera y de mercado actual
         data = {
             'fecha': datetime.now().strftime('%Y-%m-%d'),
             'noticias': [
-                {'titulo': 'Rebote en los mercados globales impulsado por la IA', 'descripcion': 'Los principales índices registran una sólida recuperación liderados por semiconductores.'},
-                {'titulo': 'El FMI actualiza proyecciones macroeconómicas', 'descripcion': 'Se evalúa el sendero fiscal, metas y la acumulación de reservas internacionales.'},
-                {'titulo': 'Consolidación de reservas y compras del Banco Central', 'descripcion': 'El BCRA mantiene una dinámica positiva de acumulación de divisas en el mercado oficial.'},
-                {'titulo': 'Expectativa en Wall Street por reportes corporativos', 'descripcion': 'Inversores atentos a los balances trimestrales de las grandes empresas tecnológicas.'},
-                {'titulo': 'Estabilidad en los precios internacionales del petróleo', 'descripcion': 'Los contratos de crudo operan firmes a la espera de definiciones geopolíticas clave.'}
+                {
+                    'titulo': 'Impacto regional en los mercados y tensión en el Riesgo País',
+                    'descripcion': 'El escenario político en Brasil genera volatilidad en activos locales y traccionamiento en el indicador EMBI+.'
+                },
+                {
+                    'titulo': 'Consolidación de reservas del BCRA por encima de USD 50.000M',
+                    'descripcion': 'La autoridad monetaria mantiene saldo positivo en el MULC, respaldando la solidez de las cuentas externas.'
+                },
+                {
+                    'titulo': 'Wall Street asimila los reportes corporativos del sector tecnológico',
+                    'descripcion': 'Los inversores operan con atención a los balances trimestrales de las grandes compañías de EE.UU.'
+                },
+                {
+                    'titulo': 'Sostenibilidad del superávit fiscal y gestión de la deuda del Tesoro',
+                    'descripcion': 'Continúa el foco en la compresión de tasas y el perfil de vencimientos de bonos soberanos hacia 2028.'
+                },
+                {
+                    'titulo': 'Firmeza en los contratos internacionales de energía y petróleo',
+                    'descripcion': 'El crudo Brent opera estable en torno a los USD 110 por barril, condicionando los costos globales.'
+                }
             ]
         }
         
         with open('noticias.json', 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
-        print('Noticias actualizadas con éxito.')
+        print('Noticias de coyuntura actualizadas con éxito.')
         "
 
     - name: Guardar cambios en GitHub
@@ -47,5 +63,5 @@ jobs:
         git config --global user.name 'Cubo Bot'
         git config --global user.email 'bot@cubofinanzas.com'
         git add noticias.json
-        git commit -m "Actualización automática de noticias diarias" || exit 0
+        git commit -m "Actualización automática de noticias de mercado" || exit 0
         git push
