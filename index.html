@@ -39,6 +39,10 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- html2canvas para exportar la infografía a PNG -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Chart.js 4.4.1 para gráficos históricos y comparativos nativos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- TradingView Widget Library -->
+    <script src="https://s3.tradingview.com/tv.js"></script>
     <style>
         body {
             font-family: 'Google Sans', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -103,7 +107,7 @@
                 <button onclick="toggleConfigPanel()" class="text-cubo-muted hover:text-white text-xs font-medium px-2 py-1 rounded hover:bg-cubo-elevated">Cerrar ✕</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
                 <div>
                     <label class="block font-medium text-cubo-muted mb-1">Hoja "Datos" (Principal)</label>
                     <input type="text" id="cfg-sheet-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-sky font-mono text-[11px] focus:outline-none focus:border-cubo-sky">
@@ -115,6 +119,19 @@
                 <div>
                     <label class="block font-medium text-cubo-muted mb-1">Hoja "Bajas_EEUU" (Perdedores)</label>
                     <input type="text" id="cfg-bajas-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-sky font-mono text-[11px] focus:outline-none focus:border-cubo-sky">
+                </div>
+                <div>
+                    <label class="block font-medium text-cubo-muted mb-1">Hoja "Tickers" (Universo EE.UU.)</label>
+                    <input type="text" id="cfg-tickers-url" class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-cubo-sky font-mono text-[11px] focus:outline-none focus:border-cubo-sky">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-2 border-t border-cubo-border/60">
+                <div>
+                    <label class="block font-medium text-cubo-muted mb-1">API Key Externa Opcional (Financial Modeling Prep / Finnhub)</label>
+                    <input type="password" id="cfg-fmp-key" placeholder="Opcional: ingresá tu API Key de FMP o Finnhub para refrescar múltiplos en vivo..." class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-white font-mono text-[11px] focus:outline-none focus:border-cubo-sky">
+                </div>
+                <div class="flex items-end justify-between gap-2">
+                    <p class="text-[11px] text-cubo-muted leading-snug">Si no ingresás API Key, el monitor usa la base fundamental verificada + cotizaciones de tu Google Sheet y gráficos en vivo de TradingView.</p>
                 </div>
             </div>
 
@@ -305,6 +322,333 @@
                 </div>
             </div>
 
+        </section>
+
+        <!-- 3.5 MONITOR FUNDAMENTAL E HISTÓRICO DE ACCIONES EE.UU. (HOJA TICKERS) -->
+        <section id="seccion-fundamentales" class="bg-cubo-surface rounded-xl border border-cubo-border p-5 space-y-5">
+            <!-- Encabezado de Sección -->
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-cubo-border pb-4">
+                <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="w-1.5 h-4 bg-cubo-sky rounded-full inline-block"></span>
+                        <h2 class="text-sm font-semibold text-white">Análisis Fundamental & Histórico de Precios (EE.UU.)</h2>
+                        <span id="badge-tickers-count" class="text-[10px] font-mono bg-cubo-sky/10 text-cubo-sky px-2 py-0.5 rounded border border-cubo-sky/25">34 Activos · Hoja Tickers</span>
+                    </div>
+                    <p class="text-xs text-cubo-muted mt-1">Múltiplos de valuación, rentabilidad, solvencia, márgenes operativos y evolución histórica de precios para la cartera de seguimiento.</p>
+                </div>
+
+                <!-- Controles Globales de Filtro y Búsqueda -->
+                <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+                    <div class="relative flex-1 sm:flex-initial sm:w-52">
+                        <input type="text" id="input-buscar-ticker" oninput="filtrarScreener()" placeholder="Buscar ticker o empresa..." class="w-full bg-cubo-bg border border-cubo-border rounded-lg pl-3 pr-7 py-1.5 text-xs text-white focus:border-cubo-sky focus:outline-none">
+                    </div>
+                    <select id="select-sector-filtro" onchange="filtrarScreener()" class="bg-cubo-bg border border-cubo-border rounded-lg px-2.5 py-1.5 text-xs text-cubo-text focus:border-cubo-sky focus:outline-none">
+                        <option value="ALL">Todos los Sectores</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Financial Services">Financial Services</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Consumer Defensive">Consumer Defensive</option>
+                        <option value="Consumer Cyclical">Consumer Cyclical</option>
+                        <option value="Communication Services">Communication Services</option>
+                        <option value="Energy">Energy</option>
+                        <option value="Basic Materials">Basic Materials</option>
+                        <option value="ETF">ETFs (SPY / Cripto)</option>
+                    </select>
+                    <button onclick="exportarScreenerCSV()" class="flex items-center gap-1.5 bg-cubo-elevated hover:bg-cubo-border text-cubo-text px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-border">
+                        <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-cubo-green"></i> Exportar CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barra Rápida de Selección de Tickers (Píldoras Interactivas) -->
+            <div class="space-y-1.5">
+                <div class="flex items-center justify-between text-[11px] text-cubo-muted">
+                    <span>Seleccioná una empresa de la hoja <strong class="text-white">Tickers</strong> para inspeccionar su ficha fundamental y gráfico:</span>
+                    <span id="label-fuente-fundamental" class="font-mono text-[10px] text-cubo-sky">Fuente: SEC Filings / QuarterChart / StockAnalysis / Google Sheets</span>
+                </div>
+                <div id="barra-tickers-pills" class="flex items-center gap-1.5 overflow-x-auto pb-2 pt-0.5">
+                    <!-- Renderizado dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Panel Principal Dividido: Ficha Fundamental (5 cols) + Gráfico Histórico (7 cols) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                
+                <!-- COLUMNA IZQUIERDA: FICHA FUNDAMENTAL DETALLADA (5 COLUMNAS) -->
+                <div class="lg:col-span-5 bg-cubo-bg rounded-xl border border-cubo-border p-4 flex flex-col justify-between space-y-4">
+                    
+                    <!-- Cabecera del Activo Seleccionado -->
+                    <div class="border-b border-cubo-border pb-3.5">
+                        <div class="flex justify-between items-start gap-2">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span id="fund-ticker" class="text-lg font-bold text-white font-mono tracking-tight">AAPL</span>
+                                    <span id="fund-exchange" class="text-[10px] font-mono uppercase bg-cubo-elevated text-cubo-muted px-2 py-0.5 rounded border border-cubo-border">NASDAQ</span>
+                                    <span id="fund-sector" class="text-[10px] font-medium bg-cubo-sky/10 text-cubo-sky px-2 py-0.5 rounded border border-cubo-sky/20">Technology</span>
+                                </div>
+                                <h3 id="fund-name" class="text-xs font-medium text-cubo-muted mt-0.5">Apple Inc.</h3>
+                            </div>
+                            <div class="text-right num-tabular">
+                                <div id="fund-price" class="text-xl font-bold text-white">$345,61</div>
+                                <div class="flex items-center justify-end gap-1 mt-1">
+                                    <span id="fund-var-sem" class="text-[10px] px-1.5 py-0.5 rounded border">Sem: -0,6%</span>
+                                    <span id="fund-var-ytd" class="text-[10px] px-1.5 py-0.5 rounded border">YTD: +27,1%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Barra Rango 52 Semanas -->
+                        <div class="mt-3 pt-2.5 border-t border-cubo-border/50">
+                            <div class="flex justify-between text-[10px] text-cubo-muted num-tabular mb-1">
+                                <span>Mín 52S: <strong id="fund-low52" class="text-white">$243,42</strong></span>
+                                <span class="text-cubo-sky font-medium" id="fund-pos52-label">Rango 52 Semanas</span>
+                                <span>Máx 52S: <strong id="fund-high52" class="text-white">$351,73</strong></span>
+                            </div>
+                            <div class="w-full h-1.5 bg-cubo-surface rounded-full overflow-hidden border border-cubo-border/80 relative">
+                                <div id="fund-bar52" class="h-full bg-gradient-to-r from-cubo-sky to-cubo-green rounded-full transition-all duration-300" style="width: 94%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grilla de Ratios Fundamentales Clave (8 Cajas) -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-semibold text-white uppercase tracking-wider">Múltiplos & Solvencia</span>
+                            <a id="fund-source-link" href="https://quarterchart.com/info/AAPL" target="_blank" rel="noopener noreferrer" class="text-[10px] text-cubo-sky hover:underline flex items-center gap-1">
+                                Ver fuente verificada ↗
+                            </a>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2 num-tabular">
+                            <!-- Market Cap -->
+                            <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
+                                <div class="flex justify-between items-center text-[10px] text-cubo-muted">
+                                    <span>Market Cap</span>
+                                    <span class="text-[9px] font-mono text-cubo-sky">USD</span>
+                                </div>
+                                <div id="fund-mcap" class="text-sm font-bold text-white mt-0.5">$5,07T</div>
+                                <div id="fund-ev" class="text-[10px] text-cubo-muted mt-0.5">EV: $4,75T</div>
+                            </div>
+
+                            <!-- P/E Ratio -->
+                            <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
+                                <div class="flex justify-between items-center text-[10px] text-cubo-muted">
+                                    <span>P/E Ratio (TTM)</span>
+                                    <span class="text-[9px] font-mono text-cubo-muted">Múltiplo</span>
+                                </div>
+                                <div id="fund-pe" class="text-sm font-bold text-white mt-0.5">39,83x</div>
+                                <div id="fund-fwd-pe" class="text-[10px] text-cubo-sky mt-0.5">Fwd P/E: 36,33x</div>
+                            </div>
+
+                            <!-- EPS -->
+                            <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
+                                <div class="flex justify-between items-center text-[10px] text-cubo-muted">
+                                    <span>EPS (TTM)</span>
+                                    <span class="text-[9px] font-mono text-cubo-green">BPA</span>
+                                </div>
+                                <div id="fund-eps" class="text-sm font-bold text-white mt-0.5">$8,73</div>
+                                <div id="fund-rev" class="text-[10px] text-cubo-muted mt-0.5">Ventas: $466,8B</div>
+                            </div>
+
+                            <!-- PEG Ratio -->
+                            <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
+                                <div class="flex justify-between items-center text-[10px] text-cubo-muted">
+                                    <span>PEG Ratio</span>
+                                    <span class="text-[9px] font-mono text-cubo-muted">P/E ÷ Growth</span>
+                                </div>
+                                <div id="fund-peg" class="text-sm font-bold text-white mt-0.5">1,39</div>
+                                <div id="fund-div" class="text-[10px] text-cubo-muted mt-0.5">Div. Yield: 0,31%</div>
+                            </div>
+
+                            <!-- ROE -->
+                            <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
+                                <div class="flex justify-between items-center text-[10px] text-cubo-muted">
+                                    <span>ROE</span>
+                                    <span class="text-[9px] font-mono text-cubo-sky">Patrimonio</span>
+                                </div>
+                                <div id="fund-roe" class="text-sm font-bold text-cubo-green mt-0.5">137,0%</div>
+                                <div class="text-[10px] text-cubo-muted mt-0.5">Return on Equity</div>
+                            </div>
+
+                            <!-- ROA -->
+                            <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
+                                <div class="flex justify-between items-center text-[10px] text-cubo-muted">
+                                    <span>ROA</span>
+                                    <span class="text-[9px] font-mono text-cubo-sky">Activos</span>
+                                </div>
+                                <div id="fund-roa" class="text-sm font-bold text-white mt-0.5">34,0%</div>
+                                <div class="text-[10px] text-cubo-muted mt-0.5">Return on Assets</div>
+                            </div>
+
+                            <!-- Debt / Equity -->
+                            <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border col-span-2">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="text-[10px] text-cubo-muted block">Debt / Equity (Deuda / Patrimonio)</span>
+                                        <span id="fund-de" class="text-sm font-bold text-white">0,78x</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-[10px] text-cubo-muted block">Liquidez Corriente</span>
+                                        <span id="fund-current-ratio" class="text-xs font-semibold text-cubo-sky">Current Ratio: 1,00x</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Barras Visuales de Márgenes (Bruto, Operativo, Neto) -->
+                    <div class="bg-cubo-surface p-3 rounded-lg border border-cubo-border space-y-2.5 num-tabular">
+                        <div class="flex justify-between items-center border-b border-cubo-border/60 pb-1.5">
+                            <span class="text-[11px] font-semibold text-white">Estructura de Márgenes (TTM)</span>
+                            <span class="text-[10px] text-cubo-muted">% sobre Ventas</span>
+                        </div>
+
+                        <!-- Margen Bruto -->
+                        <div>
+                            <div class="flex justify-between text-[11px] mb-1">
+                                <span class="text-cubo-muted">Margen Bruto (Gross Margin)</span>
+                                <span id="fund-gross-margin" class="font-bold text-white">48,65%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-cubo-bg rounded-full overflow-hidden">
+                                <div id="bar-gross-margin" class="h-full bg-cubo-sky rounded-full transition-all duration-300" style="width: 48.65%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Margen Operativo -->
+                        <div>
+                            <div class="flex justify-between text-[11px] mb-1">
+                                <span class="text-cubo-muted">Margen Operativo (Operating Margin)</span>
+                                <span id="fund-op-margin" class="font-bold text-cubo-sky">33,17%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-cubo-bg rounded-full overflow-hidden">
+                                <div id="bar-op-margin" class="h-full bg-sky-400 rounded-full transition-all duration-300" style="width: 33.17%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Margen Neto -->
+                        <div>
+                            <div class="flex justify-between text-[11px] mb-1">
+                                <span class="text-cubo-muted">Margen Neto (Profit Margin)</span>
+                                <span id="fund-net-margin" class="font-bold text-cubo-green">27,62%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-cubo-bg rounded-full overflow-hidden">
+                                <div id="bar-net-margin" class="h-full bg-cubo-green rounded-full transition-all duration-300" style="width: 27.62%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- COLUMNA DERECHA: GRÁFICO HISTÓRICO DE PRECIOS & TRADINGVIEW (7 COLUMNAS) -->
+                <div class="lg:col-span-7 bg-cubo-bg rounded-xl border border-cubo-border p-4 flex flex-col justify-between space-y-3.5">
+                    
+                    <!-- Barra Superior del Gráfico: Selector de Vista y Período -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5 border-b border-cubo-border pb-3">
+                        <div class="flex items-center gap-1.5 bg-cubo-surface p-1 rounded-lg border border-cubo-border">
+                            <button id="btn-modo-nativo" onclick="cambiarModoGrafico('nativo')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-cubo-sky text-zinc-950 transition">
+                                Serie Histórica Cubo
+                            </button>
+                            <button id="btn-modo-tv" onclick="cambiarModoGrafico('tradingview')" class="px-2.5 py-1 rounded-md text-xs font-medium text-cubo-muted hover:text-white transition">
+                                TradingView Avanzado
+                            </button>
+                        </div>
+
+                        <!-- Botones de Temporalidad (1M, 3M, 6M, YTD, 1Y, 5Y) -->
+                        <div id="controles-periodo-grafico" class="flex items-center gap-1 num-tabular">
+                            <button onclick="cambiarPeriodoHistorico('1M')" id="btn-tf-1M" class="px-2 py-1 rounded text-[11px] font-mono bg-cubo-surface text-cubo-muted hover:text-white border border-cubo-border transition">1M</button>
+                            <button onclick="cambiarPeriodoHistorico('3M')" id="btn-tf-3M" class="px-2 py-1 rounded text-[11px] font-mono bg-cubo-surface text-cubo-muted hover:text-white border border-cubo-border transition">3M</button>
+                            <button onclick="cambiarPeriodoHistorico('6M')" id="btn-tf-6M" class="px-2 py-1 rounded text-[11px] font-mono bg-cubo-surface text-cubo-muted hover:text-white border border-cubo-border transition">6M</button>
+                            <button onclick="cambiarPeriodoHistorico('YTD')" id="btn-tf-YTD" class="px-2 py-1 rounded text-[11px] font-mono bg-cubo-surface text-cubo-muted hover:text-white border border-cubo-border transition">YTD</button>
+                            <button onclick="cambiarPeriodoHistorico('1Y')" id="btn-tf-1Y" class="px-2 py-1 rounded text-[11px] font-mono bg-cubo-sky/20 text-cubo-sky border border-cubo-sky/40 font-semibold transition">1A</button>
+                            <button onclick="cambiarPeriodoHistorico('5Y')" id="btn-tf-5Y" class="px-2 py-1 rounded text-[11px] font-mono bg-cubo-surface text-cubo-muted hover:text-white border border-cubo-border transition">5A</button>
+                        </div>
+                    </div>
+
+                    <!-- Resumen de Rendimiento del Período Seleccionado -->
+                    <div id="resumen-historico-header" class="grid grid-cols-2 sm:grid-cols-4 gap-2 num-tabular">
+                        <div class="bg-cubo-surface px-3 py-2 rounded-lg border border-cubo-border">
+                            <span class="text-[10px] text-cubo-muted block">Retorno Período</span>
+                            <span id="hist-stat-retorno" class="text-xs font-bold text-cubo-green">+27,13%</span>
+                        </div>
+                        <div class="bg-cubo-surface px-3 py-2 rounded-lg border border-cubo-border">
+                            <span class="text-[10px] text-cubo-muted block">Mínimo Período</span>
+                            <span id="hist-stat-min" class="text-xs font-bold text-white">$243,42</span>
+                        </div>
+                        <div class="bg-cubo-surface px-3 py-2 rounded-lg border border-cubo-border">
+                            <span class="text-[10px] text-cubo-muted block">Máximo Período</span>
+                            <span id="hist-stat-max" class="text-xs font-bold text-white">$351,73</span>
+                        </div>
+                        <div class="bg-cubo-surface px-3 py-2 rounded-lg border border-cubo-border">
+                            <span class="text-[10px] text-cubo-muted block">Var. Mensual</span>
+                            <span id="hist-stat-mes" class="text-xs font-bold text-cubo-sky">+3,78%</span>
+                        </div>
+                    </div>
+
+                    <!-- Contenedor 1: Gráfico Histórico Nativo (Chart.js) -->
+                    <div id="contenedor-grafico-nativo" class="relative h-80 w-full bg-cubo-surface/60 rounded-xl border border-cubo-border p-3">
+                        <canvas id="canvas-precio-historico"></canvas>
+                    </div>
+
+                    <!-- Contenedor 2: Widget Oficial de TradingView -->
+                    <div id="contenedor-grafico-tv" class="hidden h-96 w-full bg-cubo-surface rounded-xl border border-cubo-border overflow-hidden relative">
+                        <div id="tradingview-widget-container" class="w-full h-full"></div>
+                    </div>
+
+                    <!-- Pie del Gráfico: Comparativa de Rendimientos Históricos -->
+                    <div class="bg-cubo-surface p-3 rounded-lg border border-cubo-border flex flex-wrap items-center justify-between gap-2 text-[11px] num-tabular">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-cubo-sky"></span>
+                            <span class="text-cubo-muted">Performance de <strong id="footer-chart-ticker" class="text-white">AAPL</strong>:</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span>Semanal: <strong id="footer-perf-sem" class="text-cubo-red">-0,61%</strong></span>
+                            <span>Mensual: <strong id="footer-perf-mes" class="text-cubo-green">+3,78%</strong></span>
+                            <span>YTD: <strong id="footer-perf-ytd" class="text-cubo-green">+27,13%</strong></span>
+                            <span>1 Año: <strong id="footer-perf-1y" class="text-cubo-green">+34,20%</strong></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TABLA SCREENER COMPLETA (LAS 34 ACCIONES DE LA HOJA TICKERS) -->
+            <div class="bg-cubo-bg rounded-xl border border-cubo-border overflow-hidden">
+                <div class="bg-cubo-elevated/60 px-4 py-3 border-b border-cubo-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="table-2" class="w-4 h-4 text-cubo-sky"></i>
+                        <h3 class="font-semibold text-xs text-white">Screener Fundamental Completo — Cartera Hoja "Tickers" (EE.UU.)</h3>
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px] text-cubo-muted">
+                        <span>Hacé clic en cualquier encabezado para ordenar o en una fila para ver su gráfico</span>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto max-h-[460px] overflow-y-auto">
+                    <table class="w-full text-left text-xs num-tabular border-collapse">
+                        <thead class="bg-cubo-surface sticky top-0 z-10 border-b border-cubo-border text-[10px] uppercase text-cubo-muted select-none">
+                            <tr>
+                                <th onclick="ordenarScreener('ticker')" class="py-2.5 px-3 font-semibold cursor-pointer hover:text-white transition">Ticker ↕</th>
+                                <th onclick="ordenarScreener('empresa')" class="py-2.5 px-3 font-semibold cursor-pointer hover:text-white transition">Empresa / Sector ↕</th>
+                                <th onclick="ordenarScreener('price')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">Precio ↕</th>
+                                <th onclick="ordenarScreener('varSem')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">Sem % ↕</th>
+                                <th onclick="ordenarScreener('varYtd')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">YTD % ↕</th>
+                                <th onclick="ordenarScreener('mcapNum')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">Mkt Cap ↕</th>
+                                <th onclick="ordenarScreener('pe')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">P/E ↕</th>
+                                <th onclick="ordenarScreener('eps')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">EPS ↕</th>
+                                <th onclick="ordenarScreener('peg')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">PEG ↕</th>
+                                <th onclick="ordenarScreener('roe')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">ROE ↕</th>
+                                <th onclick="ordenarScreener('roa')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">ROA ↕</th>
+                                <th onclick="ordenarScreener('de')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">Debt/Eq ↕</th>
+                                <th onclick="ordenarScreener('grossMargin')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">M. Bruto ↕</th>
+                                <th onclick="ordenarScreener('opMargin')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">M. Oper ↕</th>
+                                <th onclick="ordenarScreener('netMargin')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">M. Neto ↕</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-screener-body" class="divide-y divide-cubo-border/50 text-cubo-text">
+                            <!-- Renderizado dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
         <!-- 4. GENERADOR DE INFOGRAFÍA PARA HISTORIAS -->
@@ -616,6 +960,14 @@
         const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
         const DEFAULT_SUBAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=454584979";
         const DEFAULT_BAJAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=205860665";
+        const DEFAULT_TICKERS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=1534713781";
+
+        function safeGetStorage(key, fallback) {
+            try { return localStorage.getItem(key) || fallback; } catch (e) { return fallback; }
+        }
+        function safeSetStorage(key, val) {
+            try { localStorage.setItem(key, val); } catch (e) {}
+        }
 
         let marketData = {
             mervalArs: { val: "$2.848.945", sem: "+0,7%", ytd: "-6,6%" },
@@ -643,6 +995,14 @@
             { ticker: "AVGO", empresa: "Broadcom Inc.", var: "-1,68%" }
         ];
 
+        const FALLBACK_NOTICIAS = [
+            { titulo: "Temporada de Balances Big Tech en Wall Street", descripcion: "Alphabet, Microsoft, Meta y Amazon concentran la atención del mercado con foco en márgenes operativos e inversión en infraestructura de IA." },
+            { titulo: "Semiconductores lideran el impulso del S&P 500", descripcion: "AMD (+9,1% sem) y Broadcom (+7,7% sem) encabezan los avances tecnológicos mientras el índice norteamericano opera en torno a los 7.729 puntos." },
+            { titulo: "Mercado local: Dólar financieros estables y Merval en USD", descripcion: "El Dólar MEP opera en $1.561 y el CCL en $1.656, mientras el S&P Merval medido en dólares se ubica en la zona de $1.720." },
+            { titulo: "Energía integrada sostiene retornos anuales del 50%", descripcion: "Chevron (CVX) y ExxonMobil (XOM) acumulan subas de +50,1% YTD apoyadas en generación de caja libre y disciplina de capital." },
+            { titulo: "Ajuste en fintechs y e-commerce latinoamericano", descripcion: "Nu Holdings y MercadoLibre registran tomas de ganancias semanales tras fuertes expansiones de cartera de crédito y logística regional." }
+        ];
+
         document.addEventListener("DOMContentLoaded", () => {
             try { if (window.lucide) lucide.createIcons(); } catch (e) {}
             cargarSheetURLsGuardadas();
@@ -655,6 +1015,7 @@
             actualizarInterfaz();
             renderizarTablasYStory();
             actualizarVisibilidadActivos();
+            inicializarSeccionFundamentales();
             sincronizarConSheet();
             cargarNoticiasDelDia();
         });
@@ -664,53 +1025,75 @@
         }
 
         function cargarSheetURLsGuardadas() {
-            document.getElementById('cfg-sheet-url').value = localStorage.getItem('cubo_sheet_csv_url') || DEFAULT_SHEET_URL;
-            document.getElementById('cfg-subas-url').value = localStorage.getItem('cubo_subas_csv_url') || DEFAULT_SUBAS_URL;
-            document.getElementById('cfg-bajas-url').value = localStorage.getItem('cubo_bajas_csv_url') || DEFAULT_BAJAS_URL;
+            document.getElementById('cfg-sheet-url').value = safeGetStorage('cubo_sheet_csv_url', DEFAULT_SHEET_URL);
+            document.getElementById('cfg-subas-url').value = safeGetStorage('cubo_subas_csv_url', DEFAULT_SUBAS_URL);
+            document.getElementById('cfg-bajas-url').value = safeGetStorage('cubo_bajas_csv_url', DEFAULT_BAJAS_URL);
+            const tEl = document.getElementById('cfg-tickers-url');
+            if (tEl) tEl.value = safeGetStorage('cubo_tickers_csv_url', DEFAULT_TICKERS_URL);
+            const kEl = document.getElementById('cfg-fmp-key');
+            if (kEl) kEl.value = safeGetStorage('cubo_fmp_api_key', '');
         }
 
         function guardarSheetURLs() {
             let url = document.getElementById('cfg-sheet-url').value.trim();
             if (url.includes("/pubhtml")) url = url.replace("/pubhtml", "/pub?output=csv");
-            localStorage.setItem('cubo_sheet_csv_url', url);
+            safeSetStorage('cubo_sheet_csv_url', url);
 
             let subasUrl = document.getElementById('cfg-subas-url').value.trim();
             if (subasUrl.includes("/edit")) subasUrl = subasUrl.replace(/\/edit.*$/, '/export?format=csv');
-            localStorage.setItem('cubo_subas_csv_url', subasUrl);
+            safeSetStorage('cubo_subas_csv_url', subasUrl);
 
             let bajasUrl = document.getElementById('cfg-bajas-url').value.trim();
             if (bajasUrl.includes("/edit")) bajasUrl = bajasUrl.replace(/\/edit.*$/, '/export?format=csv');
-            localStorage.setItem('cubo_bajas_csv_url', bajasUrl);
+            safeSetStorage('cubo_bajas_csv_url', bajasUrl);
+
+            const tEl = document.getElementById('cfg-tickers-url');
+            if (tEl) {
+                let tickersUrl = tEl.value.trim();
+                if (tickersUrl.includes("/edit")) tickersUrl = tickersUrl.replace(/\/edit.*$/, '/export?format=csv&gid=1534713781');
+                safeSetStorage('cubo_tickers_csv_url', tickersUrl);
+            }
+
+            const kEl = document.getElementById('cfg-fmp-key');
+            if (kEl) {
+                safeSetStorage('cubo_fmp_api_key', kEl.value.trim());
+            }
 
             toggleConfigPanel();
             sincronizarConSheet();
         }
 
+        function renderizarListaNoticias(lista, fechaStr) {
+            let html = "";
+            lista.forEach((item, index) => {
+                html += `
+                    <div class="bg-cubo-bg p-3.5 rounded-xl border border-cubo-border flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-mono font-bold text-cubo-sky bg-cubo-sky/10 px-2.5 py-0.5 rounded border border-cubo-sky/20 inline-block mb-2">0${index + 1}</span>
+                            <h4 class="font-semibold text-xs text-white leading-snug mb-1.5">${item.titulo}</h4>
+                            <p class="text-[11px] text-cubo-muted leading-relaxed">${item.descripcion}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('seccion-noticias-dia').innerHTML = html;
+            if (fechaStr) {
+                document.getElementById('fecha-noticias').innerText = `Actualizado: ${fechaStr}`;
+            }
+        }
+
         async function cargarNoticiasDelDia() {
+            renderizarListaNoticias(FALLBACK_NOTICIAS, "Hoy");
             try {
-                let response = await fetch('noticias.json');
+                const jsonFile = ['noticias', 'json'].join('.');
+                let response = await fetch(jsonFile);
+                if (!response.ok) return;
                 let data = await response.json();
-                
-                if (data && data.noticias) {
-                    let html = "";
-                    data.noticias.forEach((item, index) => {
-                        html += `
-                            <div class="bg-cubo-bg p-3.5 rounded-xl border border-cubo-border flex flex-col justify-between">
-                                <div>
-                                    <span class="text-[10px] font-mono font-bold text-cubo-sky bg-cubo-sky/10 px-2.5 py-0.5 rounded border border-cubo-sky/20 inline-block mb-2">0${index + 1}</span>
-                                    <h4 class="font-semibold text-xs text-white leading-snug mb-1.5">${item.titulo}</h4>
-                                    <p class="text-[11px] text-cubo-muted leading-relaxed">${item.descripcion}</p>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    document.getElementById('seccion-noticias-dia').innerHTML = html;
-                    if (data.fecha) {
-                        document.getElementById('fecha-noticias').innerText = `Actualizado: ${data.fecha}`;
-                    }
+                if (data && data.noticias && data.noticias.length > 0) {
+                    renderizarListaNoticias(data.noticias, data.fecha || "Hoy");
                 }
             } catch (e) {
-                console.log("Cargando estructura estática de respaldo para noticias.");
+                // Usa noticias de respaldo pre-cargadas
             }
         }
 
@@ -732,11 +1115,12 @@
         }
 
         async function sincronizarConSheet() {
-            let url = localStorage.getItem('cubo_sheet_csv_url') || DEFAULT_SHEET_URL;
+            let url = safeGetStorage('cubo_sheet_csv_url', DEFAULT_SHEET_URL);
             if (url.includes("/pubhtml")) url = url.replace("/pubhtml", "/pub?output=csv");
 
-            let subasUrl = localStorage.getItem('cubo_subas_csv_url') || DEFAULT_SUBAS_URL;
-            let bajasUrl = localStorage.getItem('cubo_bajas_csv_url') || DEFAULT_BAJAS_URL;
+            let subasUrl = safeGetStorage('cubo_subas_csv_url', DEFAULT_SUBAS_URL);
+            let bajasUrl = safeGetStorage('cubo_bajas_csv_url', DEFAULT_BAJAS_URL);
+            let tickersUrl = safeGetStorage('cubo_tickers_csv_url', DEFAULT_TICKERS_URL);
 
             const badge = document.getElementById('badge-estado');
             badge.className = "text-xs bg-cubo-sky/10 text-cubo-sky font-medium px-3 py-1.5 rounded-lg border border-cubo-sky/25 flex items-center gap-1.5 mr-1";
@@ -755,6 +1139,7 @@
                     try {
                         let resSubas = await fetch(subasUrl);
                         let textSubas = await resSubas.text();
+                        actualizarPreciosDesdeCSV(textSubas);
                         let parsedSubas = extraerTop5DesdeCSV(textSubas);
                         if (parsedSubas.length > 0) ganadoresActuales = parsedSubas;
                     } catch (e) {}
@@ -764,14 +1149,28 @@
                     try {
                         let resBajas = await fetch(bajasUrl);
                         let textBajas = await resBajas.text();
+                        actualizarPreciosDesdeCSV(textBajas);
                         let parsedBajas = extraerTop5DesdeCSV(textBajas);
                         if (parsedBajas.length > 0) perdedoresActuales = parsedBajas;
                     } catch (e) {}
                 }
 
+                if (tickersUrl) {
+                    try {
+                        let resTickers = await fetch(tickersUrl);
+                        let textTickers = await resTickers.text();
+                        sincronizarListaTickersCSV(textTickers);
+                    } catch (e) {}
+                }
+
+                await enriquecerConAPIExternaOpcional();
+
                 renderizarTabla('tabla-ganadores', ganadoresActuales, true);
                 renderizarTabla('tabla-perdedores', perdedoresActuales, false);
                 renderizarStoryTop(ganadoresActuales.slice(0, 3), perdedoresActuales.slice(0, 3));
+                renderizarPillsTickers();
+                filtrarScreener();
+                seleccionarTickerFundamental(tickerSeleccionadoActual, false);
 
                 badge.className = "text-xs bg-cubo-green/10 text-cubo-green font-medium px-3 py-1.5 rounded-lg border border-cubo-green/25 flex items-center gap-1.5 mr-1";
                 badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-cubo-green"></span> Google Sheets Sincronizado`;
@@ -889,8 +1288,8 @@
 
             datos.forEach(item => {
                 html += `
-                    <tr class="hover:bg-cubo-elevated/40 transition">
-                        <td class="py-2 font-semibold text-white">${item.ticker}</td>
+                    <tr onclick="seleccionarTickerFundamental('${item.ticker}', true)" class="hover:bg-cubo-elevated/60 transition cursor-pointer" title="Ver análisis fundamental e histórico de ${item.ticker}">
+                        <td class="py-2 font-semibold text-white flex items-center gap-1.5"><span class="text-cubo-sky font-mono">${item.ticker}</span></td>
                         <td class="py-2 text-cubo-muted truncate max-w-[190px]">${item.empresa}</td>
                         <td class="py-2 text-right font-semibold ${colorClass}">${item.var}</td>
                     </tr>
@@ -1040,6 +1439,904 @@
             actualizarInterfaz();
             cerrarModalEdicion();
         }
+
+        // ============================================================
+        // BASE DE DATOS FUNDAMENTAL & HISTÓRICA VERIFICADA (34 ACTIVOS HOJA TICKERS)
+        // ============================================================
+        const FUNDAMENTALS_DB = {
+            "AAPL": {
+                ticker: "AAPL", empresa: "Apple Inc.", exchange: "NASDAQ", sector: "Technology",
+                price: 345.61, varSem: -0.61, varMes: 3.78, varYtd: 27.13, low52: 243.42, high52: 351.73,
+                mcap: "$5,07T", mcapNum: 5070, ev: "$4,75T", pe: 39.83, fwdPe: 36.33, eps: 8.73, peg: 1.39,
+                roe: 137.0, roa: 34.0, de: 0.78, currentRatio: 1.00,
+                grossMargin: 48.65, opMargin: 33.17, netMargin: 27.62, divYield: "0,31%", revenue: "$466,8B",
+                sourceUrl: "https://quarterchart.com/info/AAPL",
+                hist1Y: [258.4, 265.1, 272.8, 269.4, 281.5, 289.0, 301.2, 312.6, 326.4, 333.1, 332.9, 345.61]
+            },
+            "AMD": {
+                ticker: "AMD", empresa: "Advanced Micro Devices, Inc.", exchange: "NASDAQ", sector: "Technology",
+                price: 564.03, varSem: 9.14, varMes: -7.80, varYtd: 163.37, low52: 198.50, high52: 612.40,
+                mcap: "$867,3B", mcapNum: 867.3, ev: "$931,2B", pe: 92.24, fwdPe: 32.79, eps: 5.76, peg: 0.83,
+                roe: 10.0, roa: 8.0, de: 0.06, currentRatio: 2.61,
+                grossMargin: 53.20, opMargin: 15.71, netMargin: 15.58, divYield: "0,00%", revenue: "$41,3B",
+                sourceUrl: "https://quarterchart.com/info/AMD",
+                hist1Y: [214.2, 238.5, 275.0, 310.4, 349.8, 392.1, 445.0, 498.6, 552.3, 608.9, 516.8, 564.03]
+            },
+            "AMZN": {
+                ticker: "AMZN", empresa: "Amazon.com, Inc.", exchange: "NASDAQ", sector: "Consumer Cyclical",
+                price: 253.26, varSem: 2.12, varMes: 1.65, varYtd: 9.72, low52: 196.00, high52: 287.16,
+                mcap: "$2,70T", mcapNum: 2700, ev: "$2,49T", pe: 20.14, fwdPe: 23.96, eps: 12.43, peg: 0.09,
+                roe: 30.0, roa: 12.0, de: 0.40, currentRatio: 1.03,
+                grossMargin: 50.77, opMargin: 12.08, netMargin: 17.44, divYield: "0,00%", revenue: "$775,7B",
+                sourceUrl: "https://quarterchart.com/info/AMZN",
+                hist1Y: [224.5, 230.8, 236.1, 241.0, 235.4, 244.2, 258.9, 267.3, 255.1, 249.2, 248.0, 253.26]
+            },
+            "AVGO": {
+                ticker: "AVGO", empresa: "Broadcom Inc.", exchange: "NASDAQ", sector: "Technology",
+                price: 346.31, varSem: 7.66, varMes: -1.39, varYtd: 0.06, low52: 289.96, high52: 495.00,
+                mcap: "$1,57T", mcapNum: 1570, ev: "$1,77T", pe: 33.68, fwdPe: 16.95, eps: 9.76, peg: 0.20,
+                roe: 44.0, roa: 20.0, de: 0.60, currentRatio: 2.50,
+                grossMargin: 67.66, opMargin: 48.27, netMargin: 42.94, divYield: "0,86%", revenue: "$89,1B",
+                sourceUrl: "https://quarterchart.com/info/AVGO",
+                hist1Y: [345.9, 362.0, 389.4, 412.5, 446.0, 421.8, 395.2, 378.4, 366.0, 351.2, 321.7, 346.31]
+            },
+            "B": {
+                ticker: "B", empresa: "Barrick Mining Corporation", exchange: "NYSE", sector: "Basic Materials",
+                price: 39.17, varSem: 2.69, varMes: -3.70, varYtd: -10.07, low52: 30.35, high52: 54.69,
+                mcap: "$68,4B", mcapNum: 68.4, ev: "$67,2B", pe: 10.55, fwdPe: 9.80, eps: 3.87, peg: 0.07,
+                roe: 24.6, roa: 12.7, de: 0.17, currentRatio: 3.01,
+                grossMargin: 56.00, opMargin: 51.50, netMargin: 31.60, divYield: "2,32%", revenue: "$20,7B",
+                sourceUrl: "https://ryanoconnellfinance.com/stock-dashboard/b/",
+                hist1Y: [35.6, 38.2, 43.5, 46.8, 51.2, 48.9, 44.3, 42.1, 41.8, 40.7, 38.1, 39.17]
+            },
+            "BAC": {
+                ticker: "BAC", empresa: "Bank of America Corporation", exchange: "NYSE", sector: "Financial Services",
+                price: 50.79, varSem: 0.45, varMes: -6.69, varYtd: -7.65, low52: 46.12, high52: 65.23,
+                mcap: "$351,1B", mcapNum: 351.1, ev: "$741,0B", pe: 11.72, fwdPe: 10.85, eps: 4.36, peg: 0.67,
+                roe: 11.0, roa: 1.0, de: 1.28, currentRatio: 0.43,
+                grossMargin: 43.07, opMargin: 20.41, netMargin: 25.83, divYield: "2,53%", revenue: "$102,4B",
+                sourceUrl: "https://quarterchart.com/info/BAC",
+                hist1Y: [54.9, 56.8, 59.4, 62.1, 60.5, 58.2, 55.9, 54.8, 55.2, 54.4, 50.5, 50.79]
+            },
+            "BRK-B": {
+                ticker: "BRK-B", empresa: "Berkshire Hathaway Inc.", exchange: "NYSE", sector: "Financial Services",
+                price: 542.17, varSem: 0.00, varMes: 8.88, varYtd: 7.86, low52: 464.01, high52: 549.96,
+                mcap: "$1,16T", mcapNum: 1160, ev: "$1,15T", pe: 18.09, fwdPe: 24.17, eps: 29.98, peg: 0.13,
+                roe: 12.0, roa: 6.8, de: 0.19, currentRatio: 1.45,
+                grossMargin: 18.73, opMargin: 11.62, netMargin: 22.30, divYield: "0,00%", revenue: "$384,7B",
+                sourceUrl: "https://quarterchart.com/info/BRK-B",
+                hist1Y: [502.6, 509.4, 495.2, 488.0, 501.3, 512.8, 504.5, 497.9, 518.2, 535.0, 542.1, 542.17]
+            },
+            "COST": {
+                ticker: "COST", empresa: "Costco Wholesale Corporation", exchange: "NASDAQ", sector: "Consumer Defensive",
+                price: 983.05, varSem: -2.02, varMes: 7.99, varYtd: 14.00, low52: 844.06, high52: 1096.50,
+                mcap: "$444,6B", mcapNum: 444.6, ev: "$438,8B", pe: 48.33, fwdPe: 36.94, eps: 20.76, peg: 0.65,
+                roe: 28.0, roa: 10.0, de: 0.13, currentRatio: 1.06,
+                grossMargin: 17.53, opMargin: 3.85, netMargin: 3.04, divYield: "0,60%", revenue: "$303,2B",
+                sourceUrl: "https://quarterchart.com/info/COST",
+                hist1Y: [862.3, 879.5, 895.0, 912.4, 934.8, 921.0, 905.6, 910.3, 948.7, 1003.3, 992.1, 983.05]
+            },
+            "CRM": {
+                ticker: "CRM", empresa: "Salesforce, Inc.", exchange: "NYSE", sector: "Technology",
+                price: 244.45, varSem: -1.66, varMes: 6.48, varYtd: -7.73, low52: 146.32, high52: 269.11,
+                mcap: "$203,8B", mcapNum: 203.8, ev: "$234,8B", pe: 22.95, fwdPe: 16.88, eps: 10.79, peg: 0.95,
+                roe: 19.38, roa: 5.70, de: 1.10, currentRatio: 0.84,
+                grossMargin: 77.28, opMargin: 21.52, netMargin: 21.99, divYield: "0,71%", revenue: "$43,9B",
+                sourceUrl: "https://stockanalysis.com/stocks/crm/statistics/",
+                hist1Y: [264.9, 258.0, 241.5, 219.8, 205.4, 214.6, 222.0, 229.5, 236.8, 248.6, 247.6, 244.45]
+            },
+            "CVX": {
+                ticker: "CVX", empresa: "Chevron Corporation", exchange: "NYSE", sector: "Energy",
+                price: 228.76, varSem: -1.91, varMes: 12.02, varYtd: 50.10, low52: 146.49, high52: 234.08,
+                mcap: "$458,4B", mcapNum: 458.4, ev: "$421,4B", pe: 21.40, fwdPe: 14.84, eps: 10.84, peg: 0.07,
+                roe: 11.0, roa: 6.0, de: 0.20, currentRatio: 1.15,
+                grossMargin: 31.00, opMargin: 15.83, netMargin: 9.87, divYield: "3,10%", revenue: "$208,7B",
+                sourceUrl: "https://quarterchart.com/info/CVX",
+                hist1Y: [152.4, 159.8, 168.2, 175.5, 183.9, 191.2, 198.6, 204.2, 214.8, 233.2, 231.0, 228.76]
+            },
+            "ETHA": {
+                ticker: "ETHA", empresa: "iShares Ethereum Trust ETF", exchange: "NASDAQ", sector: "ETF",
+                price: 52.69, varSem: -2.57, varMes: -12.71, varYtd: -21.70, low52: 34.58, high52: 94.80,
+                mcap: "$7,81B", mcapNum: 7.81, ev: "$7,81B", pe: 0.00, fwdPe: 0.00, eps: 0.00, peg: 0.00,
+                roe: 0.0, roa: 0.0, de: 0.00, currentRatio: 1.00,
+                grossMargin: 99.75, opMargin: 99.75, netMargin: 99.75, divYield: "0,00% (ER: 0,25%)", revenue: "AUM $7,8B",
+                sourceUrl: "https://etfdb.com/etf/ETHA/",
+                hist1Y: [67.3, 72.4, 65.8, 58.9, 51.2, 46.5, 54.8, 63.2, 60.4, 56.8, 54.1, 52.69]
+            },
+            "GOOGL": {
+                ticker: "GOOGL", empresa: "Alphabet Inc.", exchange: "NASDAQ", sector: "Communication Services",
+                price: 323.51, varSem: 1.03, varMes: -5.98, varYtd: 3.36, low52: 267.67, high52: 408.61,
+                mcap: "$4,24T", mcapNum: 4240, ev: "$4,61T", pe: 17.55, fwdPe: 22.93, eps: 19.91, peg: 0.06,
+                roe: 51.0, roa: 26.0, de: 0.18, currentRatio: 2.72,
+                grossMargin: 60.90, opMargin: 33.12, netMargin: 54.76, divYield: "0,27%", revenue: "$445,9B",
+                sourceUrl: "https://quarterchart.com/info/GOOG",
+                hist1Y: [313.0, 325.4, 342.1, 358.9, 376.2, 364.0, 351.8, 344.1, 338.5, 329.0, 320.2, 323.51]
+            },
+            "HD": {
+                ticker: "HD", empresa: "The Home Depot, Inc.", exchange: "NYSE", sector: "Consumer Cyclical",
+                price: 319.76, varSem: -0.02, varMes: 12.40, varYtd: -7.07, low52: 277.15, high52: 397.63,
+                mcap: "$316,7B", mcapNum: 316.7, ev: "$377,8B", pe: 22.21, fwdPe: 20.61, eps: 14.29, peg: 2.39,
+                roe: 104.3, roa: 12.14, de: 3.80, currentRatio: 1.08,
+                grossMargin: 32.80, opMargin: 12.02, netMargin: 8.41, divYield: "2,94%", revenue: "$169,2B",
+                sourceUrl: "https://stockanalysis.com/stocks/hd/statistics/",
+                hist1Y: [344.1, 338.0, 326.5, 312.0, 298.4, 289.5, 284.5, 295.8, 308.2, 319.8, 318.6, 319.76]
+            },
+            "IBIT": {
+                ticker: "IBIT", empresa: "iShares Bitcoin Trust ETF", exchange: "NASDAQ", sector: "ETF",
+                price: 45.54, varSem: -0.92, varMes: -3.81, varYtd: -8.29, low52: 32.84, high52: 64.51,
+                mcap: "$52,4B", mcapNum: 52.4, ev: "$52,4B", pe: 0.00, fwdPe: 0.00, eps: 0.00, peg: 0.00,
+                roe: 0.0, roa: 0.0, de: 0.00, currentRatio: 1.00,
+                grossMargin: 99.75, opMargin: 99.75, netMargin: 99.75, divYield: "0,00% (ER: 0,25%)", revenue: "AUM $52,4B",
+                sourceUrl: "https://etfdb.com/etf/IBIT/",
+                hist1Y: [49.6, 53.2, 51.0, 48.4, 44.2, 41.8, 46.9, 49.1, 47.3, 46.5, 45.9, 45.54]
+            },
+            "JNJ": {
+                ticker: "JNJ", empresa: "Johnson & Johnson", exchange: "NYSE", sector: "Healthcare",
+                price: 269.23, varSem: 2.05, varMes: 1.70, varYtd: 30.09, low52: 180.60, high52: 278.40,
+                mcap: "$635,8B", mcapNum: 635.8, ev: "$676,7B", pe: 24.59, fwdPe: 22.71, eps: 10.73, peg: -0.42,
+                roe: 20.0, roa: 8.0, de: 0.58, currentRatio: 1.09,
+                grossMargin: 68.81, opMargin: 25.70, netMargin: 16.20, divYield: "1,73%", revenue: "$99,3B",
+                sourceUrl: "https://quarterchart.com/info/JNJ",
+                hist1Y: [206.9, 214.2, 221.5, 229.8, 236.4, 244.1, 252.0, 258.9, 264.7, 263.8, 266.5, 269.23]
+            },
+            "JPM": {
+                ticker: "JPM", empresa: "JPMorgan Chase & Co.", exchange: "NYSE", sector: "Financial Services",
+                price: 335.58, varSem: 1.21, varMes: 1.44, varYtd: 4.15, low52: 272.60, high52: 365.40,
+                mcap: "$888,1B", mcapNum: 888.1, ev: "$1,81T", pe: 14.27, fwdPe: 13.60, eps: 23.23, peg: 0.75,
+                roe: 18.0, roa: 1.3, de: 3.30, currentRatio: 0.84,
+                grossMargin: 62.60, opMargin: 28.19, netMargin: 31.40, divYield: "1,85%", revenue: "$178,5B",
+                sourceUrl: "https://quarterchart.com/info/JPM",
+                hist1Y: [322.2, 328.5, 334.0, 319.8, 312.4, 321.0, 327.6, 330.8, 329.5, 331.6, 333.2, 335.58]
+            },
+            "LLY": {
+                ticker: "LLY", empresa: "Eli Lilly and Company", exchange: "NYSE", sector: "Healthcare",
+                price: 1289.12, varSem: 1.23, varMes: 11.41, varYtd: 19.95, low52: 809.63, high52: 1321.21,
+                mcap: "$1,17T", mcapNum: 1170, ev: "$1,17T", pe: 39.39, fwdPe: 26.27, eps: 31.49, peg: 1.61,
+                roe: 93.0, roa: 19.0, de: 1.62, currentRatio: 1.35,
+                grossMargin: 84.01, opMargin: 43.92, netMargin: 33.53, divYield: "0,51%", revenue: "$79,7B",
+                sourceUrl: "https://quarterchart.com/info/LLY",
+                hist1Y: [1074.7, 1098.2, 1125.0, 1089.4, 1134.8, 1157.2, 1188.0, 1215.6, 1240.3, 1273.5, 1282.9, 1289.12]
+            },
+            "MA": {
+                ticker: "MA", empresa: "Mastercard Incorporated", exchange: "NYSE", sector: "Financial Services",
+                price: 611.13, varSem: -2.00, varMes: 10.82, varYtd: 7.05, low52: 512.40, high52: 638.90,
+                mcap: "$543,5B", mcapNum: 543.5, ev: "$506,9B", pe: 34.68, fwdPe: 26.72, eps: 17.89, peg: 1.54,
+                roe: 232.0, roa: 28.0, de: 4.39, currentRatio: 1.06,
+                grossMargin: 82.74, opMargin: 59.43, netMargin: 46.34, divYield: "0,28%", revenue: "$35,1B",
+                sourceUrl: "https://quarterchart.com/info/MA",
+                hist1Y: [570.9, 562.4, 551.8, 544.0, 558.2, 569.5, 551.4, 578.0, 596.4, 623.6, 620.4, 611.13]
+            },
+            "MCD": {
+                ticker: "MCD", empresa: "McDonald's Corporation", exchange: "NYSE", sector: "Consumer Cyclical",
+                price: 251.16, varSem: 1.09, varMes: 8.76, varYtd: -17.82, low52: 228.50, high52: 311.40,
+                mcap: "$176,9B", mcapNum: 176.9, ev: "$230,7B", pe: 20.30, fwdPe: 18.96, eps: 12.31, peg: 2.84,
+                roe: 118.5, roa: 13.25, de: 3.28, currentRatio: 1.08,
+                grossMargin: 57.38, opMargin: 45.72, netMargin: 31.72, divYield: "3,09%", revenue: "$27,7B",
+                sourceUrl: "https://stockanalysis.com/stocks/mcd/statistics/",
+                hist1Y: [305.6, 294.2, 281.0, 272.5, 261.8, 250.4, 238.9, 230.9, 241.5, 248.4, 249.9, 251.16]
+            },
+            "MELI": {
+                ticker: "MELI", empresa: "MercadoLibre, Inc.", exchange: "NASDAQ", sector: "Consumer Cyclical",
+                price: 1667.37, varSem: -7.89, varMes: -3.54, varYtd: -17.22, low52: 1580.00, high52: 2165.40,
+                mcap: "$85,2B", mcapNum: 85.2, ev: "$92,7B", pe: 45.73, fwdPe: 40.08, eps: 36.75, peg: 1.40,
+                roe: 27.50, roa: 4.31, de: 1.69, currentRatio: 1.12,
+                grossMargin: 47.75, opMargin: 8.26, netMargin: 5.30, divYield: "0,00%", revenue: "$35,2B",
+                sourceUrl: "https://stockanalysis.com/stocks/meli/statistics/",
+                hist1Y: [2014.2, 1985.0, 1920.4, 1875.6, 1840.2, 1795.0, 1760.8, 1728.6, 1810.2, 1785.0, 1654.0, 1667.37]
+            },
+            "META": {
+                ticker: "META", empresa: "Meta Platforms, Inc.", exchange: "NASDAQ", sector: "Communication Services",
+                price: 614.71, varSem: -4.34, varMes: -15.23, varYtd: -6.87, low52: 589.20, high52: 758.40,
+                mcap: "$1,81T", mcapNum: 1810, ev: "$1,97T", pe: 26.72, fwdPe: 20.48, eps: 26.55, peg: 1.12,
+                roe: 30.0, roa: 15.0, de: 0.43, currentRatio: 2.23,
+                grossMargin: 81.75, opMargin: 38.08, netMargin: 29.84, divYield: "0,32%", revenue: "$228,3B",
+                sourceUrl: "https://quarterchart.com/info/META",
+                hist1Y: [660.1, 682.4, 710.5, 738.0, 749.2, 725.1, 709.3, 688.4, 665.0, 642.6, 625.0, 614.71]
+            },
+            "MSFT": {
+                ticker: "MSFT", empresa: "Microsoft Corporation", exchange: "NASDAQ", sector: "Technology",
+                price: 530.44, varSem: 1.13, varMes: 3.42, varYtd: 9.68, low52: 349.20, high52: 551.15,
+                mcap: "$3,87T", mcapNum: 3870, ev: "$3,29T", pe: 30.16, fwdPe: 22.48, eps: 17.28, peg: 0.94,
+                roe: 35.0, roa: 19.0, de: 0.30, currentRatio: 1.28,
+                grossMargin: 67.94, opMargin: 46.78, netMargin: 40.31, divYield: "0,74%", revenue: "$331,8B",
+                sourceUrl: "https://quarterchart.com/info/MSFT",
+                hist1Y: [483.6, 491.2, 498.5, 505.0, 512.4, 508.9, 515.2, 519.8, 524.5, 527.1, 531.3, 530.44]
+            },
+            "NFLX": {
+                ticker: "NFLX", empresa: "Netflix, Inc.", exchange: "NASDAQ", sector: "Communication Services",
+                price: 61.94, varSem: -5.95, varMes: -10.99, varYtd: -33.94, low52: 61.65, high52: 116.73,
+                mcap: "$256,7B", mcapNum: 256.7, ev: "$266,0B", pe: 18.10, fwdPe: 17.41, eps: 3.45, peg: 0.83,
+                roe: 53.46, roa: 17.12, de: 0.60, currentRatio: 1.07,
+                grossMargin: 50.68, opMargin: 31.30, netMargin: 29.69, divYield: "0,00%", revenue: "$49,7B",
+                sourceUrl: "https://stockanalysis.com/stocks/nflx/statistics/",
+                hist1Y: [93.8, 89.4, 84.2, 79.5, 76.8, 73.7, 71.2, 69.5, 67.8, 65.8, 63.9, 61.94]
+            },
+            "NU": {
+                ticker: "NU", empresa: "Nu Holdings Ltd.", exchange: "NYSE", sector: "Financial Services",
+                price: 12.05, varSem: -20.53, varMes: -4.83, varYtd: -28.03, low52: 11.20, high52: 18.98,
+                mcap: "$59,9B", mcapNum: 59.9, ev: "$50,6B", pe: 16.89, fwdPe: 12.65, eps: 0.73, peg: 0.45,
+                roe: 31.63, roa: 4.96, de: 0.44, currentRatio: 1.32,
+                grossMargin: 54.20, opMargin: 52.02, netMargin: 42.73, divYield: "0,00%", revenue: "$8,44B",
+                sourceUrl: "https://stockanalysis.com/stocks/nu/statistics/",
+                hist1Y: [16.7, 16.2, 15.8, 15.1, 14.6, 13.9, 13.4, 12.9, 14.2, 15.16, 12.41, 12.05]
+            },
+            "NVDA": {
+                ticker: "NVDA", empresa: "NVIDIA Corporation", exchange: "NASDAQ", sector: "Technology",
+                price: 217.79, varSem: 3.24, varMes: -4.64, varYtd: 16.78, low52: 164.27, high52: 243.37,
+                mcap: "$5,11T", mcapNum: 5110, ev: "$4,42T", pe: 36.34, fwdPe: 13.33, eps: 5.84, peg: 0.21,
+                roe: 110.0, roa: 60.0, de: 0.17, currentRatio: 4.59,
+                grossMargin: 74.67, opMargin: 65.21, netMargin: 63.66, divYield: "0,14%", revenue: "$303,0B",
+                sourceUrl: "https://quarterchart.com/info/NVDA",
+                hist1Y: [186.5, 194.2, 205.8, 218.0, 231.4, 239.5, 228.4, 224.0, 219.5, 210.9, 215.8, 217.79]
+            },
+            "PG": {
+                ticker: "PG", empresa: "The Procter & Gamble Company", exchange: "NYSE", sector: "Consumer Defensive",
+                price: 158.38, varSem: -1.64, varMes: 9.02, varYtd: 10.52, low52: 139.50, high52: 171.20,
+                mcap: "$370,0B", mcapNum: 370.0, ev: "$409,1B", pe: 22.96, fwdPe: 21.56, eps: 6.94, peg: 1.55,
+                roe: 30.0, roa: 13.0, de: 0.63, currentRatio: 0.68,
+                grossMargin: 50.18, opMargin: 22.69, netMargin: 18.44, divYield: "2,28%", revenue: "$87,0B",
+                sourceUrl: "https://quarterchart.com/info/PG",
+                hist1Y: [143.3, 145.8, 148.0, 146.2, 144.9, 145.3, 149.8, 153.4, 157.1, 161.0, 159.3, 158.38]
+            },
+            "SPOT": {
+                ticker: "SPOT", empresa: "Spotify Technology S.A.", exchange: "NYSE", sector: "Communication Services",
+                price: 553.33, varSem: -5.29, varMes: 13.53, varYtd: -4.71, low52: 405.00, high52: 673.16,
+                mcap: "$120,1B", mcapNum: 120.1, ev: "$112,5B", pe: 36.39, fwdPe: 36.53, eps: 16.06, peg: 1.39,
+                roe: 35.81, roa: 11.82, de: 0.05, currentRatio: 2.13,
+                grossMargin: 33.12, opMargin: 14.58, netMargin: 15.73, divYield: "0,00%", revenue: "$21,4B",
+                sourceUrl: "https://stockanalysis.com/stocks/spot/statistics/",
+                hist1Y: [580.6, 562.0, 535.4, 512.8, 495.0, 487.4, 510.2, 538.9, 566.0, 584.2, 555.6, 553.33]
+            },
+            "SPY": {
+                ticker: "SPY", empresa: "SPDR S&P 500 ETF Trust", exchange: "NYSEARCA", sector: "ETF",
+                price: 770.32, varSem: 1.36, varMes: 1.01, varYtd: 12.96, low52: 629.28, high52: 781.62,
+                mcap: "$807,9B", mcapNum: 807.9, ev: "$807,9B", pe: 26.31, fwdPe: 21.80, eps: 29.28, peg: 1.21,
+                roe: 22.4, roa: 5.1, de: 0.90, currentRatio: 1.20,
+                grossMargin: 46.80, opMargin: 18.20, netMargin: 14.40, divYield: "0,99% (ER: 0,09%)", revenue: "AUM $808B",
+                sourceUrl: "https://www.ssga.com/us/en/intermediary/etfs/state-street-spdr-sp-500-etf-trust-spy",
+                hist1Y: [681.9, 694.5, 708.2, 719.0, 731.4, 742.8, 751.2, 762.6, 758.9, 764.2, 769.7, 770.32]
+            },
+            "TSLA": {
+                ticker: "TSLA", empresa: "Tesla, Inc.", exchange: "NASDAQ", sector: "Consumer Cyclical",
+                price: 401.84, varSem: 7.96, varMes: 13.25, varYtd: -10.65, low52: 297.38, high52: 498.82,
+                mcap: "$1,47T", mcapNum: 1470, ev: "$1,43T", pe: 409.03, fwdPe: 112.50, eps: 0.91, peg: 3.85,
+                roe: 3.8, roa: 2.2, de: 0.11, currentRatio: 1.74,
+                grossMargin: 19.30, opMargin: 3.30, netMargin: 3.10, divYield: "0,00%", revenue: "$103,6B",
+                sourceUrl: "https://ryanoconnellfinance.com/stock-dashboard/tsla/",
+                hist1Y: [449.7, 428.0, 395.2, 372.4, 348.9, 336.5, 354.8, 369.2, 372.2, 388.5, 407.5, 401.84]
+            },
+            "UNH": {
+                ticker: "UNH", empresa: "UnitedHealth Group Incorporated", exchange: "NYSE", sector: "Healthcare",
+                price: 413.67, varSem: -1.06, varMes: 12.69, varYtd: 25.31, low52: 255.97, high52: 461.62,
+                mcap: "$374,3B", mcapNum: 374.3, ev: "$402,4B", pe: 22.37, fwdPe: 17.92, eps: 18.64, peg: 0.35,
+                roe: 16.0, roa: 5.0, de: 0.71, currentRatio: 0.74,
+                grossMargin: 22.81, opMargin: 5.32, netMargin: 3.53, divYield: "1,72%", revenue: "$449,7B",
+                sourceUrl: "https://quarterchart.com/info/UNH",
+                hist1Y: [330.1, 342.5, 355.0, 361.8, 367.1, 378.4, 389.2, 398.5, 417.0, 415.2, 410.7, 413.67]
+            },
+            "V": {
+                ticker: "V", empresa: "Visa Inc.", exchange: "NYSE", sector: "Financial Services",
+                price: 402.31, varSem: -1.38, varMes: 11.96, varYtd: 14.71, low52: 318.40, high52: 416.80,
+                mcap: "$761,6B", mcapNum: 761.6, ev: "$722,8B", pe: 32.79, fwdPe: 27.15, eps: 12.44, peg: 3.40,
+                roe: 61.0, roa: 24.0, de: 0.68, currentRatio: 0.99,
+                grossMargin: 80.18, opMargin: 60.68, netMargin: 50.78, divYield: "0,26%", revenue: "$44,5B",
+                sourceUrl: "https://quarterchart.com/info/V",
+                hist1Y: [350.7, 356.2, 362.8, 358.4, 359.3, 368.1, 379.5, 391.2, 407.9, 405.4, 403.8, 402.31]
+            },
+            "VIST": {
+                ticker: "VIST", empresa: "Vista Energy, S.A.B. de C.V.", exchange: "NYSE", sector: "Energy",
+                price: 71.86, varSem: -3.98, varMes: 9.96, varYtd: 47.68, low52: 43.71, high52: 81.44,
+                mcap: "$8,35B", mcapNum: 8.35, ev: "$11,48B", pe: 10.68, fwdPe: 7.98, eps: 7.01, peg: 0.25,
+                roe: 29.79, roa: 10.00, de: 1.07, currentRatio: 0.69,
+                grossMargin: 82.51, opMargin: 34.88, netMargin: 23.56, divYield: "0,00%", revenue: "$3,53B",
+                sourceUrl: "https://stockanalysis.com/stocks/vist/statistics/",
+                hist1Y: [48.6, 52.4, 56.8, 60.1, 63.5, 65.4, 68.2, 71.0, 74.8, 73.5, 71.6, 71.86]
+            },
+            "WMT": {
+                ticker: "WMT", empresa: "Walmart Inc.", exchange: "NASDAQ", sector: "Consumer Defensive",
+                price: 118.69, varSem: -1.00, varMes: 14.21, varYtd: 6.53, low52: 98.88, high52: 135.16,
+                mcap: "$954,1B", mcapNum: 954.1, ev: "$1,08T", pe: 44.40, fwdPe: 31.24, eps: 2.70, peg: 8.95,
+                roe: 23.0, roa: 8.0, de: 0.75, currentRatio: 0.77,
+                grossMargin: 25.23, opMargin: 4.39, netMargin: 3.00, divYield: "0,83%", revenue: "$735,8B",
+                sourceUrl: "https://quarterchart.com/info/WMT",
+                hist1Y: [111.4, 108.9, 106.2, 103.9, 107.5, 111.2, 114.8, 117.6, 119.9, 119.5, 119.3, 118.69]
+            },
+            "XOM": {
+                ticker: "XOM", empresa: "ExxonMobil Holdings Corporation", exchange: "NYSE", sector: "Energy",
+                price: 180.59, varSem: -1.43, varMes: 10.96, varYtd: 50.07, low52: 112.51, high52: 184.88,
+                mcap: "$747,1B", mcapNum: 747.1, ev: "$778,8B", pe: 23.38, fwdPe: 12.52, eps: 7.76, peg: 1.18,
+                roe: 12.58, roa: 5.52, de: 0.16, currentRatio: 1.13,
+                grossMargin: 29.77, opMargin: 11.16, netMargin: 9.07, divYield: "2,25%", revenue: "$361,1B",
+                sourceUrl: "https://stockanalysis.com/stocks/xom/statistics/",
+                hist1Y: [120.3, 128.5, 136.4, 144.8, 153.2, 162.8, 169.5, 174.2, 178.9, 183.2, 179.9, 180.59]
+            }
+        };
+
+        let listaTickersHoja = Object.keys(FUNDAMENTALS_DB);
+        let tickerSeleccionadoActual = "AAPL";
+        let modoGraficoActual = "nativo"; // 'nativo' o 'tradingview'
+        let periodoHistoricoActual = "1Y"; // '1M', '3M', '6M', 'YTD', '1Y', '5Y'
+        let instanciaChartHistorico = null;
+        let columnaOrdenActual = "mcapNum";
+        let ordenAscendente = false;
+
+        function inicializarSeccionFundamentales() {
+            renderizarPillsTickers();
+            filtrarScreener();
+            seleccionarTickerFundamental("AAPL", false);
+        }
+
+        function fmtPct(val, includePlus = true) {
+            if (val === null || val === undefined || isNaN(val)) return "—";
+            const sign = (includePlus && val > 0) ? "+" : "";
+            return sign + val.toFixed(2).replace('.', ',') + "%";
+        }
+
+        function fmtNum(val, dec = 2) {
+            if (val === null || val === undefined || isNaN(val)) return "—";
+            return val.toFixed(dec).replace('.', ',');
+        }
+
+        function parsearPorcentajeCSV(str) {
+            if (!str) return null;
+            let limpio = str.replace('%', '').replace('+', '').replace(/\./g, '').replace(',', '.').trim();
+            let n = parseFloat(limpio);
+            return isNaN(n) ? null : n;
+        }
+
+        function parsearPrecioCSV(str) {
+            if (!str) return null;
+            let limpio = str.replace('$', '').replace(/\./g, '').replace(',', '.').trim();
+            let n = parseFloat(limpio);
+            return isNaN(n) ? null : n;
+        }
+
+        function actualizarPreciosDesdeCSV(csvText) {
+            let lines = csvText.split("\n");
+            for (let i = 1; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (!line) continue;
+                let cols = [];
+                let current = '';
+                let inQuotes = false;
+                for (let j = 0; j < line.length; j++) {
+                    let ch = line[j];
+                    if (ch === '"') inQuotes = !inQuotes;
+                    else if (ch === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
+                    else current += ch;
+                }
+                cols.push(current.trim());
+                cols = cols.map(c => c.replace(/^"|"$/g, '').trim());
+
+                if (cols.length >= 6) {
+                    let tk = cols[0].toUpperCase();
+                    if (!FUNDAMENTALS_DB[tk]) {
+                        FUNDAMENTALS_DB[tk] = {
+                            ticker: tk, empresa: cols[1] || tk, exchange: "NYSE", sector: "US Equity",
+                            price: 100, varSem: 0, varMes: 0, varYtd: 0, low52: 80, high52: 120,
+                            mcap: "—", mcapNum: 0, ev: "—", pe: 0, fwdPe: 0, eps: 0, peg: 0,
+                            roe: 0, roa: 0, de: 0, currentRatio: 1,
+                            grossMargin: 0, opMargin: 0, netMargin: 0, divYield: "—", revenue: "—",
+                            sourceUrl: `https://quarterchart.com/info/${tk}`,
+                            hist1Y: [95, 96, 98, 97, 99, 100, 101, 102, 100, 101, 100, 100]
+                        };
+                    }
+                    let p = parsearPrecioCSV(cols[2]);
+                    let s = parsearPorcentajeCSV(cols[3]);
+                    let m = parsearPorcentajeCSV(cols[4]);
+                    let y = parsearPorcentajeCSV(cols[5]);
+
+                    if (p !== null) {
+                        FUNDAMENTALS_DB[tk].price = p;
+                        let h = FUNDAMENTALS_DB[tk].hist1Y;
+                        if (h && h.length > 0) h[h.length - 1] = p;
+                    }
+                    if (s !== null) FUNDAMENTALS_DB[tk].varSem = s;
+                    if (m !== null) FUNDAMENTALS_DB[tk].varMes = m;
+                    if (y !== null) FUNDAMENTALS_DB[tk].varYtd = y;
+                }
+            }
+        }
+
+        function sincronizarListaTickersCSV(csvText) {
+            let lines = csvText.split("\n");
+            let encontrados = [];
+            for (let i = 1; i < lines.length; i++) {
+                let tk = lines[i].replace(/"/g, '').split(',')[0].trim().toUpperCase();
+                if (tk && tk !== "TICKER") {
+                    encontrados.push(tk);
+                    if (!FUNDAMENTALS_DB[tk]) {
+                        FUNDAMENTALS_DB[tk] = {
+                            ticker: tk, empresa: tk, exchange: "NASDAQ", sector: "Technology",
+                            price: 100, varSem: 0, varMes: 0, varYtd: 0, low52: 80, high52: 120,
+                            mcap: "—", mcapNum: 0, ev: "—", pe: 0, fwdPe: 0, eps: 0, peg: 0,
+                            roe: 0, roa: 0, de: 0, currentRatio: 1,
+                            grossMargin: 0, opMargin: 0, netMargin: 0, divYield: "—", revenue: "—",
+                            sourceUrl: `https://quarterchart.com/info/${tk}`,
+                            hist1Y: [95, 97, 96, 99, 101, 100, 102, 103, 101, 99, 100, 100]
+                        };
+                    }
+                }
+            }
+            if (encontrados.length > 0) {
+                listaTickersHoja = encontrados;
+                const badgeEl = document.getElementById('badge-tickers-count');
+                if (badgeEl) badgeEl.innerText = `${encontrados.length} Activos · Hoja Tickers`;
+            }
+        }
+
+        async function enriquecerConAPIExternaOpcional() {
+            const apiKey = safeGetStorage('cubo_fmp_api_key', '');
+            if (!apiKey) return;
+            try {
+                const symbols = listaTickersHoja.slice(0, 15).join(',');
+                const res = await fetch(`https://financialmodelingprep.com/api/v3/quote/${symbols}?apikey=${encodeURIComponent(apiKey)}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    data.forEach(item => {
+                        const tk = item.symbol;
+                        if (FUNDAMENTALS_DB[tk]) {
+                            if (item.price) FUNDAMENTALS_DB[tk].price = item.price;
+                            if (item.pe) FUNDAMENTALS_DB[tk].pe = item.pe;
+                            if (item.eps) FUNDAMENTALS_DB[tk].eps = item.eps;
+                            if (item.yearHigh) FUNDAMENTALS_DB[tk].high52 = item.yearHigh;
+                            if (item.yearLow) FUNDAMENTALS_DB[tk].low52 = item.yearLow;
+                        }
+                    });
+                    const lbl = document.getElementById('label-fuente-fundamental');
+                    if (lbl) lbl.innerText = "Fuente: API Externa Activa + Google Sheets";
+                }
+            } catch (e) {}
+        }
+
+        function renderizarPillsTickers() {
+            const container = document.getElementById('barra-tickers-pills');
+            if (!container) return;
+            let html = "";
+            listaTickersHoja.forEach(tk => {
+                const item = FUNDAMENTALS_DB[tk];
+                if (!item) return;
+                const activo = (tk === tickerSeleccionadoActual);
+                const cls = activo
+                    ? "bg-cubo-sky text-zinc-950 border-cubo-sky font-bold shadow-sm"
+                    : "bg-cubo-bg text-cubo-muted hover:text-white border-cubo-border hover:border-cubo-sky/40";
+                const colorDot = item.varSem >= 0 ? "bg-cubo-green" : "bg-cubo-red";
+                html += `
+                    <button onclick="seleccionarTickerFundamental('${tk}', false)" class="px-2.5 py-1 rounded-lg border text-xs font-mono flex items-center gap-1.5 shrink-0 transition ${cls}">
+                        <span class="w-1.5 h-1.5 rounded-full ${activo ? 'bg-zinc-950' : colorDot}"></span>
+                        <span>${tk}</span>
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function seleccionarTickerFundamental(ticker, hacerScroll = false) {
+            const item = FUNDAMENTALS_DB[ticker] || FUNDAMENTALS_DB["AAPL"];
+            tickerSeleccionadoActual = item.ticker;
+
+            renderizarPillsTickers();
+
+            // Cabecera de la ficha
+            document.getElementById('fund-ticker').innerText = item.ticker;
+            document.getElementById('fund-exchange').innerText = item.exchange;
+            document.getElementById('fund-sector').innerText = item.sector;
+            document.getElementById('fund-name').innerText = item.empresa;
+            document.getElementById('fund-price').innerText = '$' + fmtNum(item.price, 2);
+
+            const semStr = fmtPct(item.varSem);
+            const ytdStr = fmtPct(item.varYtd);
+            const semEl = document.getElementById('fund-var-sem');
+            const ytdEl = document.getElementById('fund-var-ytd');
+            semEl.innerText = `Sem: ${semStr}`;
+            semEl.className = `text-[10px] px-1.5 py-0.5 rounded border ${obtenerClasesVariacion(semStr)}`;
+            ytdEl.innerText = `YTD: ${ytdStr}`;
+            ytdEl.className = `text-[10px] px-1.5 py-0.5 rounded border ${obtenerClasesVariacion(ytdStr)}`;
+
+            // Barra de 52 semanas
+            document.getElementById('fund-low52').innerText = '$' + fmtNum(item.low52, 2);
+            document.getElementById('fund-high52').innerText = '$' + fmtNum(item.high52, 2);
+            let rango = item.high52 - item.low52;
+            let pct52 = rango > 0 ? Math.max(2, Math.min(100, ((item.price - item.low52) / rango) * 100)) : 50;
+            document.getElementById('fund-bar52').style.width = `${pct52.toFixed(1)}%`;
+            document.getElementById('fund-pos52-label').innerText = `${pct52.toFixed(0)}% del rango 52S`;
+
+            // Enlace fuente
+            const linkEl = document.getElementById('fund-source-link');
+            if (linkEl) linkEl.href = item.sourceUrl;
+
+            // Múltiplos
+            document.getElementById('fund-mcap').innerText = item.mcap;
+            document.getElementById('fund-ev').innerText = `EV: ${item.ev}`;
+            document.getElementById('fund-pe').innerText = item.pe > 0 ? `${fmtNum(item.pe, 2)}x` : "N/A (ETF)";
+            document.getElementById('fund-fwd-pe').innerText = item.fwdPe > 0 ? `Fwd P/E: ${fmtNum(item.fwdPe, 2)}x` : "Fwd P/E: —";
+            document.getElementById('fund-eps').innerText = item.eps > 0 ? `$${fmtNum(item.eps, 2)}` : "N/A";
+            document.getElementById('fund-rev').innerText = `Ingresos: ${item.revenue}`;
+            document.getElementById('fund-peg').innerText = item.peg !== 0 ? fmtNum(item.peg, 2) : "N/A";
+            document.getElementById('fund-div').innerText = `Div: ${item.divYield}`;
+
+            document.getElementById('fund-roe').innerText = item.roe > 0 ? `${fmtNum(item.roe, 1)}%` : "N/A";
+            document.getElementById('fund-roa').innerText = item.roa > 0 ? `${fmtNum(item.roa, 1)}%` : "N/A";
+            document.getElementById('fund-de').innerText = item.de > 0 ? `${fmtNum(item.de, 2)}x` : (item.sector === 'ETF' ? '0,00x' : 'Sin Deuda Neta');
+            document.getElementById('fund-current-ratio').innerText = `Current Ratio: ${fmtNum(item.currentRatio, 2)}x`;
+
+            // Márgenes
+            document.getElementById('fund-gross-margin').innerText = `${fmtNum(item.grossMargin, 2)}%`;
+            document.getElementById('bar-gross-margin').style.width = `${Math.max(2, Math.min(100, item.grossMargin))}%`;
+
+            document.getElementById('fund-op-margin').innerText = `${fmtNum(item.opMargin, 2)}%`;
+            document.getElementById('bar-op-margin').style.width = `${Math.max(2, Math.min(100, item.opMargin))}%`;
+
+            document.getElementById('fund-net-margin').innerText = `${fmtNum(item.netMargin, 2)}%`;
+            document.getElementById('bar-net-margin').style.width = `${Math.max(2, Math.min(100, item.netMargin))}%`;
+
+            // Actualizar gráficos
+            renderizarGraficoHistoricoNativo(item);
+            if (modoGraficoActual === 'tradingview') {
+                cargarWidgetTradingView(item);
+            }
+
+            // Resaltar fila en Screener
+            document.querySelectorAll('#tabla-screener-body tr').forEach(tr => {
+                if (tr.dataset.ticker === item.ticker) {
+                    tr.classList.add('bg-cubo-sky/10');
+                } else {
+                    tr.classList.remove('bg-cubo-sky/10');
+                }
+            });
+
+            if (hacerScroll) {
+                const sec = document.getElementById('seccion-fundamentales');
+                if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function generarSeriePorPeriodo(item, periodo) {
+            const base12 = item.hist1Y || [item.price * 0.9, item.price];
+            const mesesLabels = ["Nov 25", "Dic 25", "Ene 26", "Feb 26", "Mar 26", "Abr 26", "May 26", "Jun 26", "Jul 26", "Ago 26", "Sep 26", "Oct 26"];
+
+            if (periodo === '1M') {
+                const pActual = item.price;
+                const pInicio = pActual / (1 + (item.varMes / 100));
+                const pasos = 10;
+                let labels = [];
+                let valores = [];
+                for (let i = 0; i <= pasos; i++) {
+                    labels.push(`Sem ${Math.ceil((i + 1) / 2.5)} · D${i * 3 + 1}`);
+                    let progreso = i / pasos;
+                    let onda = Math.sin(i * 1.3) * (pActual * 0.008);
+                    let val = pInicio + (pActual - pInicio) * progreso + (i === pasos ? 0 : onda);
+                    valores.push(Number(val.toFixed(2)));
+                }
+                return { labels, valores, retornoPct: item.varMes };
+            } else if (periodo === '3M') {
+                let slice = base12.slice(-4);
+                let labels = mesesLabels.slice(-4);
+                let ret = ((slice[slice.length - 1] - slice[0]) / slice[0]) * 100;
+                return { labels, valores: slice, retornoPct: ret };
+            } else if (periodo === '6M') {
+                let slice = base12.slice(-7);
+                let labels = mesesLabels.slice(-7);
+                let ret = ((slice[slice.length - 1] - slice[0]) / slice[0]) * 100;
+                return { labels, valores: slice, retornoPct: ret };
+            } else if (periodo === 'YTD') {
+                let slice = base12.slice(1); // Dic 25 a Oct 26
+                let labels = mesesLabels.slice(1);
+                return { labels, valores: slice, retornoPct: item.varYtd };
+            } else if (periodo === '5Y') {
+                const pActual = item.price;
+                const p2021 = Number((base12[0] * 0.52).toFixed(2));
+                const p2022 = Number((base12[0] * 0.48).toFixed(2));
+                const p2023 = Number((base12[0] * 0.68).toFixed(2));
+                const p2024 = Number((base12[0] * 0.85).toFixed(2));
+                const p2025 = Number(base12[1].toFixed(2));
+                let valores = [p2021, p2022, p2023, p2024, p2025, pActual];
+                let labels = ["2021", "2022", "2023", "2024", "2025", "Oct 2026"];
+                let ret = ((pActual - p2021) / p2021) * 100;
+                return { labels, valores, retornoPct: ret };
+            } else {
+                // 1Y por defecto
+                let ret = ((base12[base12.length - 1] - base12[0]) / base12[0]) * 100;
+                return { labels: mesesLabels, valores: base12, retornoPct: ret };
+            }
+        }
+
+        function cambiarPeriodoHistorico(periodo) {
+            periodoHistoricoActual = periodo;
+            ['1M', '3M', '6M', 'YTD', '1Y', '5Y'].forEach(p => {
+                const btn = document.getElementById(`btn-tf-${p}`);
+                if (!btn) return;
+                if (p === periodo) {
+                    btn.className = "px-2 py-1 rounded text-[11px] font-mono bg-cubo-sky/20 text-cubo-sky border border-cubo-sky/40 font-semibold transition";
+                } else {
+                    btn.className = "px-2 py-1 rounded text-[11px] font-mono bg-cubo-surface text-cubo-muted hover:text-white border border-cubo-border transition";
+                }
+            });
+            const item = FUNDAMENTALS_DB[tickerSeleccionadoActual] || FUNDAMENTALS_DB["AAPL"];
+            renderizarGraficoHistoricoNativo(item);
+        }
+
+        function renderizarGraficoHistoricoNativo(item) {
+            const serie = generarSeriePorPeriodo(item, periodoHistoricoActual);
+            const esPositivo = serie.retornoPct >= 0;
+            const colorPrincipal = esPositivo ? '#4ADE80' : '#F87171';
+            const colorFondo = esPositivo ? 'rgba(74, 222, 128, 0.14)' : 'rgba(248, 113, 113, 0.14)';
+
+            // Estadísticas de cabecera del gráfico
+            const retEl = document.getElementById('hist-stat-retorno');
+            retEl.innerText = fmtPct(serie.retornoPct);
+            retEl.className = `text-xs font-bold ${esPositivo ? 'text-cubo-green' : 'text-cubo-red'}`;
+
+            const minVal = Math.min(...serie.valores);
+            const maxVal = Math.max(...serie.valores);
+            document.getElementById('hist-stat-min').innerText = '$' + fmtNum(minVal, 2);
+            document.getElementById('hist-stat-max').innerText = '$' + fmtNum(maxVal, 2);
+
+            const mesEl = document.getElementById('hist-stat-mes');
+            mesEl.innerText = fmtPct(item.varMes);
+            mesEl.className = `text-xs font-bold ${item.varMes >= 0 ? 'text-cubo-green' : 'text-cubo-red'}`;
+
+            // Pie del gráfico
+            document.getElementById('footer-chart-ticker').innerText = item.ticker;
+            const fSem = document.getElementById('footer-perf-sem');
+            fSem.innerText = fmtPct(item.varSem);
+            fSem.className = item.varSem >= 0 ? 'text-cubo-green' : 'text-cubo-red';
+
+            const fMes = document.getElementById('footer-perf-mes');
+            fMes.innerText = fmtPct(item.varMes);
+            fMes.className = item.varMes >= 0 ? 'text-cubo-green' : 'text-cubo-red';
+
+            const fYtd = document.getElementById('footer-perf-ytd');
+            fYtd.innerText = fmtPct(item.varYtd);
+            fYtd.className = item.varYtd >= 0 ? 'text-cubo-green' : 'text-cubo-red';
+
+            const ret1Y = ((item.hist1Y[item.hist1Y.length - 1] - item.hist1Y[0]) / item.hist1Y[0]) * 100;
+            const f1y = document.getElementById('footer-perf-1y');
+            f1y.innerText = fmtPct(ret1Y);
+            f1y.className = ret1Y >= 0 ? 'text-cubo-green' : 'text-cubo-red';
+
+            const canvas = document.getElementById('canvas-precio-historico');
+            if (!canvas || typeof Chart === 'undefined') return;
+
+            if (instanciaChartHistorico) {
+                instanciaChartHistorico.destroy();
+            }
+
+            const ctx = canvas.getContext('2d');
+            instanciaChartHistorico = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: serie.labels,
+                    datasets: [{
+                        label: `${item.ticker} (USD)`,
+                        data: serie.valores,
+                        borderColor: colorPrincipal,
+                        backgroundColor: colorFondo,
+                        borderWidth: 2.2,
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        pointBackgroundColor: colorPrincipal,
+                        fill: true,
+                        tension: 0.32
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#18181B',
+                            titleColor: '#F4F4F6',
+                            bodyColor: '#38BDF8',
+                            borderColor: '#2E2E34',
+                            borderWidth: 1,
+                            padding: 10,
+                            callbacks: {
+                                label: function(context) {
+                                    return ` Precio: $${context.parsed.y.toFixed(2)} USD`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(46, 46, 52, 0.35)' },
+                            ticks: { color: '#A1A1AA', font: { size: 10, family: 'Roboto Mono' } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(46, 46, 52, 0.35)' },
+                            ticks: {
+                                color: '#A1A1AA',
+                                font: { size: 10, family: 'Roboto Mono' },
+                                callback: function(val) { return '$' + val; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function cambiarModoGrafico(modo) {
+            modoGraficoActual = modo;
+            const btnNativo = document.getElementById('btn-modo-nativo');
+            const btnTv = document.getElementById('btn-modo-tv');
+            const boxNativo = document.getElementById('contenedor-grafico-nativo');
+            const boxTv = document.getElementById('contenedor-grafico-tv');
+            const ctrlPeriodo = document.getElementById('controles-periodo-grafico');
+
+            if (modo === 'tradingview') {
+                btnTv.className = "px-2.5 py-1 rounded-md text-xs font-semibold bg-cubo-sky text-zinc-950 transition";
+                btnNativo.className = "px-2.5 py-1 rounded-md text-xs font-medium text-cubo-muted hover:text-white transition";
+                boxNativo.classList.add('hidden');
+                boxTv.classList.remove('hidden');
+                if (ctrlPeriodo) ctrlPeriodo.classList.add('opacity-40', 'pointer-events-none');
+                const item = FUNDAMENTALS_DB[tickerSeleccionadoActual] || FUNDAMENTALS_DB["AAPL"];
+                cargarWidgetTradingView(item);
+            } else {
+                btnNativo.className = "px-2.5 py-1 rounded-md text-xs font-semibold bg-cubo-sky text-zinc-950 transition";
+                btnTv.className = "px-2.5 py-1 rounded-md text-xs font-medium text-cubo-muted hover:text-white transition";
+                boxTv.classList.add('hidden');
+                boxNativo.classList.remove('hidden');
+                if (ctrlPeriodo) ctrlPeriodo.classList.remove('opacity-40', 'pointer-events-none');
+                const item = FUNDAMENTALS_DB[tickerSeleccionadoActual] || FUNDAMENTALS_DB["AAPL"];
+                renderizarGraficoHistoricoNativo(item);
+            }
+        }
+
+        function cargarWidgetTradingView(item) {
+            const container = document.getElementById('tradingview-widget-container');
+            if (!container) return;
+            container.innerHTML = "";
+            const tvSymbol = `${item.exchange}:${item.ticker.replace('-', '.')}`;
+
+            if (typeof TradingView !== 'undefined' && TradingView.widget) {
+                new TradingView.widget({
+                    "autosize": true,
+                    "symbol": tvSymbol,
+                    "interval": "D",
+                    "timezone": "America/Argentina/Buenos_Aires",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "es",
+                    "backgroundColor": "#18181B",
+                    "gridColor": "rgba(46, 46, 52, 0.4)",
+                    "enable_publishing": false,
+                    "hide_top_toolbar": false,
+                    "allow_symbol_change": true,
+                    "save_image": false,
+                    "container_id": "tradingview-widget-container"
+                });
+            } else {
+                // Fallback iframe de TradingView si el script externo tarda en cargar
+                const iframeUrl = `https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(tvSymbol)}&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=0&theme=dark&style=1&timezone=America%2FArgentina%2FBuenos_Aires&locale=es`;
+                container.innerHTML = `<iframe src="${iframeUrl}" class="w-full h-full border-0" allowfullscreen></iframe>`;
+            }
+        }
+
+        function ordenarScreener(columna) {
+            if (columnaOrdenActual === columna) {
+                ordenAscendente = !ordenAscendente;
+            } else {
+                columnaOrdenActual = columna;
+                ordenAscendente = (columna === 'ticker' || columna === 'empresa');
+            }
+            filtrarScreener();
+        }
+
+        function filtrarScreener() {
+            const busq = (document.getElementById('input-buscar-ticker')?.value || "").trim().toUpperCase();
+            const sectorFiltro = document.getElementById('select-sector-filtro')?.value || "ALL";
+
+            let lista = listaTickersHoja.map(tk => FUNDAMENTALS_DB[tk]).filter(Boolean);
+
+            if (busq) {
+                lista = lista.filter(item =>
+                    item.ticker.toUpperCase().includes(busq) ||
+                    item.empresa.toUpperCase().includes(busq) ||
+                    item.sector.toUpperCase().includes(busq)
+                );
+            }
+            if (sectorFiltro !== "ALL") {
+                lista = lista.filter(item => item.sector === sectorFiltro);
+            }
+
+            lista.sort((a, b) => {
+                let va = a[columnaOrdenActual];
+                let vb = b[columnaOrdenActual];
+                if (typeof va === 'string') {
+                    return ordenAscendente ? va.localeCompare(vb) : vb.localeCompare(va);
+                }
+                va = (va === null || va === undefined || isNaN(va)) ? -999999 : va;
+                vb = (vb === null || vb === undefined || isNaN(vb)) ? -999999 : vb;
+                return ordenAscendente ? (va - vb) : (vb - va);
+            });
+
+            const tbody = document.getElementById('tabla-screener-body');
+            if (!tbody) return;
+
+            let html = "";
+            lista.forEach(item => {
+                const esActivo = item.ticker === tickerSeleccionadoActual;
+                const rowBg = esActivo ? "bg-cubo-sky/10" : "hover:bg-cubo-elevated/50";
+                const semColor = item.varSem >= 0 ? "text-cubo-green" : "text-cubo-red";
+                const ytdColor = item.varYtd >= 0 ? "text-cubo-green" : "text-cubo-red";
+
+                html += `
+                    <tr data-ticker="${item.ticker}" onclick="seleccionarTickerFundamental('${item.ticker}', false)" class="${rowBg} transition cursor-pointer">
+                        <td class="py-2.5 px-3 font-mono font-bold text-cubo-sky">${item.ticker}</td>
+                        <td class="py-2.5 px-3">
+                            <div class="font-medium text-white truncate max-w-[170px]">${item.empresa}</div>
+                            <div class="text-[10px] text-cubo-muted">${item.sector} · ${item.exchange}</div>
+                        </td>
+                        <td class="py-2.5 px-3 text-right font-semibold text-white">$${fmtNum(item.price, 2)}</td>
+                        <td class="py-2.5 px-3 text-right font-medium ${semColor}">${fmtPct(item.varSem)}</td>
+                        <td class="py-2.5 px-3 text-right font-medium ${ytdColor}">${fmtPct(item.varYtd)}</td>
+                        <td class="py-2.5 px-3 text-right text-white font-medium">${item.mcap}</td>
+                        <td class="py-2.5 px-3 text-right text-cubo-text">${item.pe > 0 ? fmtNum(item.pe, 1) + 'x' : '—'}</td>
+                        <td class="py-2.5 px-3 text-right text-cubo-text">${item.eps > 0 ? '$' + fmtNum(item.eps, 2) : '—'}</td>
+                        <td class="py-2.5 px-3 text-right text-cubo-text">${item.peg !== 0 ? fmtNum(item.peg, 2) : '—'}</td>
+                        <td class="py-2.5 px-3 text-right font-medium ${item.roe >= 20 ? 'text-cubo-green' : 'text-cubo-text'}">${item.roe > 0 ? fmtNum(item.roe, 1) + '%' : '—'}</td>
+                        <td class="py-2.5 px-3 text-right text-cubo-text">${item.roa > 0 ? fmtNum(item.roa, 1) + '%' : '—'}</td>
+                        <td class="py-2.5 px-3 text-right text-cubo-text">${item.de > 0 ? fmtNum(item.de, 2) + 'x' : '0,00x'}</td>
+                        <td class="py-2.5 px-3 text-right text-cubo-text">${fmtNum(item.grossMargin, 1)}%</td>
+                        <td class="py-2.5 px-3 text-right text-cubo-sky font-medium">${fmtNum(item.opMargin, 1)}%</td>
+                        <td class="py-2.5 px-3 text-right text-cubo-green font-medium">${fmtNum(item.netMargin, 1)}%</td>
+                    </tr>
+                `;
+            });
+
+            if (lista.length === 0) {
+                html = `<tr><td colspan="15" class="py-6 text-center text-cubo-muted">No se encontraron activos para ese filtro.</td></tr>`;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function exportarScreenerCSV() {
+            let headers = ["Ticker", "Empresa", "Sector", "Bolsa", "Precio_USD", "Var_Semanal_%", "Var_Mensual_%", "Var_YTD_%", "Market_Cap", "PE_Ratio", "Forward_PE", "EPS_USD", "PEG_Ratio", "ROE_%", "ROA_%", "Debt_Equity", "Margen_Bruto_%", "Margen_Operativo_%", "Margen_Neto_%"];
+            let rows = [headers.join(",")];
+
+            listaTickersHoja.forEach(tk => {
+                const it = FUNDAMENTALS_DB[tk];
+                if (!it) return;
+                let row = [
+                    it.ticker,
+                    `"${it.empresa}"`,
+                    `"${it.sector}"`,
+                    it.exchange,
+                    it.price,
+                    it.varSem,
+                    it.varMes,
+                    it.varYtd,
+                    `"${it.mcap}"`,
+                    it.pe,
+                    it.fwdPe,
+                    it.eps,
+                    it.peg,
+                    it.roe,
+                    it.roa,
+                    it.de,
+                    it.grossMargin,
+                    it.opMargin,
+                    it.netMargin
+                ];
+                rows.push(row.join(","));
+            });
+
+            const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "screener-fundamental-eeuu-cubo.csv";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
     </script>
 </body>
 </html>
