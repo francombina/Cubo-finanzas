@@ -1,25 +1,25 @@
 {
-    "fecha": "2026-10-28",
+    "fecha": "28/10/2026 11:14 hs",
     "noticias": [
         {
-            "titulo": "Rebote en los mercados globales impulsado por la IA",
-            "descripcion": "Los principales índices registran una sólida recuperación liderados por semiconductores."
+            "titulo": "S&P 500 sube mientras Wall Street espera decisión de la Fed y resultados de Microsoft y Alphabet",
+            "descripcion": "Fuente: Bloomberg Línea • Cobertura actualizada de mercados y economía."
         },
         {
-            "titulo": "El FMI actualiza proyecciones macroeconómicas",
-            "descripcion": "Se evalúa el sendero fiscal, metas y la acumulación de reservas internacionales."
+            "titulo": "Llegan los balances big tech al mercado: Wall Street sube y los analistas tienen la palabra",
+            "descripcion": "Fuente: El Cronista • Cobertura actualizada de mercados y economía."
         },
         {
-            "titulo": "Consolida2ción de reservas y compras del Banco Central",
-            "descripcion": "El BCRA mantiene una dinámica positiva de acumulación de divisas en el mercado oficial."
+            "titulo": "La debilidad generalizada de Wall Street mantiene el impulso de las operaciones relacionadas con la IA: McGeever",
+            "descripcion": "Fuente: TradingView • Cobertura actualizada de mercados y economía."
         },
         {
-            "titulo": "Expectativa en Wall Street por reportes corporativos",
-            "descripcion": "Inversores atentos a los balances trimestrales de las grandes empresas tecnológicas."
+            "titulo": "Wall Street cierra en verde por compra masiva en el sector de la IA",
+            "descripcion": "Fuente: La Nación • Cobertura actualizada de mercados y economía."
         },
         {
-            "titulo": "Estabilidad en los precios internacionales del petróleo",
-            "descripcion": "Los contratos de crudo operan firmes a la espera de definiciones geopolíticas clave."
+            "titulo": "Wall Street cerró en verde a la espera de resultados de tecnológicas y la decisión de la Fed sobre tasas",
+            "descripcion": "Fuente: Ambito • Cobertura actualizada de mercados y economía."
         }
     ]
 }
