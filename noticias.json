@@ -1,25 +1,25 @@
 {
-    "fecha": "29/10/2026 14:22 hs",
+    "fecha": "30/10/2026 13:59 hs",
     "noticias": [
         {
-            "titulo": "Dólar blue: a cuánto cotizan hoy en Mendoza 29 octubre 2026",
-            "descripcion": "Dólar & BCRA • Fuente: Infocampo"
+            "titulo": "Polémica con el oro: el BCRA reveló cómo fue la operación con el metal cuestionada por la AGN",
+            "descripcion": "Dólar & BCRA • Fuente: Ambito"
         },
         {
-            "titulo": "Por qué los bonos argentinos están “baratos” y el temor de Wall Street, según Gómez Minujín del JPMorgan",
-            "descripcion": "Mercados Locales • Fuente: Bloomberg Línea"
+            "titulo": "Arranca la temporada de balances: qué espera el mercado para las acciones argentinas y qué datos mirar",
+            "descripcion": "Mercados Locales • Fuente: El Cronista"
         },
         {
-            "titulo": "El FMI se mostró confiado en que las reformas de la Argentina permitirán transformar la estabilización en crecimiento y empleo",
-            "descripcion": "Macro & Finanzas • Fuente: Infobae"
+            "titulo": "La Fed mantuvo las tasas, pero aún hay incertidumbre: cómo invertir ante una posible suba en diciembre",
+            "descripcion": "Macro & Finanzas • Fuente: El Cronista"
         },
         {
-            "titulo": "¿Acaba de cometer un error grave la Reserva Federal?",
-            "descripcion": "Wall Street • Fuente: Yahoo Finanzas"
+            "titulo": "S&P 500 cae arrastrado por Intel y Amazon, mientras el bitcoin retrocede tras hackeo a Binance",
+            "descripcion": "Wall Street • Fuente: Bloomberg Línea"
         },
         {
-            "titulo": "Bitcoin hoy: precio, cotización y variación del mercado al 29 de octubre",
-            "descripcion": "Energía, Agro & Cripto • Fuente: La Nación"
+            "titulo": "Binance suspende depósitos y retiros tras presunto hackeo que deja más de US$2.500 millones congelados",
+            "descripcion": "Energía & Cripto • Fuente: Bloomberg Línea"
         }
     ]
 }
