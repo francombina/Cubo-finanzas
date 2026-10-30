@@ -2,8 +2,8 @@ name: Actualizar Noticias Diario
 
 on:
   schedule:
-    - cron: '0 11 * * *' # 8:00 AM Argentina
-  workflow_dispatch: # Permite probarlo manualmente
+    - cron: '0 11 * * *' # Corre solo todos los días a las 8:00 AM de Argentina
+  workflow_dispatch: # Botón para probarlo manualmente cuando quieras
 
 permissions:
   contents: write
@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Buscar 5 noticias diversificadas por categoria
+      - name: Descargar noticias en vivo de portales financieros
         run: |
           cat << 'EOF' > generar_noticias.py
           import urllib.request
@@ -30,27 +30,27 @@ jobs:
           from datetime import datetime, timedelta
           import re
 
-          # 5 consultas separadas para garantizar variedad temática (1 noticia por vertical)
+          # 5 búsquedas en vivo restringidas a medios financieros de primera línea y de las últimas horas
           categorias = [
               {
                   "etiqueta": "Dólar & BCRA",
-                  "query": '(dolar OR "banco central" OR reservas OR MEP OR CCL) when:1d'
+                  "query": '(dolar OR reservas OR BCRA OR MEP OR CCL) (site:ambito.com OR site:cronista.com OR site:bloomberglinea.com) when:1d'
               },
               {
                   "etiqueta": "Mercados Locales",
-                  "query": '(merval OR "riesgo pais" OR bonos OR acciones) argentina when:1d'
+                  "query": '(merval OR "riesgo pais" OR bonos OR acciones) (site:ambito.com OR site:cronista.com OR site:iprofesional.com) when:1d'
               },
               {
                   "etiqueta": "Macro & Finanzas",
-                  "query": '(inflacion OR tesoro OR licitacion OR "tasas de interes" OR FMI) argentina when:1d'
+                  "query": '(inflacion OR licitacion OR FMI OR economia OR tasas) (site:cronista.com OR site:infobae.com OR site:lanacion.com.ar) when:1d'
               },
               {
                   "etiqueta": "Wall Street",
-                  "query": '("wall street" OR "S&P 500" OR Reserva Federal OR Nasdaq) when:1d'
+                  "query": '("wall street" OR "S&P 500" OR Fed OR Nasdaq) (site:bloomberglinea.com OR site:ambito.com OR site:cronista.com) when:1d'
               },
               {
-                  "etiqueta": "Energía, Agro & Cripto",
-                  "query": '(petroleo OR "vaca muerta" OR soja OR oro OR bitcoin) mercado when:1d'
+                  "etiqueta": "Energía & Cripto",
+                  "query": '(petroleo OR "vaca muerta" OR YPF OR bitcoin OR oro) (site:bloomberglinea.com OR site:ambito.com OR site:cronista.com) when:1d'
               }
           ]
 
@@ -66,7 +66,6 @@ jobs:
                   return False
               for t in titulos_existentes:
                   kws_exist = obtener_palabras_clave(t)
-                  # Si comparten 3 o más palabras clave sustantivas, se descarta por repetida
                   if len(kws_nuevo.intersection(kws_exist)) >= 3:
                       return True
               return False
@@ -96,10 +95,11 @@ jobs:
                       if len(partes) > 1 and fuente == 'Mercado':
                           fuente = partes[1].strip()
                       
-                      if len(titulo_limpio) < 25:
+                      # Descartar notas de relleno tipo "a cuánto cotiza hoy en Mendoza/Córdoba"
+                      if any(x in titulo_limpio.lower() for x in ['mendoza', 'córdoba', 'rosario', 'minuto a minuto', 'en vivo:']):
                           continue
-                      
-                      if es_similar(titulo_limpio, titulos_usados):
+
+                      if len(titulo_limpio) < 25 or es_similar(titulo_limpio, titulos_usados):
                           continue
                       
                       noticias.append({
@@ -120,9 +120,7 @@ jobs:
               }
               with open('noticias.json', 'w', encoding='utf-8') as f:
                   json.dump(data, f, ensure_ascii=False, indent=4)
-              print(f"Se guardaron {len(noticias)} noticias diversificadas.")
-          else:
-              print("No se encontraron noticias.")
+              print(f"Éxito: {len(noticias)} noticias en vivo guardadas.")
           EOF
           python generar_noticias.py
           rm generar_noticias.py
@@ -132,5 +130,5 @@ jobs:
           git config --global user.name 'Cubo Bot'
           git config --global user.email 'bot@cubofinanzas.com'
           git add noticias.json
-          git commit -m "Actualización automática de noticias diversificadas" || exit 0
+          git commit -m "Actualización automática de noticias en vivo" || exit 0
           git push
