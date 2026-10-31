@@ -1,25 +1,25 @@
 {
-    "fecha": "30/10/2026 13:59 hs",
+    "fecha": "31/10/2026 13:00 hs",
     "noticias": [
         {
-            "titulo": "Polémica con el oro: el BCRA reveló cómo fue la operación con el metal cuestionada por la AGN",
-            "descripcion": "Dólar & BCRA • Fuente: Ambito"
+            "titulo": "Dólar blue hoy: a cuánto cotiza el sábado 31 de octubre con el MEP y el CCL",
+            "descripcion": "Dólar & BCRA • Fuente: El Cronista"
         },
         {
-            "titulo": "Arranca la temporada de balances: qué espera el mercado para las acciones argentinas y qué datos mirar",
-            "descripcion": "Mercados Locales • Fuente: El Cronista"
+            "titulo": "Cartera de noviembre: qué bonos, acciones y Cedears recomiendan los expertos",
+            "descripcion": "Mercados Locales • Fuente: Ambito"
         },
         {
-            "titulo": "La Fed mantuvo las tasas, pero aún hay incertidumbre: cómo invertir ante una posible suba en diciembre",
-            "descripcion": "Macro & Finanzas • Fuente: El Cronista"
+            "titulo": "El Gobierno gestiona créditos con garantía multilateral para completar su financiamiento en 2026 y 2027",
+            "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "S&P 500 cae arrastrado por Intel y Amazon, mientras el bitcoin retrocede tras hackeo a Binance",
-            "descripcion": "Wall Street • Fuente: Bloomberg Línea"
+            "titulo": "Financiamiento circular de la IA: qué es, por qué preocupa a Wall Street y cuáles son los riesgos para los mercados",
+            "descripcion": "Wall Street • Fuente: Ambito"
         },
         {
-            "titulo": "Binance suspende depósitos y retiros tras presunto hackeo que deja más de US$2.500 millones congelados",
-            "descripcion": "Energía & Cripto • Fuente: Bloomberg Línea"
+            "titulo": "De la “corpo” a armar una startup que automatiza facturas para YPF, Arcos Dorados y Nike: van por u$s 7,5 millones",
+            "descripcion": "Energía & Cripto • Fuente: El Cronista"
         }
     ]
 }
