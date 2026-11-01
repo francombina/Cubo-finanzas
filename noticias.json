@@ -1,24 +1,24 @@
 {
-    "fecha": "31/10/2026 13:00 hs",
+    "fecha": "01/11/2026 14:04 hs",
     "noticias": [
         {
-            "titulo": "Dólar blue hoy: a cuánto cotiza el sábado 31 de octubre con el MEP y el CCL",
-            "descripcion": "Dólar & BCRA • Fuente: El Cronista"
+            "titulo": "Tras las críticas de Javier Milei, Domingo Cavallo insistió con la necesidad de acumular reservas y pidió compras por u$s15.000 millones",
+            "descripcion": "Dólar & BCRA • Fuente: Ambito"
         },
         {
-            "titulo": "Cartera de noviembre: qué bonos, acciones y Cedears recomiendan los expertos",
-            "descripcion": "Mercados Locales • Fuente: Ambito"
+            "titulo": "Los “vigilantes de bonos” frenaron dos veces a Trump y estas son las señales que anticipan una crisis",
+            "descripcion": "Mercados Locales • Fuente: El Cronista"
         },
         {
-            "titulo": "El Gobierno gestiona créditos con garantía multilateral para completar su financiamiento en 2026 y 2027",
-            "descripcion": "Macro & Finanzas • Fuente: Infobae"
+            "titulo": "¿Creés que las reformas económicas respaldadas por el FMI permitirán que la Argentina vuelva a crecer?",
+            "descripcion": "Macro & Finanzas • Fuente: El Cronista"
         },
         {
-            "titulo": "Financiamiento circular de la IA: qué es, por qué preocupa a Wall Street y cuáles son los riesgos para los mercados",
-            "descripcion": "Wall Street • Fuente: Ambito"
+            "titulo": "El S&P 500 después de las elecciones de medio término: lo que muestra el registro histórico",
+            "descripcion": "Wall Street • Fuente: El Cronista"
         },
         {
-            "titulo": "De la “corpo” a armar una startup que automatiza facturas para YPF, Arcos Dorados y Nike: van por u$s 7,5 millones",
+            "titulo": "Cambio de aceite y filtros: por qué hacerlo a tiempo es clave para cuidar el motor",
             "descripcion": "Energía & Cripto • Fuente: El Cronista"
         }
     ]
