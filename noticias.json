@@ -1,25 +1,25 @@
 {
-    "fecha": "01/11/2026 14:04 hs",
+    "fecha": "02/11/2026 17:42 hs",
     "noticias": [
         {
-            "titulo": "Tras las críticas de Javier Milei, Domingo Cavallo insistió con la necesidad de acumular reservas y pidió compras por u$s15.000 millones",
-            "descripcion": "Dólar & BCRA • Fuente: Ambito"
+            "titulo": "Contrapunto a Arriazu: BCRA debería comprar más reservas para bajar tasas, dice Sanches de Neix",
+            "descripcion": "Dólar & BCRA • Fuente: Bloomberg Línea"
         },
         {
-            "titulo": "Los “vigilantes de bonos” frenaron dos veces a Trump y estas son las señales que anticipan una crisis",
-            "descripcion": "Mercados Locales • Fuente: El Cronista"
+            "titulo": "Los ADRs se hunden hasta casi 7% y el riesgo país esta a un paso de superar los 800 puntos",
+            "descripcion": "Mercados Locales • Fuente: Ambito"
         },
         {
-            "titulo": "¿Creés que las reformas económicas respaldadas por el FMI permitirán que la Argentina vuelva a crecer?",
-            "descripcion": "Macro & Finanzas • Fuente: El Cronista"
+            "titulo": "Guerra, tasas y riesgo país: qué efectos pueden tener en la Argentina las elecciones de medio término de Estados Unidos",
+            "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "El S&P 500 después de las elecciones de medio término: lo que muestra el registro histórico",
+            "titulo": "Se rompe el Nasdaq: cuando Wall Street incrementa el costo de capital",
             "descripcion": "Wall Street • Fuente: El Cronista"
         },
         {
-            "titulo": "Cambio de aceite y filtros: por qué hacerlo a tiempo es clave para cuidar el motor",
-            "descripcion": "Energía & Cripto • Fuente: El Cronista"
+            "titulo": "¿Habrá una migración masiva desde Buenos Aires a Vaca Muerta y las zonas mineras? Esto ven analistas",
+            "descripcion": "Energía & Cripto • Fuente: Bloomberg Línea"
         }
     ]
 }
