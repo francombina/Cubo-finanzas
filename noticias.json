@@ -1,25 +1,25 @@
 {
-    "fecha": "02/11/2026 17:42 hs",
+    "fecha": "03/11/2026 15:20 hs",
     "noticias": [
         {
-            "titulo": "Contrapunto a Arriazu: BCRA debería comprar más reservas para bajar tasas, dice Sanches de Neix",
-            "descripcion": "Dólar & BCRA • Fuente: Bloomberg Línea"
+            "titulo": "Oro del BCRA: denuncian ante la Comisión de Valores de EEUU posibles pagos irregulares en las operaciones con Deutsche Bank",
+            "descripcion": "Dólar & BCRA • Fuente: Ambito"
         },
         {
-            "titulo": "Los ADRs se hunden hasta casi 7% y el riesgo país esta a un paso de superar los 800 puntos",
-            "descripcion": "Mercados Locales • Fuente: Ambito"
+            "titulo": "El mercado no levanta cabeza: caen las acciones y los bonos argentinos",
+            "descripcion": "Mercados Locales • Fuente: El Cronista"
         },
         {
-            "titulo": "Guerra, tasas y riesgo país: qué efectos pueden tener en la Argentina las elecciones de medio término de Estados Unidos",
-            "descripcion": "Macro & Finanzas • Fuente: Infobae"
+            "titulo": "La directora del FMI destacó a la Argentina entre los países que hicieron el ajuste fiscal y llamó a los europeos a seguir el ejemplo",
+            "descripcion": "Macro & Finanzas • Fuente: La Nación"
         },
         {
-            "titulo": "Se rompe el Nasdaq: cuando Wall Street incrementa el costo de capital",
+            "titulo": "Wall Street, el día después: qué indicadores mirar de cerca después de las midterms",
             "descripcion": "Wall Street • Fuente: El Cronista"
         },
         {
-            "titulo": "¿Habrá una migración masiva desde Buenos Aires a Vaca Muerta y las zonas mineras? Esto ven analistas",
-            "descripcion": "Energía & Cripto • Fuente: Bloomberg Línea"
+            "titulo": "YPF cambió de escala: el dato que muestra cuánto pesa Vaca Muerta en su negocio",
+            "descripcion": "Energía & Cripto • Fuente: El Cronista"
         }
     ]
 }
