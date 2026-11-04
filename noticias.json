@@ -1,25 +1,25 @@
 {
-    "fecha": "03/11/2026 15:20 hs",
+    "fecha": "04/11/2026 15:33 hs",
     "noticias": [
         {
-            "titulo": "Oro del BCRA: denuncian ante la Comisión de Valores de EEUU posibles pagos irregulares en las operaciones con Deutsche Bank",
-            "descripcion": "Dólar & BCRA • Fuente: Ambito"
+            "titulo": "Dólar blue hoy: a cuánto cotiza el miércoles 4 de noviembre con el MEP y el CCL",
+            "descripcion": "Dólar & BCRA • Fuente: El Cronista"
         },
         {
-            "titulo": "El mercado no levanta cabeza: caen las acciones y los bonos argentinos",
-            "descripcion": "Mercados Locales • Fuente: El Cronista"
+            "titulo": "La City prevé más pérdidas en acciones y bonos argentinos por efecto Trump",
+            "descripcion": "Mercados Locales • Fuente: iProfesional"
         },
         {
-            "titulo": "La directora del FMI destacó a la Argentina entre los países que hicieron el ajuste fiscal y llamó a los europeos a seguir el ejemplo",
-            "descripcion": "Macro & Finanzas • Fuente: La Nación"
+            "titulo": "Cómo funcionará el nuevo plan para cancelar deudas con ARCA que anunció Caputo: tasas, cuotas y pagos a cuenta",
+            "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "Wall Street, el día después: qué indicadores mirar de cerca después de las midterms",
-            "descripcion": "Wall Street • Fuente: El Cronista"
+            "titulo": "¿Wall Street celebra la victoria demócrata en EEUU? La bolsa norteamericana se dispara más de 2%",
+            "descripcion": "Wall Street • Fuente: Ambito"
         },
         {
-            "titulo": "YPF cambió de escala: el dato que muestra cuánto pesa Vaca Muerta en su negocio",
-            "descripcion": "Energía & Cripto • Fuente: El Cronista"
+            "titulo": "Sebastián Lastiri, de ICOMEX: La Pampa busca complementar el desarrollo de Vaca Muerta",
+            "descripcion": "Energía & Cripto • Fuente: Ambito"
         }
     ]
 }
