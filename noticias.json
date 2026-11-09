@@ -1,24 +1,24 @@
 {
-    "fecha": "08/11/2026 13:58 hs",
+    "fecha": "09/11/2026 18:22 hs",
     "noticias": [
         {
-            "titulo": "Dólar blue hoy: a cuánto cotiza el domingo 8 de noviembre con el MEP y el CCL",
+            "titulo": "Dólar blue hoy: a cuánto cotiza el lunes 9 de noviembre con el MEP y el CCL",
             "descripcion": "Dólar & BCRA • Fuente: El Cronista"
         },
         {
-            "titulo": "¿Creés que la incertidumbre electoral de 2027 es la principal causa de la caída de los bonos argentinos?",
+            "titulo": "Riesgo país: los bonos argentinos rebotan hasta 3,3% en una jornada sin actividad en la plaza local",
             "descripcion": "Mercados Locales • Fuente: El Cronista"
         },
         {
-            "titulo": "Con el riesgo electoral de fondo: ¿qué tasas de interés proyecta el mercado para 2027?",
-            "descripcion": "Macro & Finanzas • Fuente: El Cronista"
+            "titulo": "El FMI y Ecuador acuerdan sexta revisión del crédito para liberar 380 millones de dólares",
+            "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "S&P 500 vs. “inversión en ladrillos”: en cual conviene meterse y cuál le gana por goleada a la otra",
-            "descripcion": "Wall Street • Fuente: El Cronista"
+            "titulo": "Los ADRs rebotaron en Wall Street mientras no hubo operatoria local por el feriado",
+            "descripcion": "Wall Street • Fuente: Ambito"
         },
         {
-            "titulo": "Denuncian ante la SEC la maniobra con el oro que hizo el BCRA",
+            "titulo": "El petróleo cae más de 5% y las acciones en Wall Street suben pese a las turbulencias en Nvidia",
             "descripcion": "Energía & Cripto • Fuente: Ambito"
         }
     ]
