@@ -1,25 +1,25 @@
 {
-    "fecha": "09/11/2026 18:22 hs",
+    "fecha": "10/11/2026 15:34 hs",
     "noticias": [
         {
-            "titulo": "Dólar blue hoy: a cuánto cotiza el lunes 9 de noviembre con el MEP y el CCL",
-            "descripcion": "Dólar & BCRA • Fuente: El Cronista"
+            "titulo": "Dólar hoy: a cuánto cotiza este martes 10 de noviembre",
+            "descripcion": "Dólar & BCRA • Fuente: Ambito"
         },
         {
-            "titulo": "Riesgo país: los bonos argentinos rebotan hasta 3,3% en una jornada sin actividad en la plaza local",
+            "titulo": "Los bonos vuelven a subir y el riesgo país se toma un respiro",
             "descripcion": "Mercados Locales • Fuente: El Cronista"
         },
         {
-            "titulo": "El FMI y Ecuador acuerdan sexta revisión del crédito para liberar 380 millones de dólares",
+            "titulo": "El riesgo país cayó con fuerza en la Argentina y se espera una baja de tasas a nivel global",
             "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "Los ADRs rebotaron en Wall Street mientras no hubo operatoria local por el feriado",
+            "titulo": "La inflación en EEUU fue mayor a la esperada en octubre y presiona a las tasas de la Fed",
             "descripcion": "Wall Street • Fuente: Ambito"
         },
         {
-            "titulo": "El petróleo cae más de 5% y las acciones en Wall Street suben pese a las turbulencias en Nvidia",
-            "descripcion": "Energía & Cripto • Fuente: Ambito"
+            "titulo": "El oro recuperó los u$s 4000 en un nuevo contexto mundial: las razones detrás del alza y cómo sigue",
+            "descripcion": "Energía & Cripto • Fuente: El Cronista"
         }
     ]
 }
