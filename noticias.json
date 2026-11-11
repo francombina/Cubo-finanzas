@@ -1,25 +1,25 @@
 {
-    "fecha": "10/11/2026 15:34 hs",
+    "fecha": "11/11/2026 15:31 hs",
     "noticias": [
         {
-            "titulo": "Dólar hoy: a cuánto cotiza este martes 10 de noviembre",
-            "descripcion": "Dólar & BCRA • Fuente: Ambito"
+            "titulo": "Dólar blue hoy: a cuánto cotiza el miércoles 11 de noviembre con el MEP y el CCL",
+            "descripcion": "Dólar & BCRA • Fuente: El Cronista"
         },
         {
-            "titulo": "Los bonos vuelven a subir y el riesgo país se toma un respiro",
-            "descripcion": "Mercados Locales • Fuente: El Cronista"
+            "titulo": "Los ADRs y el MSCI Merval bajan, en una jornada en que el riesgo país sigue en 850 puntos",
+            "descripcion": "Mercados Locales • Fuente: Ambito"
         },
         {
-            "titulo": "El riesgo país cayó con fuerza en la Argentina y se espera una baja de tasas a nivel global",
+            "titulo": "Así están las tasas de interés de tarjetas de crédito para quienes piensan adelantar sus compras de Navidad",
             "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "La inflación en EEUU fue mayor a la esperada en octubre y presiona a las tasas de la Fed",
+            "titulo": "Diálogos de Wall Street: acechan nubarrones en el mercado, y truenos en la Fed por tasas e inflación",
             "descripcion": "Wall Street • Fuente: Ambito"
         },
         {
-            "titulo": "El oro recuperó los u$s 4000 en un nuevo contexto mundial: las razones detrás del alza y cómo sigue",
-            "descripcion": "Energía & Cripto • Fuente: El Cronista"
+            "titulo": "El oro al contado se hundió más de 2% ante apuesta por alza de tasas de un funcionario de la Fed",
+            "descripcion": "Energía & Cripto • Fuente: Ambito"
         }
     ]
 }
