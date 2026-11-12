@@ -1,24 +1,24 @@
 {
-    "fecha": "11/11/2026 15:31 hs",
+    "fecha": "12/11/2026 15:47 hs",
     "noticias": [
         {
-            "titulo": "Dólar blue hoy: a cuánto cotiza el miércoles 11 de noviembre con el MEP y el CCL",
+            "titulo": "Bancos negocian con el BCRA una garantía para cubrir colaterales: qué es lo que piden",
             "descripcion": "Dólar & BCRA • Fuente: El Cronista"
         },
         {
-            "titulo": "Los ADRs y el MSCI Merval bajan, en una jornada en que el riesgo país sigue en 850 puntos",
-            "descripcion": "Mercados Locales • Fuente: Ambito"
+            "titulo": "Suben los bonos argentinos y cae el riesgo país, pese al “efecto Nvidia” en Wall Street",
+            "descripcion": "Mercados Locales • Fuente: El Cronista"
         },
         {
-            "titulo": "Así están las tasas de interés de tarjetas de crédito para quienes piensan adelantar sus compras de Navidad",
+            "titulo": "\"Fluctuaciones de corto plazo”: el FMI restó importancia a la volatilidad del mercado argentino y la suba del riesgo país",
             "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "Diálogos de Wall Street: acechan nubarrones en el mercado, y truenos en la Fed por tasas e inflación",
-            "descripcion": "Wall Street • Fuente: Ambito"
+            "titulo": "Wall Street le pasa factura a la IA: la cifra que las tecnológicas necesitan para justificar el gasto",
+            "descripcion": "Wall Street • Fuente: El Cronista"
         },
         {
-            "titulo": "El oro al contado se hundió más de 2% ante apuesta por alza de tasas de un funcionario de la Fed",
+            "titulo": "Las compras de oro de los bancos centrales continúan ante la caída de su cotización",
             "descripcion": "Energía & Cripto • Fuente: Ambito"
         }
     ]
