@@ -1,24 +1,24 @@
 {
-    "fecha": "12/11/2026 15:47 hs",
+    "fecha": "13/11/2026 15:28 hs",
     "noticias": [
         {
-            "titulo": "Bancos negocian con el BCRA una garantía para cubrir colaterales: qué es lo que piden",
+            "titulo": "Las tasas en pesos, dentro de una montaña rusa: el BCRA busca ahora plancharlas",
             "descripcion": "Dólar & BCRA • Fuente: El Cronista"
         },
         {
-            "titulo": "Suben los bonos argentinos y cae el riesgo país, pese al “efecto Nvidia” en Wall Street",
+            "titulo": "Cambió el mapa de la IA: qué acciones y Cedear ganan y cuáles pierden con el escándalo de Nvidia",
             "descripcion": "Mercados Locales • Fuente: El Cronista"
         },
         {
-            "titulo": "\"Fluctuaciones de corto plazo”: el FMI restó importancia a la volatilidad del mercado argentino y la suba del riesgo país",
+            "titulo": "La inflación en octubre fue de 2,2% y acumuló 33,1% en los últimos doce meses",
             "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "Wall Street le pasa factura a la IA: la cifra que las tecnológicas necesitan para justificar el gasto",
+            "titulo": "Rebote del S&P 500: Morgan Stanley ya tiene una carta guardada con hasta 60% de potencial",
             "descripcion": "Wall Street • Fuente: El Cronista"
         },
         {
-            "titulo": "Las compras de oro de los bancos centrales continúan ante la caída de su cotización",
+            "titulo": "Oro: la AGN recibió la respuesta del BCRA y prepara una dura auditoría sobre los envíos al exterior",
             "descripcion": "Energía & Cripto • Fuente: Ambito"
         }
     ]
