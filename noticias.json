@@ -1,25 +1,25 @@
 {
-    "fecha": "13/11/2026 15:28 hs",
+    "fecha": "14/11/2026 13:55 hs",
     "noticias": [
         {
-            "titulo": "Las tasas en pesos, dentro de una montaña rusa: el BCRA busca ahora plancharlas",
-            "descripcion": "Dólar & BCRA • Fuente: El Cronista"
+            "titulo": "La demanda de pesos que sigue el BCRA cayó en octubre, pero hubo señales positivas: ¿arranca la remonetización?",
+            "descripcion": "Dólar & BCRA • Fuente: Ambito"
         },
         {
-            "titulo": "Cambió el mapa de la IA: qué acciones y Cedear ganan y cuáles pierden con el escándalo de Nvidia",
+            "titulo": "Wall Street elige cuatro acciones tras la caída de Brasil y ve 58% de potencial en un papel argentino",
             "descripcion": "Mercados Locales • Fuente: El Cronista"
         },
         {
-            "titulo": "La inflación en octubre fue de 2,2% y acumuló 33,1% en los últimos doce meses",
+            "titulo": "Asfura agradece respaldo del FMI y busca impulsar inversiones y crecimiento económico en Honduras",
             "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "Rebote del S&P 500: Morgan Stanley ya tiene una carta guardada con hasta 60% de potencial",
+            "titulo": "Nubank se dispara 10% en Wall Street tras reportar utilidad récord; ¿hasta dónde puede subir?",
             "descripcion": "Wall Street • Fuente: El Cronista"
         },
         {
-            "titulo": "Oro: la AGN recibió la respuesta del BCRA y prepara una dura auditoría sobre los envíos al exterior",
-            "descripcion": "Energía & Cripto • Fuente: Ambito"
+            "titulo": "¿Derrama?: los proveedores de Vaca Muerta, entre el estrés financiero y la competencia China",
+            "descripcion": "Energía & Cripto • Fuente: El Cronista"
         }
     ]
 }
