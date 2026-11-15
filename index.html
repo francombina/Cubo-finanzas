@@ -15,20 +15,21 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Google Sans"', '"DM Sans"', 'Roboto', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-                        mono: ['"Google Sans Mono"', '"Roboto Mono"', 'monospace'],
+                        sans: ['"DM Sans"', 'Roboto', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        mono: ['"Roboto Mono"', 'monospace'],
                     },
                     colors: {
                         cubo: {
-                            bg: '#111113',         // Carbón profundo neutro
-                            surface: '#18181B',    // Gris grafito para tarjetas (Zinc 900)
-                            elevated: '#222226',   // Gris intermedio para cajas internas
-                            border: '#2E2E34',     // Borde gris acero sutil
-                            text: '#F4F4F6',       // Blanco suave
-                            muted: '#A1A1AA',      // Gris medio (Zinc 400)
-                            sky: '#38BDF8',        // Celeste claro limpio
-                            green: '#4ADE80',      // Verde claro fresco
-                            red: '#F87171'         // Rojo coral suave
+                            bg: '#111113',
+                            surface: '#18181B',
+                            elevated: '#222226',
+                            border: '#2E2E34',
+                            text: '#F4F4F6',
+                            muted: '#A1A1AA',
+                            sky: '#38BDF8',
+                            green: '#4ADE80',
+                            red: '#F87171',
+                            amber: '#FBBF24'
                         }
                     }
                 }
@@ -37,20 +38,25 @@
     </script>
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- html2canvas para exportar la infografía a PNG -->
+    <!-- html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- Chart.js 4.4.1 para gráficos históricos y comparativos nativos -->
+    <!-- Chart.js 4.4.1 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <!-- TradingView Widget Library -->
     <script src="https://s3.tradingview.com/tv.js"></script>
     <style>
         body {
-            font-family: 'Google Sans', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             letter-spacing: -0.01em;
         }
         .num-tabular {
             font-variant-numeric: tabular-nums;
         }
+        /* Scrollbars sutiles */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #111113; }
+        ::-webkit-scrollbar-thumb { background: #2E2E34; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #38BDF8; }
     </style>
 </head>
 <body class="bg-cubo-bg text-cubo-text font-sans antialiased min-h-screen pb-16 selection:bg-cubo-sky/30 selection:text-white">
@@ -59,7 +65,6 @@
     <header class="bg-cubo-surface/90 backdrop-blur-md border-b border-cubo-border sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3.5">
-                <!-- Icono con mini cubo isométrico -->
                 <div class="w-9 h-9 bg-cubo-elevated border border-cubo-sky/40 text-cubo-sky rounded-lg flex items-center justify-center shadow-inner">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -78,8 +83,8 @@
                     <span class="w-1.5 h-1.5 rounded-full bg-cubo-green"></span> Google Sheets Activo
                 </span>
 
-                <button onclick="sincronizarConSheet()" class="flex items-center gap-1.5 bg-cubo-elevated hover:bg-cubo-border text-cubo-text px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-border">
-                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cubo-sky"></i> Sincronizar
+                <button id="btn-sync" onclick="sincronizarConSheet()" class="flex items-center gap-1.5 bg-cubo-elevated hover:bg-cubo-border text-cubo-text px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-border">
+                    <i data-lucide="refresh-cw" id="icon-sync" class="w-3.5 h-3.5 text-cubo-sky"></i> Sincronizar
                 </button>
                 <button onclick="toggleConfigPanel()" class="flex items-center gap-1.5 bg-cubo-sky/10 hover:bg-cubo-sky/20 text-cubo-sky px-3 py-1.5 rounded-lg text-xs font-medium transition border border-cubo-sky/30">
                     <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i> Fuentes CSV
@@ -101,7 +106,7 @@
                     <i data-lucide="database" class="w-4 h-4 text-cubo-sky"></i>
                     <div>
                         <h3 class="font-semibold text-sm text-white">Conexión de Orígenes de Datos (Google Sheets CSV)</h3>
-                        <p class="text-xs text-cubo-muted">Enlaces de solapas configurados para lectura directa.</p>
+                        <p class="text-xs text-cubo-muted">Enlaces de solapas configurados para lectura en paralelo.</p>
                     </div>
                 </div>
                 <button onclick="toggleConfigPanel()" class="text-cubo-muted hover:text-white text-xs font-medium px-2 py-1 rounded hover:bg-cubo-elevated">Cerrar ✕</button>
@@ -127,23 +132,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-2 border-t border-cubo-border/60">
                 <div>
-                    <label class="block font-medium text-cubo-muted mb-1">API Key Externa Opcional (Financial Modeling Prep / Finnhub)</label>
-                    <input type="password" id="cfg-fmp-key" placeholder="Opcional: ingresá tu API Key de FMP o Finnhub para refrescar múltiplos en vivo..." class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-white font-mono text-[11px] focus:outline-none focus:border-cubo-sky">
+                    <label class="block font-medium text-cubo-muted mb-1">API Key Financial Modeling Prep (Ruta `/stable/`)</label>
+                    <input type="password" id="cfg-fmp-key" placeholder="Opcional: API Key de FMP para refrescar múltiplos..." class="w-full border border-cubo-border p-2 rounded-lg bg-cubo-bg text-white font-mono text-[11px] focus:outline-none focus:border-cubo-sky">
                 </div>
                 <div class="flex items-end justify-between gap-2">
-                    <p class="text-[11px] text-cubo-muted leading-snug">Si no ingresás API Key, el monitor usa la base fundamental verificada + cotizaciones de tu Google Sheet y gráficos en vivo de TradingView.</p>
+                    <p class="text-[11px] text-cubo-muted leading-snug">Si no ingresás API Key, el monitor utiliza la base fundamental local + precios en tiempo real de tu Google Sheet.</p>
                 </div>
             </div>
 
             <div class="flex justify-between items-center border-t border-cubo-border pt-3">
-                <span class="text-xs text-cubo-muted">Se guardan localmente en tu navegador.</span>
+                <span class="text-xs text-cubo-muted">Configuración persistente en `localStorage`.</span>
                 <button onclick="guardarSheetURLs()" class="bg-cubo-sky text-zinc-950 hover:bg-sky-300 px-4 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
                     <i data-lucide="check" class="w-3.5 h-3.5"></i> Guardar y Sincronizar
                 </button>
             </div>
         </section>
 
-        <!-- SECCIÓN: TOP 5 NOTICIAS DEL DÍA (AUTOMATIZADAS) -->
+        <!-- SECCIÓN: TOP 5 NOTICIAS DEL DÍA -->
         <section class="bg-cubo-surface rounded-xl border border-cubo-border p-5 space-y-4">
             <div class="flex items-center justify-between border-b border-cubo-border pb-3">
                 <div class="flex items-center gap-2">
@@ -165,7 +170,7 @@
                     <span class="w-1.5 h-4 bg-cubo-sky rounded-full inline-block"></span>
                     <h2 class="text-sm font-semibold text-white">Indicadores Principales de Mercado</h2>
                 </div>
-                <span class="text-xs text-cubo-muted">Variación Semanal & Acumulado Anual (YTD)</span>
+                <span id="timestamp-sync" class="text-xs text-cubo-muted font-mono">Variación Semanal & Acumulado Anual (YTD)</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
@@ -200,7 +205,7 @@
                 <div class="bg-cubo-surface p-4 rounded-xl border border-cubo-border hover:border-cubo-sky/40 transition flex flex-col justify-between">
                     <div class="flex justify-between items-center mb-1.5">
                         <span class="text-xs font-medium text-cubo-muted">Dólar MEP</span>
-                        <span class="text-[10px] font-medium text-cubo-muted bg-cubo-elevated px-2 py-0.5 rounded border border-cubo-border">Local</span>
+                        <span class="text-[10px] font-medium text-cubo-muted bg-cubo-elevated px-2 py-0.5 rounded border border-cubo-border">Bolsa</span>
                     </div>
                     <div class="text-2xl font-bold text-white num-tabular tracking-tight my-1" id="val-mep">$1.578</div>
                     <div class="flex items-center gap-1.5 text-xs num-tabular mt-2 pt-2 border-t border-cubo-border/60">
@@ -213,7 +218,7 @@
                 <div class="bg-cubo-surface p-4 rounded-xl border border-cubo-border border-l-2 border-l-cubo-sky hover:border-cubo-sky/40 transition flex flex-col justify-between">
                     <div class="flex justify-between items-center mb-1.5">
                         <span class="text-xs font-medium text-cubo-muted">Riesgo País</span>
-                        <span class="text-[10px] font-medium text-cubo-green bg-cubo-green/10 px-2 py-0.5 rounded border border-cubo-green/20">EMBI+</span>
+                        <span class="text-[10px] font-medium text-cubo-sky bg-cubo-sky/10 px-2 py-0.5 rounded border border-cubo-sky/20">EMBI+</span>
                     </div>
                     <div class="text-2xl font-bold text-white num-tabular tracking-tight my-1" id="val-riesgo">765</div>
                     <div class="flex items-center gap-1.5 text-xs num-tabular mt-2 pt-2 border-t border-cubo-border/60">
@@ -225,7 +230,7 @@
             </div>
         </section>
 
-        <!-- 2. BLOQUE SECUNDARIO: MERVAL ARS, CCL & BTC -->
+        <!-- 2. BLOQUE SECUNDARIO: MERVAL ARS, CCL (CON BRECHA) & BTC -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
             
             <!-- S&P Merval ARS -->
@@ -243,15 +248,18 @@
                 </div>
             </div>
 
-            <!-- Dólar CCL -->
+            <!-- Dólar CCL + Brecha Cambiaria -->
             <div class="bg-cubo-surface p-4 rounded-xl border border-cubo-border flex flex-col justify-between">
                 <div class="flex justify-between items-center border-b border-cubo-border pb-2 mb-2.5">
                     <span class="text-xs font-medium text-cubo-muted">Dólar CCL</span>
-                    <span class="text-[10px] bg-cubo-elevated text-cubo-muted font-medium px-2 py-0.5 rounded border border-cubo-border">Referencia</span>
+                    <span id="badge-canje" class="text-[10px] bg-cubo-elevated text-cubo-sky font-mono px-2 py-0.5 rounded border border-cubo-border">Canje: +6,6%</span>
                 </div>
                 <div class="flex items-baseline justify-between">
                     <span class="text-xl font-bold text-white num-tabular" id="val-ccl">$1.683</span>
-                    <span class="text-xs num-tabular px-2 py-0.5 rounded-md border" id="ccl-sem">Sem: +1,7%</span>
+                    <div class="flex gap-1.5 text-xs num-tabular">
+                        <span id="ccl-sem" class="px-2 py-0.5 rounded-md border">Sem: +1,7%</span>
+                        <span id="ccl-ytd" class="px-2 py-0.5 rounded-md border">YTD: +7,5%</span>
+                    </div>
                 </div>
             </div>
 
@@ -263,7 +271,10 @@
                 </div>
                 <div class="flex items-baseline justify-between">
                     <span class="text-xl font-bold text-white num-tabular" id="val-btc">$80.544</span>
-                    <span class="text-xs num-tabular px-2 py-0.5 rounded-md border" id="btc-sem">Sem: +0,7%</span>
+                    <div class="flex gap-1.5 text-xs num-tabular">
+                        <span id="btc-sem" class="px-2 py-0.5 rounded-md border">Sem: +0,7%</span>
+                        <span id="btc-ytd" class="px-2 py-0.5 rounded-md border">YTD: -8,6%</span>
+                    </div>
                 </div>
             </div>
 
@@ -271,7 +282,6 @@
 
         <!-- 3. TOP 5 GANADORES Y PERDEDORES DE EE.UU. -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
             <!-- Top Ganadores -->
             <div class="bg-cubo-surface rounded-xl border border-cubo-border overflow-hidden">
                 <div class="bg-cubo-elevated/60 px-4 py-3 border-b border-cubo-border flex justify-between items-center">
@@ -321,23 +331,20 @@
                     </table>
                 </div>
             </div>
-
         </section>
 
-        <!-- 3.5 MONITOR FUNDAMENTAL E HISTÓRICO DE ACCIONES EE.UU. (HOJA TICKERS) -->
+        <!-- 3.5 MONITOR FUNDAMENTAL E HISTÓRICO DE ACCIONES EE.UU. -->
         <section id="seccion-fundamentales" class="bg-cubo-surface rounded-xl border border-cubo-border p-5 space-y-5">
-            <!-- Encabezado de Sección -->
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-cubo-border pb-4">
                 <div>
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="w-1.5 h-4 bg-cubo-sky rounded-full inline-block"></span>
                         <h2 class="text-sm font-semibold text-white">Análisis Fundamental & Histórico de Precios (EE.UU.)</h2>
-                        <span id="badge-tickers-count" class="text-[10px] font-mono bg-cubo-sky/10 text-cubo-sky px-2 py-0.5 rounded border border-cubo-sky/25">34 Activos · Hoja Tickers</span>
+                        <span id="badge-tickers-count" class="text-[10px] font-mono bg-cubo-sky/10 text-cubo-sky px-2 py-0.5 rounded border border-cubo-sky/25">28 Activos · Hoja Tickers</span>
                     </div>
-                    <p class="text-xs text-cubo-muted mt-1">Múltiplos de valuación, rentabilidad, solvencia, márgenes operativos y evolución histórica de precios para la cartera de seguimiento.</p>
+                    <p class="text-xs text-cubo-muted mt-1">Múltiplos de valuación, rentabilidad, solvencia, márgenes operativos y evolución histórica de precios.</p>
                 </div>
 
-                <!-- Controles Globales de Filtro y Búsqueda -->
                 <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                     <div class="relative flex-1 sm:flex-initial sm:w-52">
                         <input type="text" id="input-buscar-ticker" oninput="filtrarScreener()" placeholder="Buscar ticker o empresa..." class="w-full bg-cubo-bg border border-cubo-border rounded-lg pl-3 pr-7 py-1.5 text-xs text-white focus:border-cubo-sky focus:outline-none">
@@ -360,24 +367,20 @@
                 </div>
             </div>
 
-            <!-- Barra Rápida de Selección de Tickers (Píldoras Interactivas) -->
+            <!-- Barra Rápida de Selección de Tickers -->
             <div class="space-y-1.5">
                 <div class="flex items-center justify-between text-[11px] text-cubo-muted">
-                    <span>Seleccioná una empresa de la hoja <strong class="text-white">Tickers</strong> para inspeccionar su ficha fundamental y gráfico:</span>
-                    <span id="label-fuente-fundamental" class="font-mono text-[10px] text-cubo-sky">Fuente: SEC Filings / QuarterChart / StockAnalysis / Google Sheets</span>
+                    <span>Seleccioná un activo de la cartera para inspeccionar su ficha fundamental y gráfico:</span>
+                    <span id="label-fuente-fundamental" class="font-mono text-[10px] text-cubo-sky">Fuente: SEC / FMP / Google Sheets</span>
                 </div>
-                <div id="barra-tickers-pills" class="flex items-center gap-1.5 overflow-x-auto pb-2 pt-0.5">
-                    <!-- Renderizado dinámicamente -->
-                </div>
+                <div id="barra-tickers-pills" class="flex items-center gap-1.5 overflow-x-auto pb-2 pt-0.5"></div>
             </div>
 
             <!-- Panel Principal Dividido: Ficha Fundamental (5 cols) + Gráfico Histórico (7 cols) -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
                 
-                <!-- COLUMNA IZQUIERDA: FICHA FUNDAMENTAL DETALLADA (5 COLUMNAS) -->
+                <!-- COLUMNA IZQUIERDA: FICHA FUNDAMENTAL DETALLADA -->
                 <div class="lg:col-span-5 bg-cubo-bg rounded-xl border border-cubo-border p-4 flex flex-col justify-between space-y-4">
-                    
-                    <!-- Cabecera del Activo Seleccionado -->
                     <div class="border-b border-cubo-border pb-3.5">
                         <div class="flex justify-between items-start gap-2">
                             <div>
@@ -410,7 +413,7 @@
                         </div>
                     </div>
 
-                    <!-- Grilla de Ratios Fundamentales Clave (8 Cajas) -->
+                    <!-- Grilla de Ratios Fundamentales Clave -->
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[11px] font-semibold text-white uppercase tracking-wider">Múltiplos & Solvencia</span>
@@ -419,7 +422,6 @@
                             </a>
                         </div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2 num-tabular">
-                            <!-- Market Cap -->
                             <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
                                 <div class="flex justify-between items-center text-[10px] text-cubo-muted">
                                     <span>Market Cap</span>
@@ -429,7 +431,6 @@
                                 <div id="fund-ev" class="text-[10px] text-cubo-muted mt-0.5">EV: $4,75T</div>
                             </div>
 
-                            <!-- P/E Ratio -->
                             <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
                                 <div class="flex justify-between items-center text-[10px] text-cubo-muted">
                                     <span>P/E Ratio (TTM)</span>
@@ -439,7 +440,6 @@
                                 <div id="fund-fwd-pe" class="text-[10px] text-cubo-sky mt-0.5">Fwd P/E: 36,33x</div>
                             </div>
 
-                            <!-- EPS -->
                             <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
                                 <div class="flex justify-between items-center text-[10px] text-cubo-muted">
                                     <span>EPS (TTM)</span>
@@ -449,7 +449,6 @@
                                 <div id="fund-rev" class="text-[10px] text-cubo-muted mt-0.5">Ventas: $466,8B</div>
                             </div>
 
-                            <!-- PEG Ratio -->
                             <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
                                 <div class="flex justify-between items-center text-[10px] text-cubo-muted">
                                     <span>PEG Ratio</span>
@@ -459,7 +458,6 @@
                                 <div id="fund-div" class="text-[10px] text-cubo-muted mt-0.5">Div. Yield: 0,31%</div>
                             </div>
 
-                            <!-- ROE -->
                             <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
                                 <div class="flex justify-between items-center text-[10px] text-cubo-muted">
                                     <span>ROE</span>
@@ -469,7 +467,6 @@
                                 <div class="text-[10px] text-cubo-muted mt-0.5">Return on Equity</div>
                             </div>
 
-                            <!-- ROA -->
                             <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border">
                                 <div class="flex justify-between items-center text-[10px] text-cubo-muted">
                                     <span>ROA</span>
@@ -479,7 +476,6 @@
                                 <div class="text-[10px] text-cubo-muted mt-0.5">Return on Assets</div>
                             </div>
 
-                            <!-- Debt / Equity -->
                             <div class="bg-cubo-surface p-2.5 rounded-lg border border-cubo-border col-span-2">
                                 <div class="flex justify-between items-center">
                                     <div>
@@ -495,14 +491,13 @@
                         </div>
                     </div>
 
-                    <!-- Barras Visuales de Márgenes (Bruto, Operativo, Neto) -->
+                    <!-- Barras Visuales de Márgenes -->
                     <div class="bg-cubo-surface p-3 rounded-lg border border-cubo-border space-y-2.5 num-tabular">
                         <div class="flex justify-between items-center border-b border-cubo-border/60 pb-1.5">
                             <span class="text-[11px] font-semibold text-white">Estructura de Márgenes (TTM)</span>
                             <span class="text-[10px] text-cubo-muted">% sobre Ventas</span>
                         </div>
 
-                        <!-- Margen Bruto -->
                         <div>
                             <div class="flex justify-between text-[11px] mb-1">
                                 <span class="text-cubo-muted">Margen Bruto (Gross Margin)</span>
@@ -513,7 +508,6 @@
                             </div>
                         </div>
 
-                        <!-- Margen Operativo -->
                         <div>
                             <div class="flex justify-between text-[11px] mb-1">
                                 <span class="text-cubo-muted">Margen Operativo (Operating Margin)</span>
@@ -524,7 +518,6 @@
                             </div>
                         </div>
 
-                        <!-- Margen Neto -->
                         <div>
                             <div class="flex justify-between text-[11px] mb-1">
                                 <span class="text-cubo-muted">Margen Neto (Profit Margin)</span>
@@ -535,13 +528,10 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- COLUMNA DERECHA: GRÁFICO HISTÓRICO DE PRECIOS & TRADINGVIEW (7 COLUMNAS) -->
+                <!-- COLUMNA DERECHA: GRÁFICO HISTÓRICO & TRADINGVIEW -->
                 <div class="lg:col-span-7 bg-cubo-bg rounded-xl border border-cubo-border p-4 flex flex-col justify-between space-y-3.5">
-                    
-                    <!-- Barra Superior del Gráfico: Selector de Vista y Período -->
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5 border-b border-cubo-border pb-3">
                         <div class="flex items-center gap-1.5 bg-cubo-surface p-1 rounded-lg border border-cubo-border">
                             <button id="btn-modo-nativo" onclick="cambiarModoGrafico('nativo')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-cubo-sky text-zinc-950 transition">
@@ -552,7 +542,6 @@
                             </button>
                         </div>
 
-                        <!-- Botones de Temporalidad (1M, 3M, 6M, YTD, 1Y, 5Y) -->
                         <div id="controles-periodo-grafico" class="flex items-center gap-1 num-tabular">
                             <button onclick="cambiarPeriodoHistorico('1M')" id="btn-tf-1M" class="px-2 py-1 rounded text-[11px] font-mono bg-cubo-surface text-cubo-muted hover:text-white border border-cubo-border transition">1M</button>
                             <button onclick="cambiarPeriodoHistorico('3M')" id="btn-tf-3M" class="px-2 py-1 rounded text-[11px] font-mono bg-cubo-surface text-cubo-muted hover:text-white border border-cubo-border transition">3M</button>
@@ -563,7 +552,6 @@
                         </div>
                     </div>
 
-                    <!-- Resumen de Rendimiento del Período Seleccionado -->
                     <div id="resumen-historico-header" class="grid grid-cols-2 sm:grid-cols-4 gap-2 num-tabular">
                         <div class="bg-cubo-surface px-3 py-2 rounded-lg border border-cubo-border">
                             <span class="text-[10px] text-cubo-muted block">Retorno Período</span>
@@ -583,17 +571,14 @@
                         </div>
                     </div>
 
-                    <!-- Contenedor 1: Gráfico Histórico Nativo (Chart.js) -->
                     <div id="contenedor-grafico-nativo" class="relative h-80 w-full bg-cubo-surface/60 rounded-xl border border-cubo-border p-3">
                         <canvas id="canvas-precio-historico"></canvas>
                     </div>
 
-                    <!-- Contenedor 2: Widget Oficial de TradingView -->
                     <div id="contenedor-grafico-tv" class="hidden h-96 w-full bg-cubo-surface rounded-xl border border-cubo-border overflow-hidden relative">
                         <div id="tradingview-widget-container" class="w-full h-full"></div>
                     </div>
 
-                    <!-- Pie del Gráfico: Comparativa de Rendimientos Históricos -->
                     <div class="bg-cubo-surface p-3 rounded-lg border border-cubo-border flex flex-wrap items-center justify-between gap-2 text-[11px] num-tabular">
                         <div class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-cubo-sky"></span>
@@ -606,11 +591,10 @@
                             <span>1 Año: <strong id="footer-perf-1y" class="text-cubo-green">+34,20%</strong></span>
                         </div>
                     </div>
-
                 </div>
             </div>
 
-            <!-- TABLA SCREENER COMPLETA (LAS 34 ACCIONES DE LA HOJA TICKERS) -->
+            <!-- TABLA SCREENER COMPLETA -->
             <div class="bg-cubo-bg rounded-xl border border-cubo-border overflow-hidden">
                 <div class="bg-cubo-elevated/60 px-4 py-3 border-b border-cubo-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                     <div class="flex items-center gap-2">
@@ -618,7 +602,7 @@
                         <h3 class="font-semibold text-xs text-white">Screener Fundamental Completo — Cartera Hoja "Tickers" (EE.UU.)</h3>
                     </div>
                     <div class="flex items-center gap-2 text-[11px] text-cubo-muted">
-                        <span>Hacé clic en cualquier encabezado para ordenar o en una fila para ver su gráfico</span>
+                        <span>Hacé clic en cualquier encabezado para ordenar o en una fila para inspeccionar</span>
                     </div>
                 </div>
 
@@ -643,9 +627,7 @@
                                 <th onclick="ordenarScreener('netMargin')" class="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-white transition">M. Neto ↕</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-screener-body" class="divide-y divide-cubo-border/50 text-cubo-text">
-                            <!-- Renderizado dinámicamente -->
-                        </tbody>
+                        <tbody id="tabla-screener-body" class="divide-y divide-cubo-border/50 text-cubo-text"></tbody>
                     </table>
                 </div>
             </div>
@@ -659,20 +641,25 @@
                         <span class="w-1.5 h-4 bg-cubo-sky rounded-full inline-block"></span>
                         <h3 class="text-sm font-semibold text-white">Infografía para Historias (9:16)</h3>
                     </div>
-                    <p class="text-xs text-cubo-muted mt-0.5">Estética oscura en grises, celestes y verde claro con trama de cubos isométricos e iconos.</p>
+                    <p class="text-xs text-cubo-muted mt-0.5">Exportación PNG en alta resolución (escala 3x) lista para Instagram o X.</p>
                 </div>
-                <button onclick="descargarStoryPNG()" class="flex items-center gap-1.5 bg-cubo-sky hover:bg-sky-300 text-zinc-950 px-4 py-1.5 rounded-lg text-xs font-semibold transition shadow-sm">
+                <button id="btn-descargar-png" onclick="descargarStoryPNG()" class="flex items-center gap-1.5 bg-cubo-sky hover:bg-sky-300 text-zinc-950 px-4 py-1.5 rounded-lg text-xs font-semibold transition shadow-sm">
                     <i data-lucide="download" class="w-3.5 h-3.5"></i> Descargar PNG
                 </button>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
-                <!-- PANEL DE PERSONALIZACIÓN (5 COLUMNAS) -->
+                <!-- PANEL DE PERSONALIZACIÓN -->
                 <div class="lg:col-span-5 bg-cubo-bg p-4 rounded-xl border border-cubo-border space-y-4">
                     <h4 class="text-xs font-semibold text-cubo-sky flex items-center gap-1.5 border-b border-cubo-border pb-2.5">
                         <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Personalizar Contenido
                     </h4>
+
+                    <div>
+                        <label class="block text-xs font-medium text-cubo-muted mb-1.5">Etiqueta Superior de la Historia:</label>
+                        <input type="text" id="input-story-badge" value="CIERRE SEMANAL" oninput="actualizarHeaderStory()" class="w-full bg-cubo-surface border border-cubo-border px-2.5 py-1.5 rounded-lg text-xs text-white focus:border-cubo-sky focus:outline-none">
+                    </div>
 
                     <div>
                         <label class="block text-xs font-medium text-cubo-muted mb-2">Indicadores a incluir en la historia:</label>
@@ -728,14 +715,12 @@
                     </div>
                 </div>
 
-                <!-- PREVISUALIZACIÓN DE LA HISTORIA 9:16 (7 COLUMNAS) -->
+                <!-- PREVISUALIZACIÓN DE LA HISTORIA 9:16 -->
                 <div class="lg:col-span-7 flex justify-center bg-cubo-bg p-6 rounded-xl border border-cubo-border overflow-x-auto">
-                    
-                    <!-- LIENZO DE LA HISTORIA (330x500px) -->
                     <div id="story-infographic" class="w-[330px] h-[500px] bg-[#141417] text-white p-4 rounded-2xl flex flex-col justify-between shadow-2xl relative overflow-hidden border border-[#2C2C32] select-none">
                         
-                        <!-- FONDO GEOMÉTRICO: CUBOS ISOMÉTRICOS -->
-                        <svg class="absolute -top-10 -right-10 w-52 h-52 text-[#38BDF8] opacity-[0.08] pointer-events-none" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- FONDO GEOMÉTRICO -->
+                        <svg class="absolute -top-10 -right-10 w-52 h-52 text-[#38BDF8] opacity-[0.08] pointer-events-none" viewBox="0 0 200 200" fill="none">
                             <polygon points="100,15 175,58 175,142 100,185 25,142 25,58" stroke="currentColor" stroke-width="2"/>
                             <polyline points="25,58 100,100 175,58" stroke="currentColor" stroke-width="2"/>
                             <line x1="100" y1="100" x2="100" y2="185" stroke="currentColor" stroke-width="2"/>
@@ -744,7 +729,7 @@
                             <line x1="100" y1="101" x2="100" y2="152" stroke="currentColor" stroke-width="1.5"/>
                         </svg>
 
-                        <svg class="absolute -bottom-12 -left-12 w-56 h-56 text-[#4ADE80] opacity-[0.07] pointer-events-none" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="absolute -bottom-12 -left-12 w-56 h-56 text-[#4ADE80] opacity-[0.07] pointer-events-none" viewBox="0 0 200 200" fill="none">
                             <g transform="translate(10, 10)">
                                 <polygon points="90,20 150,55 150,125 90,160 30,125 30,55" stroke="currentColor" stroke-width="2"/>
                                 <polyline points="30,55 90,90 150,55" stroke="currentColor" stroke-width="2"/>
@@ -756,21 +741,20 @@
                         <div class="relative z-10 border-b border-[#2C2C32] pb-2 flex justify-between items-center">
                             <div class="flex items-center gap-1.5 bg-[#38BDF8]/10 border border-[#38BDF8]/30 px-2.5 py-0.5 rounded-md">
                                 <span class="w-1.5 h-1.5 rounded-full bg-[#38BDF8]"></span>
-                                <span class="text-[9px] font-bold text-[#38BDF8] uppercase tracking-wider">
+                                <span id="story-badge-title" class="text-[9px] font-bold text-[#38BDF8] uppercase tracking-wider">
                                     CIERRE SEMANAL
                                 </span>
                             </div>
-                            <span class="text-[9px] font-medium text-[#A1A1AA]">
+                            <span id="story-date-label" class="text-[9px] font-medium text-[#A1A1AA]">
                                 Principales Variables
                             </span>
                         </div>
 
-                        <!-- Contenido Central: Grilla de Activos con Iconos -->
+                        <!-- Contenido Central -->
                         <div class="relative z-10 space-y-2 my-auto py-1">
-                            
                             <div id="story-grid-container" class="grid grid-cols-2 gap-1.5 num-tabular">
                                 <!-- Merval USD -->
-                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-merval-usd">
+                                <div class="bg-[#1E1E22]/90 p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-merval-usd">
                                     <div class="flex justify-between items-baseline">
                                         <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
                                             <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
@@ -785,7 +769,7 @@
                                 </div>
 
                                 <!-- S&P 500 -->
-                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-sp500">
+                                <div class="bg-[#1E1E22]/90 p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-sp500">
                                     <div class="flex justify-between items-baseline">
                                         <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
                                             <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
@@ -800,7 +784,7 @@
                                 </div>
 
                                 <!-- Dólar MEP -->
-                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-mep">
+                                <div class="bg-[#1E1E22]/90 p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-mep">
                                     <div class="flex justify-between items-baseline">
                                         <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
                                             <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -815,7 +799,7 @@
                                 </div>
 
                                 <!-- Riesgo País -->
-                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-riesgo">
+                                <div class="bg-[#1E1E22]/90 p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between" id="story-card-riesgo">
                                     <div class="flex justify-between items-baseline">
                                         <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
                                             <svg class="w-2.5 h-2.5 text-[#4ADE80]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -830,7 +814,7 @@
                                 </div>
 
                                 <!-- Dólar CCL -->
-                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden" id="story-card-ccl">
+                                <div class="bg-[#1E1E22]/90 p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden" id="story-card-ccl">
                                     <div class="flex justify-between items-baseline">
                                         <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
                                             <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
@@ -845,7 +829,7 @@
                                 </div>
 
                                 <!-- Bitcoin -->
-                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden" id="story-card-btc">
+                                <div class="bg-[#1E1E22]/90 p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden" id="story-card-btc">
                                     <div class="flex justify-between items-baseline">
                                         <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
                                             <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11.767 19.08c4.922.868 9.539-2.532 10.407-7.454.868-4.922-2.532-9.539-7.454-10.407-4.922-.868-9.539 2.532-10.407 7.454-.868 4.922 2.532 9.539 7.454 10.407z"/></svg>
@@ -860,7 +844,7 @@
                                 </div>
 
                                 <!-- Merval ARS -->
-                                <div class="bg-[#1E1E22]/90 backdrop-blur-xs p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden col-span-2" id="story-card-merval-ars">
+                                <div class="bg-[#1E1E22]/90 p-2 rounded-lg border border-[#2E2E34] flex flex-col justify-between hidden col-span-2" id="story-card-merval-ars">
                                     <div class="flex justify-between items-baseline">
                                         <span class="text-[8px] font-semibold text-[#A1A1AA] uppercase flex items-center gap-1">
                                             <svg class="w-2.5 h-2.5 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
@@ -875,7 +859,7 @@
                                 </div>
                             </div>
 
-                            <!-- Mini Tablas Top 3 Ganadores y Perdedores en Story -->
+                            <!-- Mini Tablas Top 3 en Story -->
                             <div class="grid grid-cols-2 gap-1.5 num-tabular">
                                 <div id="story-box-ganadores" class="bg-[#1E1E22]/90 border border-[#4ADE80]/25 p-2 rounded-lg">
                                     <p class="text-[8px] font-semibold text-[#4ADE80] mb-1 border-b border-[#2C2C32] pb-0.5 flex items-center gap-1">
@@ -892,10 +876,9 @@
                                     <div id="story-perdedores" class="space-y-0.5 text-[8px]"></div>
                                 </div>
                             </div>
-
                         </div>
 
-                        <!-- Frase / Idea de la Semana -->
+                        <!-- Frase de la Semana -->
                         <div class="relative z-10 bg-[#1E1E22]/90 border-l-2 border-[#38BDF8] p-2 rounded-r-lg text-left">
                             <p id="story-idea-text" class="text-[9px] font-normal leading-snug text-[#E4E4E7]">
                                 "Consistencia y tendencia: Medir el pulso real de los activos en pesos y dólares."
@@ -917,7 +900,6 @@
 
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -955,18 +937,87 @@
         </div>
     </div>
 
-    <!-- JavaScript de Sincronización y Renderizado -->
+    <!-- JavaScript Optimizado -->
     <script>
         const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
         const DEFAULT_SUBAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=454584979";
         const DEFAULT_BAJAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=205860665";
         const DEFAULT_TICKERS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=1534713781";
 
-        function safeGetStorage(key, fallback) {
-            try { return localStorage.getItem(key) || fallback; } catch (e) { return fallback; }
+        const safeGetStorage = (key, fallback) => {
+            try { return localStorage.getItem(key) || fallback; } catch { return fallback; }
+        };
+        const safeSetStorage = (key, val) => {
+            try { localStorage.setItem(key, val); } catch {}
+        };
+
+        // Motor único y limpio para parsear cualquier CSV con comillas
+        function parseCSV(text) {
+            if (!text) return [];
+            return text.split(/\r?\n/).filter(line => line.trim() !== '').map(line => {
+                const cols = [];
+                let current = '';
+                let inQuotes = false;
+                for (let i = 0; i < line.length; i++) {
+                    const ch = line[i];
+                    if (ch === '"') inQuotes = !inQuotes;
+                    else if (ch === ',' && !inQuotes) {
+                        cols.push(current.trim().replace(/^"|"$/g, ''));
+                        current = '';
+                    } else current += ch;
+                }
+                cols.push(current.trim().replace(/^"|"$/g, ''));
+                return cols;
+            });
         }
-        function safeSetStorage(key, val) {
-            try { localStorage.setItem(key, val); } catch (e) {}
+
+        // Parser numérico bilingüe (soporta tanto $1,234.56 como $1.234,56)
+        function parseFlexibleNumber(str) {
+            if (str === null || str === undefined) return null;
+            let s = String(str).replace(/[$%\s+]/g, '').trim();
+            if (!s) return null;
+
+            const lastComma = s.lastIndexOf(',');
+            const lastDot = s.lastIndexOf('.');
+
+            if (lastComma > -1 && lastDot > -1) {
+                if (lastComma > lastDot) {
+                    // Formato ES-AR: 1.234,56
+                    s = s.replace(/\./g, '').replace(',', '.');
+                } else {
+                    // Formato EN-US: 1,234.56
+                    s = s.replace(/,/g, '');
+                }
+            } else if (lastComma > -1) {
+                // Si tiene una sola coma y 1-2 decimales al final, es decimal
+                const parts = s.split(',');
+                if (parts.length === 2 && parts[1].length <= 2) {
+                    s = s.replace(',', '.');
+                } else {
+                    s = s.replace(/,/g, '');
+                }
+            } else if (lastDot > -1) {
+                // Si tiene múltiples puntos (ej: 2.848.945), son miles
+                const parts = s.split('.');
+                if (parts.length > 2 || (parts.length === 2 && parts[1].length === 3 && parseFloat(parts[0]) < 100)) {
+                    s = s.replace(/\./g, '');
+                }
+            }
+            const num = parseFloat(s);
+            return isNaN(num) ? null : num;
+        }
+
+        function formatearIndicador(str) {
+            if (!str) return "";
+            const num = parseFlexibleNumber(str);
+            if (num === null) return str;
+            if (str.includes('$')) {
+                return '$' + Math.round(num).toLocaleString('es-AR');
+            }
+            if (str.includes('%')) {
+                return (num > 0 ? '+' : '') + num.toFixed(1).replace('.', ',') + '%';
+            }
+            return Math.round(num).toLocaleString('es-AR');
         }
 
         let marketData = {
@@ -980,31 +1031,31 @@
         };
 
         let fallbackGanadores = [
-            { ticker: "SPOT", empresa: "Spotify Technology S.A.", var: "+10,03%" },
-            { ticker: "UNH", empresa: "UnitedHealth Group Inc.", var: "+5,87%" },
-            { ticker: "HD", empresa: "Home Depot, Inc.", var: "+5,85%" },
-            { ticker: "TSLA", empresa: "Tesla, Inc.", var: "+5,60%" },
-            { ticker: "JNJ", empresa: "Johnson & Johnson", var: "+4,72%" }
+            { ticker: "AMD", empresa: "Advanced Micro Devices", var: "+9,14%" },
+            { ticker: "TSLA", empresa: "Tesla, Inc.", var: "+7,96%" },
+            { ticker: "AVGO", empresa: "Broadcom Inc.", var: "+7,66%" },
+            { ticker: "NVDA", empresa: "NVIDIA Corporation", var: "+3,24%" },
+            { ticker: "B", empresa: "Barrick Mining Corp.", var: "+2,69%" }
         ];
 
         let fallbackPerdedores = [
-            { ticker: "META", empresa: "Meta Platforms, Inc.", var: "-8,53%" },
-            { ticker: "NFLX", empresa: "Netflix, Inc.", var: "-4,93%" },
-            { ticker: "GOOGL", empresa: "Alphabet Inc.", var: "-4,81%" },
-            { ticker: "AMD", empresa: "Advanced Micro Devices", var: "-3,94%" },
-            { ticker: "AVGO", empresa: "Broadcom Inc.", var: "-1,68%" }
+            { ticker: "NU", empresa: "Nu Holdings Ltd.", var: "-20,53%" },
+            { ticker: "MELI", empresa: "MercadoLibre, Inc.", var: "-7,89%" },
+            { ticker: "NFLX", empresa: "Netflix, Inc.", var: "-5,95%" },
+            { ticker: "SPOT", empresa: "Spotify Technology S.A.", var: "-5,29%" },
+            { ticker: "META", empresa: "Meta Platforms, Inc.", var: "-4,34%" }
         ];
 
         const FALLBACK_NOTICIAS = [
             { titulo: "Temporada de Balances Big Tech en Wall Street", descripcion: "Alphabet, Microsoft, Meta y Amazon concentran la atención del mercado con foco en márgenes operativos e inversión en infraestructura de IA." },
-            { titulo: "Semiconductores lideran el impulso del S&P 500", descripcion: "AMD (+9,1% sem) y Broadcom (+7,7% sem) encabezan los avances tecnológicos mientras el índice norteamericano opera en torno a los 7.729 puntos." },
-            { titulo: "Mercado local: Dólar financieros estables y Merval en USD", descripcion: "El Dólar MEP opera en $1.561 y el CCL en $1.656, mientras el S&P Merval medido en dólares se ubica en la zona de $1.720." },
+            { titulo: "Semiconductores lideran el impulso del S&P 500", descripcion: "AMD (+9,1% sem) y Broadcom (+7,7% sem) encabezan los avances tecnológicos mientras el índice norteamericano opera en torno a los 7.720 puntos." },
+            { titulo: "Mercado local: Dólares financieros y Merval en USD", descripcion: "El Dólar MEP opera en $1.578 y el CCL en $1.683, mientras el S&P Merval medido en dólares CCL se ubica en la zona de $1.693." },
             { titulo: "Energía integrada sostiene retornos anuales del 50%", descripcion: "Chevron (CVX) y ExxonMobil (XOM) acumulan subas de +50,1% YTD apoyadas en generación de caja libre y disciplina de capital." },
             { titulo: "Ajuste en fintechs y e-commerce latinoamericano", descripcion: "Nu Holdings y MercadoLibre registran tomas de ganancias semanales tras fuertes expansiones de cartera de crédito y logística regional." }
         ];
 
         document.addEventListener("DOMContentLoaded", () => {
-            try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+            try { if (window.lucide) lucide.createIcons(); } catch {}
             cargarSheetURLsGuardadas();
             
             const ideaElem = document.getElementById('story-idea-text');
@@ -1028,55 +1079,44 @@
             document.getElementById('cfg-sheet-url').value = safeGetStorage('cubo_sheet_csv_url', DEFAULT_SHEET_URL);
             document.getElementById('cfg-subas-url').value = safeGetStorage('cubo_subas_csv_url', DEFAULT_SUBAS_URL);
             document.getElementById('cfg-bajas-url').value = safeGetStorage('cubo_bajas_csv_url', DEFAULT_BAJAS_URL);
-            const tEl = document.getElementById('cfg-tickers-url');
-            if (tEl) tEl.value = safeGetStorage('cubo_tickers_csv_url', DEFAULT_TICKERS_URL);
-            const kEl = document.getElementById('cfg-fmp-key');
-            if (kEl) kEl.value = safeGetStorage('cubo_fmp_api_key', '');
+            document.getElementById('cfg-tickers-url').value = safeGetStorage('cubo_tickers_csv_url', DEFAULT_TICKERS_URL);
+            document.getElementById('cfg-fmp-key').value = safeGetStorage('cubo_fmp_api_key', '');
+        }
+
+        function normalizarGoogleSheetURL(url, defaultGid = '') {
+            let u = url.trim();
+            if (u.includes("/pubhtml")) return u.replace("/pubhtml", "/pub?output=csv");
+            if (u.includes("/edit")) {
+                const gidMatch = u.match(/gid=(\d+)/);
+                const gid = gidMatch ? gidMatch[1] : defaultGid;
+                return u.replace(/\/edit.*$/, `/export?format=csv${gid ? '&gid=' + gid : ''}`);
+            }
+            return u;
         }
 
         function guardarSheetURLs() {
-            let url = document.getElementById('cfg-sheet-url').value.trim();
-            if (url.includes("/pubhtml")) url = url.replace("/pubhtml", "/pub?output=csv");
-            safeSetStorage('cubo_sheet_csv_url', url);
-
-            let subasUrl = document.getElementById('cfg-subas-url').value.trim();
-            if (subasUrl.includes("/edit")) subasUrl = subasUrl.replace(/\/edit.*$/, '/export?format=csv');
-            safeSetStorage('cubo_subas_csv_url', subasUrl);
-
-            let bajasUrl = document.getElementById('cfg-bajas-url').value.trim();
-            if (bajasUrl.includes("/edit")) bajasUrl = bajasUrl.replace(/\/edit.*$/, '/export?format=csv');
-            safeSetStorage('cubo_bajas_csv_url', bajasUrl);
-
-            const tEl = document.getElementById('cfg-tickers-url');
-            if (tEl) {
-                let tickersUrl = tEl.value.trim();
-                if (tickersUrl.includes("/edit")) tickersUrl = tickersUrl.replace(/\/edit.*$/, '/export?format=csv&gid=1534713781');
-                safeSetStorage('cubo_tickers_csv_url', tickersUrl);
-            }
-
-            const kEl = document.getElementById('cfg-fmp-key');
-            if (kEl) {
-                safeSetStorage('cubo_fmp_api_key', kEl.value.trim());
-            }
+            safeSetStorage('cubo_sheet_csv_url', normalizarGoogleSheetURL(document.getElementById('cfg-sheet-url').value));
+            safeSetStorage('cubo_subas_csv_url', normalizarGoogleSheetURL(document.getElementById('cfg-subas-url').value, '454584979'));
+            safeSetStorage('cubo_bajas_csv_url', normalizarGoogleSheetURL(document.getElementById('cfg-bajas-url').value, '205860665'));
+            safeSetStorage('cubo_tickers_csv_url', normalizarGoogleSheetURL(document.getElementById('cfg-tickers-url').value, '1534713781'));
+            safeSetStorage('cubo_fmp_api_key', document.getElementById('cfg-fmp-key').value.trim());
 
             toggleConfigPanel();
             sincronizarConSheet();
         }
 
         function renderizarListaNoticias(lista, fechaStr) {
-            let html = "";
-            lista.forEach((item, index) => {
-                html += `
-                    <div class="bg-cubo-bg p-3.5 rounded-xl border border-cubo-border flex flex-col justify-between">
-                        <div>
-                            <span class="text-[10px] font-mono font-bold text-cubo-sky bg-cubo-sky/10 px-2.5 py-0.5 rounded border border-cubo-sky/20 inline-block mb-2">0${index + 1}</span>
-                            <h4 class="font-semibold text-xs text-white leading-snug mb-1.5">${item.titulo}</h4>
-                            <p class="text-[11px] text-cubo-muted leading-relaxed">${item.descripcion}</p>
-                        </div>
+            const container = document.getElementById('seccion-noticias-dia');
+            if (!container) return;
+            container.innerHTML = lista.map((item, index) => `
+                <div class="bg-cubo-bg p-3.5 rounded-xl border border-cubo-border flex flex-col justify-between hover:border-cubo-sky/30 transition">
+                    <div>
+                        <span class="text-[10px] font-mono font-bold text-cubo-sky bg-cubo-sky/10 px-2.5 py-0.5 rounded border border-cubo-sky/20 inline-block mb-2">0${index + 1}</span>
+                        <h4 class="font-semibold text-xs text-white leading-snug mb-1.5">${item.titulo}</h4>
+                        <p class="text-[11px] text-cubo-muted leading-relaxed">${item.descripcion}</p>
                     </div>
-                `;
-            });
-            document.getElementById('seccion-noticias-dia').innerHTML = html;
+                </div>
+            `).join('');
             if (fechaStr) {
                 document.getElementById('fecha-noticias').innerText = `Actualizado: ${fechaStr}`;
             }
@@ -1085,82 +1125,82 @@
         async function cargarNoticiasDelDia() {
             renderizarListaNoticias(FALLBACK_NOTICIAS, "Hoy");
             try {
-                const jsonFile = ['noticias', 'json'].join('.');
-                let response = await fetch(jsonFile);
+                const response = await fetch('noticias.json', { cache: 'no-store' });
                 if (!response.ok) return;
-                let data = await response.json();
-                if (data && data.noticias && data.noticias.length > 0) {
+                const data = await response.json();
+                if (data?.noticias?.length > 0) {
                     renderizarListaNoticias(data.noticias, data.fecha || "Hoy");
                 }
-            } catch (e) {
-                // Usa noticias de respaldo pre-cargadas
-            }
+            } catch {}
         }
 
-        function obtenerClasesVariacion(strVal) {
+        // Semáforo de variaciones (con soporte para lógica inversa en Riesgo País)
+        function obtenerClasesVariacion(strVal, invertido = false) {
             if (!strVal) return "bg-cubo-elevated text-cubo-muted border-cubo-border";
-            if (strVal.includes('+')) {
-                return "bg-cubo-green/10 text-cubo-green border-cubo-green/25 font-medium";
-            } else if (strVal.includes('-')) {
-                return "bg-cubo-red/10 text-cubo-red border-cubo-red/25 font-medium";
-            }
-            return "bg-cubo-elevated text-cubo-muted border-cubo-border";
+            const esMas = strVal.includes('+');
+            const esMenos = strVal.includes('-');
+            if (!esMas && !esMenos) return "bg-cubo-elevated text-cubo-muted border-cubo-border";
+
+            const usarVerde = invertido ? esMenos : esMas;
+            return usarVerde
+                ? "bg-cubo-green/10 text-cubo-green border-cubo-green/25 font-medium"
+                : "bg-cubo-red/10 text-cubo-red border-cubo-red/25 font-medium";
         }
 
-        function obtenerColorTextoStory(strVal) {
+        function obtenerColorTextoStory(strVal, invertido = false) {
             if (!strVal) return "text-[#A1A1AA]";
-            if (strVal.includes('+')) return "text-[#4ADE80]";
-            if (strVal.includes('-')) return "text-[#F87171]";
-            return "text-[#A1A1AA]";
+            const esMas = strVal.includes('+');
+            const esMenos = strVal.includes('-');
+            if (!esMas && !esMenos) return "text-[#A1A1AA]";
+            const usarVerde = invertido ? esMenos : esMas;
+            return usarVerde ? "text-[#4ADE80]" : "text-[#F87171]";
         }
 
+        // Sincronización paralela ultrarrápida
         async function sincronizarConSheet() {
-            let url = safeGetStorage('cubo_sheet_csv_url', DEFAULT_SHEET_URL);
-            if (url.includes("/pubhtml")) url = url.replace("/pubhtml", "/pub?output=csv");
-
-            let subasUrl = safeGetStorage('cubo_subas_csv_url', DEFAULT_SUBAS_URL);
-            let bajasUrl = safeGetStorage('cubo_bajas_csv_url', DEFAULT_BAJAS_URL);
-            let tickersUrl = safeGetStorage('cubo_tickers_csv_url', DEFAULT_TICKERS_URL);
+            const urlDatos = normalizarGoogleSheetURL(safeGetStorage('cubo_sheet_csv_url', DEFAULT_SHEET_URL));
+            const urlSubas = normalizarGoogleSheetURL(safeGetStorage('cubo_subas_csv_url', DEFAULT_SUBAS_URL), '454584979');
+            const urlBajas = normalizarGoogleSheetURL(safeGetStorage('cubo_bajas_csv_url', DEFAULT_BAJAS_URL), '205860665');
+            const urlTickers = normalizarGoogleSheetURL(safeGetStorage('cubo_tickers_csv_url', DEFAULT_TICKERS_URL), '1534713781');
 
             const badge = document.getElementById('badge-estado');
+            const iconSync = document.getElementById('icon-sync');
+            if (iconSync) iconSync.classList.add('animate-spin');
+
             badge.className = "text-xs bg-cubo-sky/10 text-cubo-sky font-medium px-3 py-1.5 rounded-lg border border-cubo-sky/25 flex items-center gap-1.5 mr-1";
             badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-cubo-sky animate-ping"></span> Sincronizando...`;
 
             try {
-                let response = await fetch(url);
-                let csvText = await response.text();
-                parsearCSVConComillas(csvText);
-                actualizarInterfaz();
+                // Peticiones simultáneas en paralelo
+                const [resDatos, resSubas, resBajas, resTickers] = await Promise.allSettled([
+                    fetch(urlDatos, { cache: 'no-store' }).then(r => r.ok ? r.text() : Promise.reject()),
+                    fetch(urlSubas, { cache: 'no-store' }).then(r => r.ok ? r.text() : Promise.reject()),
+                    fetch(urlBajas, { cache: 'no-store' }).then(r => r.ok ? r.text() : Promise.reject()),
+                    fetch(urlTickers, { cache: 'no-store' }).then(r => r.ok ? r.text() : Promise.reject())
+                ]);
+
+                if (resDatos.status === 'fulfilled') {
+                    procesarCSVDatosPrincipales(resDatos.value);
+                    actualizarInterfaz();
+                }
 
                 let ganadoresActuales = fallbackGanadores;
                 let perdedoresActuales = fallbackPerdedores;
 
-                if (subasUrl) {
-                    try {
-                        let resSubas = await fetch(subasUrl);
-                        let textSubas = await resSubas.text();
-                        actualizarPreciosDesdeCSV(textSubas);
-                        let parsedSubas = extraerTop5DesdeCSV(textSubas);
-                        if (parsedSubas.length > 0) ganadoresActuales = parsedSubas;
-                    } catch (e) {}
+                if (resSubas.status === 'fulfilled') {
+                    actualizarPreciosDesdeCSV(resSubas.value);
+                    const parsedSubas = extraerTop5DesdeCSV(resSubas.value);
+                    if (parsedSubas.length > 0) ganadoresActuales = parsedSubas;
                 }
 
-                if (bajasUrl) {
-                    try {
-                        let resBajas = await fetch(bajasUrl);
-                        let textBajas = await resBajas.text();
-                        actualizarPreciosDesdeCSV(textBajas);
-                        let parsedBajas = extraerTop5DesdeCSV(textBajas);
-                        if (parsedBajas.length > 0) perdedoresActuales = parsedBajas;
-                    } catch (e) {}
+                if (resBajas.status === 'fulfilled') {
+                    actualizarPreciosDesdeCSV(resBajas.value);
+                    const parsedBajas = extraerTop5DesdeCSV(resBajas.value);
+                    if (parsedBajas.length > 0) perdedoresActuales = parsedBajas;
                 }
 
-                if (tickersUrl) {
-                    try {
-                        let resTickers = await fetch(tickersUrl);
-                        let textTickers = await resTickers.text();
-                        sincronizarListaTickersCSV(textTickers);
-                    } catch (e) {}
+                if (resTickers.status === 'fulfilled') {
+                    sincronizarListaTickersCSV(resTickers.value);
                 }
 
                 await enriquecerConAPIExternaOpcional();
@@ -1172,6 +1212,9 @@
                 filtrarScreener();
                 seleccionarTickerFundamental(tickerSeleccionadoActual, false);
 
+                const ahora = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+                document.getElementById('timestamp-sync').innerText = `Últ. act: ${ahora} hs · Semanal & YTD`;
+
                 badge.className = "text-xs bg-cubo-green/10 text-cubo-green font-medium px-3 py-1.5 rounded-lg border border-cubo-green/25 flex items-center gap-1.5 mr-1";
                 badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-cubo-green"></span> Google Sheets Sincronizado`;
 
@@ -1182,59 +1225,31 @@
 
                 badge.className = "text-xs bg-cubo-elevated text-cubo-muted font-medium px-3 py-1.5 rounded-lg border border-cubo-border flex items-center gap-1.5 mr-1";
                 badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-cubo-muted"></span> Modo Local Activo`;
+            } finally {
+                if (iconSync) iconSync.classList.remove('animate-spin');
             }
         }
 
-        function redondearValor(str) {
-            if (!str) return "";
-            let limpio = str.replace('$', '').replace(/\./g, '').replace(',', '.').trim();
-            let num = parseFloat(limpio);
-            if (!isNaN(num) && str.includes('$')) {
-                return '$' + Math.round(num).toLocaleString('es-AR');
-            }
-            if (!isNaN(num) && str.includes('%')) {
-                return (num > 0 ? '+' : '') + num.toFixed(1).replace('.', ',') + '%';
-            }
-            return str;
-        }
-
-        function parsearCSVConComillas(text) {
-            let lines = text.split("\n");
-            lines.forEach(line => {
-                let cols = [];
-                let current = '';
-                let inQuotes = false;
-                for (let i = 0; i < line.length; i++) {
-                    let char = line[i];
-                    if (char === '"') {
-                        inQuotes = !inQuotes;
-                    } else if (char === ',' && !inQuotes) {
-                        cols.push(current.trim());
-                        current = '';
-                    } else {
-                        current += char;
-                    }
-                }
-                cols.push(current.trim());
-                cols = cols.map(c => c.replace(/^"|"$/g, '').trim());
-
+        function procesarCSVDatosPrincipales(text) {
+            const rows = parseCSV(text);
+            rows.forEach(cols => {
                 if (cols.length >= 2) {
-                    let nombre = cols[0].toUpperCase();
-                    let valor = redondearValor(cols[1]);
-                    let sem = redondearValor(cols[3] || "");
-                    let ytd = redondearValor(cols[5] || "");
+                    const nombre = cols[0].toUpperCase();
+                    const valor = formatearIndicador(cols[1]);
+                    const sem = formatearIndicador(cols[3] || "");
+                    const ytd = formatearIndicador(cols[5] || "");
 
-                    if (nombre.includes("MERVAL EN USD")) {
+                    if (nombre.includes("MERVAL EN USD") || nombre.includes("MERVAL (USD)")) {
                         marketData.mervalUsd = { val: valor, sem, ytd };
-                    } else if (nombre.includes("S&P MERVAL")) {
+                    } else if (nombre.includes("MERVAL")) {
                         marketData.mervalArs = { val: valor, sem, ytd };
-                    } else if (nombre.includes("SP500")) {
+                    } else if (nombre.includes("SP500") || nombre.includes("S&P 500")) {
                         marketData.sp500 = { val: valor, sem, ytd };
-                    } else if (nombre.includes("BTC")) {
+                    } else if (nombre.includes("BTC") || nombre.includes("BITCOIN")) {
                         marketData.btc = { val: valor, sem, ytd };
-                    } else if (nombre.includes("DÓLAR MEP") || nombre.includes("DOLAR MEP")) {
+                    } else if (nombre.includes("MEP")) {
                         marketData.mep = { val: valor, sem, ytd };
-                    } else if (nombre.includes("DÓLAR CCL") || nombre.includes("DOLAR CCL")) {
+                    } else if (nombre.includes("CCL")) {
                         marketData.ccl = { val: valor, sem, ytd };
                     } else if (nombre.includes("RIESGO")) {
                         marketData.riesgo = { val: valor, sem, ytd };
@@ -1244,72 +1259,40 @@
         }
 
         function extraerTop5DesdeCSV(text) {
-            let lines = text.split("\n");
-            let resultados = [];
-            let count = 0;
-
-            for (let i = 1; i < lines.length && count < 5; i++) {
-                let line = lines[i].trim();
-                if (!line) continue;
-
-                let cols = [];
-                let current = '';
-                let inQuotes = false;
-                for (let j = 0; j < line.length; j++) {
-                    let char = line[j];
-                    if (char === '"') {
-                        inQuotes = !inQuotes;
-                    } else if (char === ',' && !inQuotes) {
-                        cols.push(current.trim());
-                        current = '';
-                    } else {
-                        current += char;
-                    }
-                }
-                cols.push(current.trim());
-                cols = cols.map(c => c.replace(/^"|"$/g, '').trim());
-
-                if (cols.length >= 4) {
-                    let ticker = cols[0];
-                    let empresa = cols[1];
-                    let varSem = cols[3];
-                    if (ticker) {
-                        resultados.push({ ticker, empresa, var: varSem });
-                        count++;
-                    }
+            const rows = parseCSV(text);
+            const resultados = [];
+            for (let i = 1; i < rows.length && resultados.length < 5; i++) {
+                const cols = rows[i];
+                if (cols.length >= 4 && cols[0]) {
+                    const numSem = parseFlexibleNumber(cols[3]);
+                    const varFormatted = numSem !== null
+                        ? (numSem > 0 ? '+' : '') + numSem.toFixed(2).replace('.', ',') + '%'
+                        : cols[3];
+                    resultados.push({ ticker: cols[0], empresa: cols[1], var: varFormatted });
                 }
             }
             return resultados;
         }
 
         function renderizarTabla(elementId, datos, esPositivo) {
-            let html = "";
             const colorClass = esPositivo ? "text-cubo-green" : "text-cubo-red";
-
-            datos.forEach(item => {
-                html += `
-                    <tr onclick="seleccionarTickerFundamental('${item.ticker}', true)" class="hover:bg-cubo-elevated/60 transition cursor-pointer" title="Ver análisis fundamental e histórico de ${item.ticker}">
-                        <td class="py-2 font-semibold text-white flex items-center gap-1.5"><span class="text-cubo-sky font-mono">${item.ticker}</span></td>
-                        <td class="py-2 text-cubo-muted truncate max-w-[190px]">${item.empresa}</td>
-                        <td class="py-2 text-right font-semibold ${colorClass}">${item.var}</td>
-                    </tr>
-                `;
-            });
-            document.getElementById(elementId).innerHTML = html;
+            document.getElementById(elementId).innerHTML = datos.map(item => `
+                <tr onclick="seleccionarTickerFundamental('${item.ticker}', true)" class="hover:bg-cubo-elevated/60 transition cursor-pointer" title="Ver análisis fundamental e histórico de ${item.ticker}">
+                    <td class="py-2 font-semibold text-white flex items-center gap-1.5"><span class="text-cubo-sky font-mono">${item.ticker}</span></td>
+                    <td class="py-2 text-cubo-muted truncate max-w-[190px]">${item.empresa}</td>
+                    <td class="py-2 text-right font-semibold ${colorClass}">${item.var}</td>
+                </tr>
+            `).join('');
         }
 
         function renderizarStoryTop(ganadores, perdedores) {
-            let htmlG = "";
-            ganadores.forEach(item => {
-                htmlG += `<div class="flex justify-between items-center"><span class="font-semibold text-white">${item.ticker}</span> <span class="text-[#4ADE80] font-semibold">${item.var}</span></div>`;
-            });
-            document.getElementById('story-ganadores').innerHTML = htmlG;
+            document.getElementById('story-ganadores').innerHTML = ganadores.map(item =>
+                `<div class="flex justify-between items-center"><span class="font-semibold text-white">${item.ticker}</span> <span class="text-[#4ADE80] font-semibold">${item.var}</span></div>`
+            ).join('');
 
-            let htmlP = "";
-            perdedores.forEach(item => {
-                htmlP += `<div class="flex justify-between items-center"><span class="font-semibold text-white">${item.ticker}</span> <span class="text-[#F87171] font-semibold">${item.var}</span></div>`;
-            });
-            document.getElementById('story-perdedores').innerHTML = htmlP;
+            document.getElementById('story-perdedores').innerHTML = perdedores.map(item =>
+                `<div class="flex justify-between items-center"><span class="font-semibold text-white">${item.ticker}</span> <span class="text-[#F87171] font-semibold">${item.var}</span></div>`
+            ).join('');
         }
 
         function renderizarTablasYStory() {
@@ -1318,11 +1301,11 @@
             renderizarStoryTop(fallbackGanadores.slice(0, 3), fallbackPerdedores.slice(0, 3));
         }
 
-        function aplicarPildora(id, prefijo, valor) {
+        function aplicarPildora(id, prefijo, valor, invertido = false) {
             const el = document.getElementById(id);
             if (!el) return;
             el.innerText = `${prefijo}: ${valor}`;
-            el.className = `px-2 py-0.5 rounded-md border text-xs num-tabular ${obtenerClasesVariacion(valor)}`;
+            el.className = `px-2 py-0.5 rounded-md border text-xs num-tabular ${obtenerClasesVariacion(valor, invertido)}`;
         }
 
         function actualizarInterfaz() {
@@ -1338,9 +1321,10 @@
             aplicarPildora('sem-mep', 'Sem', marketData.mep.sem);
             aplicarPildora('ytd-mep', 'YTD', marketData.mep.ytd);
 
+            // Riesgo País usa semáforo invertido (baja = verde, suba = rojo)
             document.getElementById('val-riesgo').innerText = marketData.riesgo.val;
-            aplicarPildora('sem-riesgo', 'Sem', marketData.riesgo.sem);
-            aplicarPildora('ytd-riesgo', 'YTD', marketData.riesgo.ytd);
+            aplicarPildora('sem-riesgo', 'Sem', marketData.riesgo.sem, true);
+            aplicarPildora('ytd-riesgo', 'YTD', marketData.riesgo.ytd, true);
 
             document.getElementById('val-merval-ars').innerText = marketData.mervalArs.val;
             aplicarPildora('merval-ars-sem', 'Sem', marketData.mervalArs.sem);
@@ -1348,19 +1332,30 @@
 
             document.getElementById('val-ccl').innerText = marketData.ccl.val;
             aplicarPildora('ccl-sem', 'Sem', marketData.ccl.sem);
+            aplicarPildora('ccl-ytd', 'YTD', marketData.ccl.ytd);
+
+            // Calcular Brecha / Canje CCL vs MEP automáticamente
+            const numMep = parseFlexibleNumber(marketData.mep.val);
+            const numCcl = parseFlexibleNumber(marketData.ccl.val);
+            const badgeCanje = document.getElementById('badge-canje');
+            if (badgeCanje && numMep > 0 && numCcl > 0) {
+                const canjePct = ((numCcl - numMep) / numMep) * 100;
+                badgeCanje.innerText = `Canje: ${canjePct >= 0 ? '+' : ''}${canjePct.toFixed(1).replace('.', ',')}%`;
+            }
 
             document.getElementById('val-btc').innerText = marketData.btc.val;
             aplicarPildora('btc-sem', 'Sem', marketData.btc.sem);
+            aplicarPildora('btc-ytd', 'YTD', marketData.btc.ytd);
 
             // Actualizar Story 9:16
             const itemsStory = [
-                { prefix: 'story-merval', valId: 'story-merval-usd', data: marketData.mervalUsd },
-                { prefix: 'story-sp500',  valId: 'story-sp500',      data: marketData.sp500 },
-                { prefix: 'story-mep',    valId: 'story-mep',        data: marketData.mep },
-                { prefix: 'story-riesgo', valId: 'story-riesgo',     data: marketData.riesgo },
-                { prefix: 'story-ccl',    valId: 'story-ccl',        data: marketData.ccl },
-                { prefix: 'story-btc',    valId: 'story-btc',        data: marketData.btc },
-                { prefix: 'story-merval-ars', valId: 'story-merval-ars', data: marketData.mervalArs }
+                { prefix: 'story-merval', valId: 'story-merval-usd', data: marketData.mervalUsd, inv: false },
+                { prefix: 'story-sp500',  valId: 'story-sp500',      data: marketData.sp500,     inv: false },
+                { prefix: 'story-mep',    valId: 'story-mep',        data: marketData.mep,       inv: false },
+                { prefix: 'story-riesgo', valId: 'story-riesgo',     data: marketData.riesgo,    inv: true },
+                { prefix: 'story-ccl',    valId: 'story-ccl',        data: marketData.ccl,       inv: false },
+                { prefix: 'story-btc',    valId: 'story-btc',        data: marketData.btc,       inv: false },
+                { prefix: 'story-merval-ars', valId: 'story-merval-ars', data: marketData.mervalArs, inv: false }
             ];
 
             itemsStory.forEach(item => {
@@ -1371,26 +1366,41 @@
                 if (valEl) valEl.innerText = item.data.val;
                 if (semEl) {
                     semEl.innerText = `Sem: ${item.data.sem}`;
-                    semEl.className = obtenerColorTextoStory(item.data.sem);
+                    semEl.className = obtenerColorTextoStory(item.data.sem, item.inv);
                 }
                 if (ytdEl) {
                     ytdEl.innerText = `YTD: ${item.data.ytd}`;
-                    ytdEl.className = obtenerColorTextoStory(item.data.ytd);
+                    ytdEl.className = obtenerColorTextoStory(item.data.ytd, item.inv);
                 }
             });
         }
 
+        function actualizarHeaderStory() {
+            const val = document.getElementById('input-story-badge').value.trim();
+            document.getElementById('story-badge-title').innerText = val || "CIERRE SEMANAL";
+        }
+
         function descargarStoryPNG() {
             const node = document.getElementById('story-infographic');
+            const btn = document.getElementById('btn-descargar-png');
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `Generando PNG...`;
+
             html2canvas(node, {
                 scale: 3,
                 useCORS: true,
                 backgroundColor: '#141417'
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `cierre-semanal-cubo.png`;
+                const fecha = new Date().toISOString().split('T')[0];
+                link.download = `cierre-mercado-${fecha}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
+            }).finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+                try { if (window.lucide) lucide.createIcons(); } catch {}
             });
         }
 
@@ -1407,21 +1417,11 @@
 
             mappings.forEach(m => {
                 const isChecked = document.getElementById(m.chk).checked;
-                const card = document.getElementById(m.card);
-                if (isChecked) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
+                document.getElementById(m.card).classList.toggle('hidden', !isChecked);
             });
 
-            const showGanadores = document.getElementById('chk-story-ganadores').checked;
-            const boxGanadores = document.getElementById('story-box-ganadores');
-            if (showGanadores) { boxGanadores.classList.remove('hidden'); } else { boxGanadores.classList.add('hidden'); }
-
-            const showPerdedores = document.getElementById('chk-story-perdedores').checked;
-            const boxPerdedores = document.getElementById('story-box-perdedores');
-            if (showPerdedores) { boxPerdedores.classList.remove('hidden'); } else { boxPerdedores.classList.add('hidden'); }
+            document.getElementById('story-box-ganadores').classList.toggle('hidden', !document.getElementById('chk-story-ganadores').checked);
+            document.getElementById('story-box-perdedores').classList.toggle('hidden', !document.getElementById('chk-story-perdedores').checked);
         }
 
         function actualizarTextoIdea() {
@@ -1441,7 +1441,7 @@
         }
 
         // ============================================================
-        // BASE DE DATOS FUNDAMENTAL & HISTÓRICA VERIFICADA (34 ACTIVOS HOJA TICKERS)
+        // BASE DE DATOS FUNDAMENTAL & HISTÓRICA VERIFICADA
         // ============================================================
         const FUNDAMENTALS_DB = {
             "AAPL": {
@@ -1754,8 +1754,8 @@
 
         let listaTickersHoja = Object.keys(FUNDAMENTALS_DB);
         let tickerSeleccionadoActual = "AAPL";
-        let modoGraficoActual = "nativo"; // 'nativo' o 'tradingview'
-        let periodoHistoricoActual = "1Y"; // '1M', '3M', '6M', 'YTD', '1Y', '5Y'
+        let modoGraficoActual = "nativo";
+        let periodoHistoricoActual = "1Y";
         let instanciaChartHistorico = null;
         let columnaOrdenActual = "mcapNum";
         let ordenAscendente = false;
@@ -1777,39 +1777,12 @@
             return val.toFixed(dec).replace('.', ',');
         }
 
-        function parsearPorcentajeCSV(str) {
-            if (!str) return null;
-            let limpio = str.replace('%', '').replace('+', '').replace(/\./g, '').replace(',', '.').trim();
-            let n = parseFloat(limpio);
-            return isNaN(n) ? null : n;
-        }
-
-        function parsearPrecioCSV(str) {
-            if (!str) return null;
-            let limpio = str.replace('$', '').replace(/\./g, '').replace(',', '.').trim();
-            let n = parseFloat(limpio);
-            return isNaN(n) ? null : n;
-        }
-
         function actualizarPreciosDesdeCSV(csvText) {
-            let lines = csvText.split("\n");
-            for (let i = 1; i < lines.length; i++) {
-                let line = lines[i].trim();
-                if (!line) continue;
-                let cols = [];
-                let current = '';
-                let inQuotes = false;
-                for (let j = 0; j < line.length; j++) {
-                    let ch = line[j];
-                    if (ch === '"') inQuotes = !inQuotes;
-                    else if (ch === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
-                    else current += ch;
-                }
-                cols.push(current.trim());
-                cols = cols.map(c => c.replace(/^"|"$/g, '').trim());
-
+            const rows = parseCSV(csvText);
+            for (let i = 1; i < rows.length; i++) {
+                const cols = rows[i];
                 if (cols.length >= 6) {
-                    let tk = cols[0].toUpperCase();
+                    const tk = cols[0].toUpperCase();
                     if (!FUNDAMENTALS_DB[tk]) {
                         FUNDAMENTALS_DB[tk] = {
                             ticker: tk, empresa: cols[1] || tk, exchange: "NYSE", sector: "US Equity",
@@ -1821,15 +1794,17 @@
                             hist1Y: [95, 96, 98, 97, 99, 100, 101, 102, 100, 101, 100, 100]
                         };
                     }
-                    let p = parsearPrecioCSV(cols[2]);
-                    let s = parsearPorcentajeCSV(cols[3]);
-                    let m = parsearPorcentajeCSV(cols[4]);
-                    let y = parsearPorcentajeCSV(cols[5]);
+                    const p = parseFlexibleNumber(cols[2]);
+                    const s = parseFlexibleNumber(cols[3]);
+                    const m = parseFlexibleNumber(cols[4]);
+                    const y = parseFlexibleNumber(cols[5]);
 
-                    if (p !== null) {
+                    if (p !== null && p > 0) {
                         FUNDAMENTALS_DB[tk].price = p;
-                        let h = FUNDAMENTALS_DB[tk].hist1Y;
+                        const h = FUNDAMENTALS_DB[tk].hist1Y;
                         if (h && h.length > 0) h[h.length - 1] = p;
+                        if (p > FUNDAMENTALS_DB[tk].high52) FUNDAMENTALS_DB[tk].high52 = p;
+                        if (p < FUNDAMENTALS_DB[tk].low52) FUNDAMENTALS_DB[tk].low52 = p;
                     }
                     if (s !== null) FUNDAMENTALS_DB[tk].varSem = s;
                     if (m !== null) FUNDAMENTALS_DB[tk].varMes = m;
@@ -1839,10 +1814,10 @@
         }
 
         function sincronizarListaTickersCSV(csvText) {
-            let lines = csvText.split("\n");
-            let encontrados = [];
-            for (let i = 1; i < lines.length; i++) {
-                let tk = lines[i].replace(/"/g, '').split(',')[0].trim().toUpperCase();
+            const rows = parseCSV(csvText);
+            const encontrados = [];
+            for (let i = 1; i < rows.length; i++) {
+                const tk = (rows[i][0] || '').toUpperCase();
                 if (tk && tk !== "TICKER") {
                     encontrados.push(tk);
                     if (!FUNDAMENTALS_DB[tk]) {
@@ -1865,51 +1840,49 @@
             }
         }
 
+        // Actualizado a la nueva arquitectura /stable/ de Financial Modeling Prep
         async function enriquecerConAPIExternaOpcional() {
             const apiKey = safeGetStorage('cubo_fmp_api_key', '');
             if (!apiKey) return;
             try {
-                const symbols = listaTickersHoja.slice(0, 15).join(',');
-                const res = await fetch(`https://financialmodelingprep.com/api/v3/quote/${symbols}?apikey=${encodeURIComponent(apiKey)}`);
+                const tk = tickerSeleccionadoActual || "AAPL";
+                const res = await fetch(`https://financialmodelingprep.com/stable/ratios?symbol=${encodeURIComponent(tk)}&limit=1&apikey=${encodeURIComponent(apiKey)}`);
                 if (!res.ok) return;
                 const data = await res.json();
-                if (Array.isArray(data)) {
-                    data.forEach(item => {
-                        const tk = item.symbol;
-                        if (FUNDAMENTALS_DB[tk]) {
-                            if (item.price) FUNDAMENTALS_DB[tk].price = item.price;
-                            if (item.pe) FUNDAMENTALS_DB[tk].pe = item.pe;
-                            if (item.eps) FUNDAMENTALS_DB[tk].eps = item.eps;
-                            if (item.yearHigh) FUNDAMENTALS_DB[tk].high52 = item.yearHigh;
-                            if (item.yearLow) FUNDAMENTALS_DB[tk].low52 = item.yearLow;
-                        }
-                    });
+                if (Array.isArray(data) && data.length > 0) {
+                    const r = data[0];
+                    if (FUNDAMENTALS_DB[tk]) {
+                        if (r.priceToEarningsRatio) FUNDAMENTALS_DB[tk].pe = Number(r.priceToEarningsRatio);
+                        if (r.grossProfitMargin) FUNDAMENTALS_DB[tk].grossMargin = Number(r.grossProfitMargin) * 100;
+                        if (r.operatingProfitMargin) FUNDAMENTALS_DB[tk].opMargin = Number(r.operatingProfitMargin) * 100;
+                        if (r.netProfitMargin) FUNDAMENTALS_DB[tk].netMargin = Number(r.netProfitMargin) * 100;
+                        if (r.currentRatio) FUNDAMENTALS_DB[tk].currentRatio = Number(r.currentRatio);
+                        if (r.debtToEquityRatio) FUNDAMENTALS_DB[tk].de = Number(r.debtToEquityRatio);
+                    }
                     const lbl = document.getElementById('label-fuente-fundamental');
-                    if (lbl) lbl.innerText = "Fuente: API Externa Activa + Google Sheets";
+                    if (lbl) lbl.innerText = "Fuente: FMP /stable/ API Activa + Google Sheets";
                 }
-            } catch (e) {}
+            } catch {}
         }
 
         function renderizarPillsTickers() {
             const container = document.getElementById('barra-tickers-pills');
             if (!container) return;
-            let html = "";
-            listaTickersHoja.forEach(tk => {
+            container.innerHTML = listaTickersHoja.map(tk => {
                 const item = FUNDAMENTALS_DB[tk];
-                if (!item) return;
+                if (!item) return '';
                 const activo = (tk === tickerSeleccionadoActual);
                 const cls = activo
                     ? "bg-cubo-sky text-zinc-950 border-cubo-sky font-bold shadow-sm"
                     : "bg-cubo-bg text-cubo-muted hover:text-white border-cubo-border hover:border-cubo-sky/40";
                 const colorDot = item.varSem >= 0 ? "bg-cubo-green" : "bg-cubo-red";
-                html += `
+                return `
                     <button onclick="seleccionarTickerFundamental('${tk}', false)" class="px-2.5 py-1 rounded-lg border text-xs font-mono flex items-center gap-1.5 shrink-0 transition ${cls}">
                         <span class="w-1.5 h-1.5 rounded-full ${activo ? 'bg-zinc-950' : colorDot}"></span>
                         <span>${tk}</span>
                     </button>
                 `;
-            });
-            container.innerHTML = html;
+            }).join('');
         }
 
         function seleccionarTickerFundamental(ticker, hacerScroll = false) {
@@ -1918,7 +1891,6 @@
 
             renderizarPillsTickers();
 
-            // Cabecera de la ficha
             document.getElementById('fund-ticker').innerText = item.ticker;
             document.getElementById('fund-exchange').innerText = item.exchange;
             document.getElementById('fund-sector').innerText = item.sector;
@@ -1934,19 +1906,16 @@
             ytdEl.innerText = `YTD: ${ytdStr}`;
             ytdEl.className = `text-[10px] px-1.5 py-0.5 rounded border ${obtenerClasesVariacion(ytdStr)}`;
 
-            // Barra de 52 semanas
             document.getElementById('fund-low52').innerText = '$' + fmtNum(item.low52, 2);
             document.getElementById('fund-high52').innerText = '$' + fmtNum(item.high52, 2);
-            let rango = item.high52 - item.low52;
-            let pct52 = rango > 0 ? Math.max(2, Math.min(100, ((item.price - item.low52) / rango) * 100)) : 50;
+            const rango = item.high52 - item.low52;
+            const pct52 = rango > 0 ? Math.max(2, Math.min(100, ((item.price - item.low52) / rango) * 100)) : 50;
             document.getElementById('fund-bar52').style.width = `${pct52.toFixed(1)}%`;
             document.getElementById('fund-pos52-label').innerText = `${pct52.toFixed(0)}% del rango 52S`;
 
-            // Enlace fuente
             const linkEl = document.getElementById('fund-source-link');
             if (linkEl) linkEl.href = item.sourceUrl;
 
-            // Múltiplos
             document.getElementById('fund-mcap').innerText = item.mcap;
             document.getElementById('fund-ev').innerText = `EV: ${item.ev}`;
             document.getElementById('fund-pe').innerText = item.pe > 0 ? `${fmtNum(item.pe, 2)}x` : "N/A (ETF)";
@@ -1961,7 +1930,6 @@
             document.getElementById('fund-de').innerText = item.de > 0 ? `${fmtNum(item.de, 2)}x` : (item.sector === 'ETF' ? '0,00x' : 'Sin Deuda Neta');
             document.getElementById('fund-current-ratio').innerText = `Current Ratio: ${fmtNum(item.currentRatio, 2)}x`;
 
-            // Márgenes
             document.getElementById('fund-gross-margin').innerText = `${fmtNum(item.grossMargin, 2)}%`;
             document.getElementById('bar-gross-margin').style.width = `${Math.max(2, Math.min(100, item.grossMargin))}%`;
 
@@ -1971,58 +1939,51 @@
             document.getElementById('fund-net-margin').innerText = `${fmtNum(item.netMargin, 2)}%`;
             document.getElementById('bar-net-margin').style.width = `${Math.max(2, Math.min(100, item.netMargin))}%`;
 
-            // Actualizar gráficos
             renderizarGraficoHistoricoNativo(item);
             if (modoGraficoActual === 'tradingview') {
                 cargarWidgetTradingView(item);
             }
 
-            // Resaltar fila en Screener
             document.querySelectorAll('#tabla-screener-body tr').forEach(tr => {
-                if (tr.dataset.ticker === item.ticker) {
-                    tr.classList.add('bg-cubo-sky/10');
-                } else {
-                    tr.classList.remove('bg-cubo-sky/10');
-                }
+                tr.classList.toggle('bg-cubo-sky/10', tr.dataset.ticker === item.ticker);
             });
 
             if (hacerScroll) {
-                const sec = document.getElementById('seccion-fundamentales');
-                if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.getElementById('seccion-fundamentales')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
         function generarSeriePorPeriodo(item, periodo) {
             const base12 = item.hist1Y || [item.price * 0.9, item.price];
-            const mesesLabels = ["Nov 25", "Dic 25", "Ene 26", "Feb 26", "Mar 26", "Abr 26", "May 26", "Jun 26", "Jul 26", "Ago 26", "Sep 26", "Oct 26"];
+            const mesesLabels = ["Dic 25", "Ene 26", "Feb 26", "Mar 26", "Abr 26", "May 26", "Jun 26", "Jul 26", "Ago 26", "Sep 26", "Oct 26", "Nov 26"];
 
             if (periodo === '1M') {
                 const pActual = item.price;
                 const pInicio = pActual / (1 + (item.varMes / 100));
                 const pasos = 10;
-                let labels = [];
-                let valores = [];
+                const labels = [];
+                const valores = [];
                 for (let i = 0; i <= pasos; i++) {
                     labels.push(`Sem ${Math.ceil((i + 1) / 2.5)} · D${i * 3 + 1}`);
-                    let progreso = i / pasos;
-                    let onda = Math.sin(i * 1.3) * (pActual * 0.008);
-                    let val = pInicio + (pActual - pInicio) * progreso + (i === pasos ? 0 : onda);
+                    const progreso = i / pasos;
+                    const onda = Math.sin(i * 1.3) * (pActual * 0.008);
+                    const val = pInicio + (pActual - pInicio) * progreso + (i === pasos ? 0 : onda);
                     valores.push(Number(val.toFixed(2)));
                 }
                 return { labels, valores, retornoPct: item.varMes };
             } else if (periodo === '3M') {
-                let slice = base12.slice(-4);
-                let labels = mesesLabels.slice(-4);
-                let ret = ((slice[slice.length - 1] - slice[0]) / slice[0]) * 100;
+                const slice = base12.slice(-4);
+                const labels = mesesLabels.slice(-4);
+                const ret = ((slice[slice.length - 1] - slice[0]) / slice[0]) * 100;
                 return { labels, valores: slice, retornoPct: ret };
             } else if (periodo === '6M') {
-                let slice = base12.slice(-7);
-                let labels = mesesLabels.slice(-7);
-                let ret = ((slice[slice.length - 1] - slice[0]) / slice[0]) * 100;
+                const slice = base12.slice(-7);
+                const labels = mesesLabels.slice(-7);
+                const ret = ((slice[slice.length - 1] - slice[0]) / slice[0]) * 100;
                 return { labels, valores: slice, retornoPct: ret };
             } else if (periodo === 'YTD') {
-                let slice = base12.slice(1); // Dic 25 a Oct 26
-                let labels = mesesLabels.slice(1);
+                const slice = base12.slice(1);
+                const labels = mesesLabels.slice(1);
                 return { labels, valores: slice, retornoPct: item.varYtd };
             } else if (periodo === '5Y') {
                 const pActual = item.price;
@@ -2030,14 +1991,13 @@
                 const p2022 = Number((base12[0] * 0.48).toFixed(2));
                 const p2023 = Number((base12[0] * 0.68).toFixed(2));
                 const p2024 = Number((base12[0] * 0.85).toFixed(2));
-                const p2025 = Number(base12[1].toFixed(2));
-                let valores = [p2021, p2022, p2023, p2024, p2025, pActual];
-                let labels = ["2021", "2022", "2023", "2024", "2025", "Oct 2026"];
-                let ret = ((pActual - p2021) / p2021) * 100;
+                const p2025 = Number(base12[0].toFixed(2));
+                const valores = [p2021, p2022, p2023, p2024, p2025, pActual];
+                const labels = ["2021", "2022", "2023", "2024", "2025", "Nov 2026"];
+                const ret = ((pActual - p2021) / p2021) * 100;
                 return { labels, valores, retornoPct: ret };
             } else {
-                // 1Y por defecto
-                let ret = ((base12[base12.length - 1] - base12[0]) / base12[0]) * 100;
+                const ret = ((base12[base12.length - 1] - base12[0]) / base12[0]) * 100;
                 return { labels: mesesLabels, valores: base12, retornoPct: ret };
             }
         }
@@ -2047,11 +2007,9 @@
             ['1M', '3M', '6M', 'YTD', '1Y', '5Y'].forEach(p => {
                 const btn = document.getElementById(`btn-tf-${p}`);
                 if (!btn) return;
-                if (p === periodo) {
-                    btn.className = "px-2 py-1 rounded text-[11px] font-mono bg-cubo-sky/20 text-cubo-sky border border-cubo-sky/40 font-semibold transition";
-                } else {
-                    btn.className = "px-2 py-1 rounded text-[11px] font-mono bg-cubo-surface text-cubo-muted hover:text-white border border-cubo-border transition";
-                }
+                btn.className = (p === periodo)
+                    ? "px-2 py-1 rounded text-[11px] font-mono bg-cubo-sky/20 text-cubo-sky border border-cubo-sky/40 font-semibold transition"
+                    : "px-2 py-1 rounded text-[11px] font-mono bg-cubo-surface text-cubo-muted hover:text-white border border-cubo-border transition";
             });
             const item = FUNDAMENTALS_DB[tickerSeleccionadoActual] || FUNDAMENTALS_DB["AAPL"];
             renderizarGraficoHistoricoNativo(item);
@@ -2063,7 +2021,6 @@
             const colorPrincipal = esPositivo ? '#4ADE80' : '#F87171';
             const colorFondo = esPositivo ? 'rgba(74, 222, 128, 0.14)' : 'rgba(248, 113, 113, 0.14)';
 
-            // Estadísticas de cabecera del gráfico
             const retEl = document.getElementById('hist-stat-retorno');
             retEl.innerText = fmtPct(serie.retornoPct);
             retEl.className = `text-xs font-bold ${esPositivo ? 'text-cubo-green' : 'text-cubo-red'}`;
@@ -2077,7 +2034,6 @@
             mesEl.innerText = fmtPct(item.varMes);
             mesEl.className = `text-xs font-bold ${item.varMes >= 0 ? 'text-cubo-green' : 'text-cubo-red'}`;
 
-            // Pie del gráfico
             document.getElementById('footer-chart-ticker').innerText = item.ticker;
             const fSem = document.getElementById('footer-perf-sem');
             fSem.innerText = fmtPct(item.varSem);
@@ -2099,9 +2055,7 @@
             const canvas = document.getElementById('canvas-precio-historico');
             if (!canvas || typeof Chart === 'undefined') return;
 
-            if (instanciaChartHistorico) {
-                instanciaChartHistorico.destroy();
-            }
+            if (instanciaChartHistorico) instanciaChartHistorico.destroy();
 
             const ctx = canvas.getContext('2d');
             instanciaChartHistorico = new Chart(ctx, {
@@ -2124,10 +2078,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false
-                    },
+                    interaction: { mode: 'index', intersect: false },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
@@ -2138,9 +2089,7 @@
                             borderWidth: 1,
                             padding: 10,
                             callbacks: {
-                                label: function(context) {
-                                    return ` Precio: $${context.parsed.y.toFixed(2)} USD`;
-                                }
+                                label: context => ` Precio: $${context.parsed.y.toFixed(2)} USD`
                             }
                         }
                     },
@@ -2154,7 +2103,7 @@
                             ticks: {
                                 color: '#A1A1AA',
                                 font: { size: 10, family: 'Roboto Mono' },
-                                callback: function(val) { return '$' + val; }
+                                callback: val => '$' + val
                             }
                         }
                     }
@@ -2170,13 +2119,14 @@
             const boxTv = document.getElementById('contenedor-grafico-tv');
             const ctrlPeriodo = document.getElementById('controles-periodo-grafico');
 
+            const item = FUNDAMENTALS_DB[tickerSeleccionadoActual] || FUNDAMENTALS_DB["AAPL"];
+
             if (modo === 'tradingview') {
                 btnTv.className = "px-2.5 py-1 rounded-md text-xs font-semibold bg-cubo-sky text-zinc-950 transition";
                 btnNativo.className = "px-2.5 py-1 rounded-md text-xs font-medium text-cubo-muted hover:text-white transition";
                 boxNativo.classList.add('hidden');
                 boxTv.classList.remove('hidden');
                 if (ctrlPeriodo) ctrlPeriodo.classList.add('opacity-40', 'pointer-events-none');
-                const item = FUNDAMENTALS_DB[tickerSeleccionadoActual] || FUNDAMENTALS_DB["AAPL"];
                 cargarWidgetTradingView(item);
             } else {
                 btnNativo.className = "px-2.5 py-1 rounded-md text-xs font-semibold bg-cubo-sky text-zinc-950 transition";
@@ -2184,7 +2134,6 @@
                 boxTv.classList.add('hidden');
                 boxNativo.classList.remove('hidden');
                 if (ctrlPeriodo) ctrlPeriodo.classList.remove('opacity-40', 'pointer-events-none');
-                const item = FUNDAMENTALS_DB[tickerSeleccionadoActual] || FUNDAMENTALS_DB["AAPL"];
                 renderizarGraficoHistoricoNativo(item);
             }
         }
@@ -2213,7 +2162,6 @@
                     "container_id": "tradingview-widget-container"
                 });
             } else {
-                // Fallback iframe de TradingView si el script externo tarda en cargar
                 const iframeUrl = `https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(tvSymbol)}&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=0&theme=dark&style=1&timezone=America%2FArgentina%2FBuenos_Aires&locale=es`;
                 container.innerHTML = `<iframe src="${iframeUrl}" class="w-full h-full border-0" allowfullscreen></iframe>`;
             }
@@ -2260,14 +2208,18 @@
             const tbody = document.getElementById('tabla-screener-body');
             if (!tbody) return;
 
-            let html = "";
-            lista.forEach(item => {
+            if (lista.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="15" class="py-6 text-center text-cubo-muted">No se encontraron activos para ese filtro.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = lista.map(item => {
                 const esActivo = item.ticker === tickerSeleccionadoActual;
                 const rowBg = esActivo ? "bg-cubo-sky/10" : "hover:bg-cubo-elevated/50";
                 const semColor = item.varSem >= 0 ? "text-cubo-green" : "text-cubo-red";
                 const ytdColor = item.varYtd >= 0 ? "text-cubo-green" : "text-cubo-red";
 
-                html += `
+                return `
                     <tr data-ticker="${item.ticker}" onclick="seleccionarTickerFundamental('${item.ticker}', false)" class="${rowBg} transition cursor-pointer">
                         <td class="py-2.5 px-3 font-mono font-bold text-cubo-sky">${item.ticker}</td>
                         <td class="py-2.5 px-3">
@@ -2289,54 +2241,32 @@
                         <td class="py-2.5 px-3 text-right text-cubo-green font-medium">${fmtNum(item.netMargin, 1)}%</td>
                     </tr>
                 `;
-            });
-
-            if (lista.length === 0) {
-                html = `<tr><td colspan="15" class="py-6 text-center text-cubo-muted">No se encontraron activos para ese filtro.</td></tr>`;
-            }
-            tbody.innerHTML = html;
+            }).join('');
         }
 
         function exportarScreenerCSV() {
-            let headers = ["Ticker", "Empresa", "Sector", "Bolsa", "Precio_USD", "Var_Semanal_%", "Var_Mensual_%", "Var_YTD_%", "Market_Cap", "PE_Ratio", "Forward_PE", "EPS_USD", "PEG_Ratio", "ROE_%", "ROA_%", "Debt_Equity", "Margen_Bruto_%", "Margen_Operativo_%", "Margen_Neto_%"];
-            let rows = [headers.join(",")];
+            const headers = ["Ticker", "Empresa", "Sector", "Bolsa", "Precio_USD", "Var_Semanal_%", "Var_Mensual_%", "Var_YTD_%", "Market_Cap", "PE_Ratio", "Forward_PE", "EPS_USD", "PEG_Ratio", "ROE_%", "ROA_%", "Debt_Equity", "Margen_Bruto_%", "Margen_Operativo_%", "Margen_Neto_%"];
+            const rows = [headers.join(",")];
 
             listaTickersHoja.forEach(tk => {
                 const it = FUNDAMENTALS_DB[tk];
                 if (!it) return;
-                let row = [
-                    it.ticker,
-                    `"${it.empresa}"`,
-                    `"${it.sector}"`,
-                    it.exchange,
-                    it.price,
-                    it.varSem,
-                    it.varMes,
-                    it.varYtd,
-                    `"${it.mcap}"`,
-                    it.pe,
-                    it.fwdPe,
-                    it.eps,
-                    it.peg,
-                    it.roe,
-                    it.roa,
-                    it.de,
-                    it.grossMargin,
-                    it.opMargin,
-                    it.netMargin
-                ];
-                rows.push(row.join(","));
+                rows.push([
+                    it.ticker, `"${it.empresa}"`, `"${it.sector}"`, it.exchange,
+                    it.price, it.varSem, it.varMes, it.varYtd,
+                    `"${it.mcap}"`, it.pe, it.fwdPe, it.eps, it.peg,
+                    it.roe, it.roa, it.de, it.grossMargin, it.opMargin, it.netMargin
+                ].join(","));
             });
 
             const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8;" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "screener-fundamental-eeuu-cubo.csv";
+            a.download = "screener-fundamental-eeuu.csv";
             a.click();
             URL.revokeObjectURL(url);
         }
-
     </script>
 </body>
 </html>
