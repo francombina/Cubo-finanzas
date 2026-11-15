@@ -104,7 +104,7 @@
             </div>
 
             <!-- Fila Inferior: Pestañas de Navegación (Secciones Independientes) -->
-            <nav class="flex items-center gap-1.5 overflow-x-auto py-2 border-t border-cubo-border/60 no-scrollbar" aria-label="Secciones del Monitor">
+            <nav class="flex items-center gap-1.5 overflow-x-auto py-2 border-t border-cubo-border/60" aria-label="Secciones del Monitor">
                 <button id="nav-tab-monitor" onclick="cambiarSeccion('monitor')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-2 shrink-0 bg-cubo-sky text-zinc-950 shadow-sm">
                     <i data-lucide="activity" class="w-3.5 h-3.5"></i>
                     <span>Monitor de Mercado</span>
@@ -112,7 +112,7 @@
                 <button id="nav-tab-fundamentales" onclick="cambiarSeccion('fundamentales')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-2 shrink-0 text-cubo-muted hover:text-white hover:bg-cubo-elevated">
                     <i data-lucide="bar-chart-3" class="w-3.5 h-3.5"></i>
                     <span>Fundamentales EE.UU.</span>
-                    <span id="nav-badge-tickers" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cubo-bg/60 text-cubo-sky border border-cubo-sky/20">28</span>
+                    <span id="nav-badge-tickers" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cubo-bg/60 text-cubo-sky border border-cubo-sky/20">34</span>
                 </button>
                 <button id="nav-tab-noticias" onclick="cambiarSeccion('noticias')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-2 shrink-0 text-cubo-muted hover:text-white hover:bg-cubo-elevated">
                     <i data-lucide="newspaper" class="w-3.5 h-3.5"></i>
@@ -361,7 +361,7 @@
                 <button onclick="cambiarSeccion('noticias')" class="bg-cubo-surface hover:bg-cubo-elevated border border-cubo-border hover:border-cubo-sky/40 p-4 rounded-xl text-left transition flex items-center justify-between group">
                     <div>
                         <span class="text-xs font-semibold text-white group-hover:text-cubo-sky transition block">Ver Noticias de Mercado</span>
-                        <span class="text-[11px] text-cubo-muted">Feeds institucionales sin clickbait</span>
+                        <span class="text-[11px] text-cubo-muted">Cobertura Argentina & Wall Street sin clickbait</span>
                     </div>
                     <i data-lucide="arrow-right" class="w-4 h-4 text-cubo-sky"></i>
                 </button>
@@ -385,7 +385,7 @@
                         <div class="flex items-center gap-2 flex-wrap">
                             <span class="w-1.5 h-4 bg-cubo-sky rounded-full inline-block"></span>
                             <h2 class="text-sm font-semibold text-white">Análisis Fundamental & Histórico de Precios (EE.UU.)</h2>
-                            <span id="badge-tickers-count" class="text-[10px] font-mono bg-cubo-sky/10 text-cubo-sky px-2 py-0.5 rounded border border-cubo-sky/25">28 Activos · Hoja Tickers</span>
+                            <span id="badge-tickers-count" class="text-[10px] font-mono bg-cubo-sky/10 text-cubo-sky px-2 py-0.5 rounded border border-cubo-sky/25">34 Activos · Hoja Tickers</span>
                         </div>
                         <p class="text-xs text-cubo-muted mt-1">Múltiplos de valuación, rentabilidad, solvencia, márgenes operativos y evolución histórica de precios.</p>
                     </div>
@@ -680,7 +680,7 @@
         </div>
 
         <!-- ============================================================== -->
-        <!-- VISTA 3: NOTICIAS DE MERCADO EN VIVO (SIN CLICKBAIT)           -->
+        <!-- VISTA 3: NOTICIAS DE MERCADO EN VIVO (AR & WALL STREET)        -->
         <!-- ============================================================== -->
         <div id="vista-noticias" class="hidden space-y-6 fade-in">
             <section class="bg-cubo-surface rounded-xl border border-cubo-border p-5 space-y-4">
@@ -688,9 +688,9 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <span class="w-1.5 h-4 bg-cubo-sky rounded-full inline-block"></span>
-                            <h2 class="text-sm font-semibold text-white">Noticias Relevantes de Mercado (Filtro Anti-Clickbait)</h2>
+                            <h2 class="text-sm font-semibold text-white">Noticias Relevantes de Mercado (Argentina & Wall Street)</h2>
                         </div>
-                        <p class="text-xs text-cubo-muted mt-0.5">Selección automatizada en vivo desde Bloomberg Línea, Investing Mercados y Ámbito Finanzas filtrada por términos bursátiles y macroeconómicos.</p>
+                        <p class="text-xs text-cubo-muted mt-0.5">Cobertura filtrada por activos e indicadores reales (BCRA, Merval, Bonos, Lecaps, Fed, S&P 500) excluyendo clickbait y otras plazas de LatAm.</p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <span id="fecha-noticias" class="text-[10px] font-mono text-cubo-muted bg-cubo-elevated px-2.5 py-1.5 rounded-lg border border-cubo-border">Actualizado hoy</span>
@@ -1013,7 +1013,7 @@
         </div>
     </div>
 
-    <!-- JavaScript de Navegación SPA, Noticias Anti-Clickbait y Sincronización -->
+    <!-- JavaScript Completo: Navegación SPA, Noticias AR/WallStreet Anti-Clickbait & Google Sheets -->
     <script>
         const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfJzgtIuaz2put1UG91FrHNn_NaN3wyt3FUK0viveHJyjZ_RCOUMtfnVwC9A3G-7sGai95izoGw7OM/pub?output=csv";
         const DEFAULT_SUBAS_URL = "https://docs.google.com/spreadsheets/d/1sKBDfvagjOyfXWCEnYDSuup3KR8jgpnXIN6iYJybs68/export?format=csv&gid=454584979";
@@ -1061,7 +1061,6 @@
                 try { history.replaceState(null, null, `#${nombreSeccion}`); } catch {}
             }
 
-            // Si abrimos Fundamentales, redibujamos el gráfico para ajustar dimensiones del canvas
             if (nombreSeccion === 'fundamentales') {
                 setTimeout(() => {
                     const item = FUNDAMENTALS_DB[tickerSeleccionadoActual] || FUNDAMENTALS_DB["AAPL"];
@@ -1077,42 +1076,88 @@
         }
 
         // ============================================================
-        // MOTOR DE NOTICIAS EN VIVO (SIN GITHUB ACTIONS NI CLICKBAIT)
+        // MOTOR DE NOTICIAS EN VIVO (SOLO ARGENTINA & WALL STREET - CERO CLICKBAIT)
         // ============================================================
         const RSS_FEEDS_MERCADO = [
-            { nombre: "Bloomberg Línea", url: "https://www.bloomberglinea.com/arc/outboundfeeds/rss/category/mercados/?outputType=xml" },
-            { nombre: "Investing Mercados", url: "https://es.investing.com/rss/news_25.rss" },
-            { nombre: "Ámbito Finanzas", url: "https://www.ambito.com/rss/pages/finanzas.xml" }
+            {
+                nombre: "Macro & Mercado AR",
+                url: "https://news.google.com/rss/search?q=(%22BCRA%22+OR+%22Merval%22+OR+%22Riesgo+Pa%C3%ADs%22+OR+%22Bonos%22+OR+%22Lecaps%22+OR+%22D%C3%B3lar+CCL%22+OR+%22BYMA%22)+-Mexico+-Chile+-Colombia+-horoscopo+-minuto&hl=es-419&gl=AR&ceid=AR:es-419"
+            },
+            {
+                nombre: "Wall Street & Global",
+                url: "https://news.google.com/rss/search?q=(%22Wall+Street%22+OR+%22S%26P+500%22+OR+%22Reserva+Federal%22+OR+%22Nasdaq%22+OR+%22Tesoro+de+EE.UU.%22)+-Mexico+-Chile+-Colombia+-minuto&hl=es-419&gl=AR&ceid=AR:es-419"
+            },
+            {
+                nombre: "Ámbito Finanzas",
+                url: "https://www.ambito.com/rss/pages/finanzas.xml"
+            }
         ];
 
-        const KEYWORDS_POSITIVAS = [
-            "merval", "bonos", "riesgo país", "riesgo pais", "ccl", "mep", "bcra", "reservas",
-            "fed", "tasas", "wall street", "s&p", "nasdaq", "dow", "balance", "resultados",
-            "inflación", "inflacion", "tesoro", "fmi", "licitacion", "licitación", "on",
-            "obligaciones negociables", "petróleo", "petroleo", "oro", "bitcoin", "nvidia",
-            "apple", "microsoft", "mercado", "acciones", "rendimiento", "superávit", "superavit", "lecaps"
+        const KEYWORDS_GEOGRAFIA_EXCLUIDA = [
+            "méxico", "mexico", "mexicano", "mexicana", "banxico", "bmv", "pemex", "amlo", "sheinbaum", "monterrey",
+            "chile", "chileno", "chilena", "ipsa", "santiago de chile", "codelco", "boric",
+            "colombia", "colombiano", "colcap", "petro", "bogotá", "bogota", "ecopetrol",
+            "perú", "peru", "sol peruano", "lima", "españa", "ibex", "madrid", "euribor", "uruguay"
         ];
 
         const KEYWORDS_CLICKBAIT = [
-            "qué significa", "que significa", "atención", "atencion", "sorpresa en",
-            "el truco", "cómo saber", "como saber", "anses", "jubilados", "feriado",
-            "horóscopo", "horoscopo", "quiniela", "dólar blue hoy: a cuánto", "minuto a minuto",
-            "imperdible", "alerta:", "mira ", "mirá ", "por qué todos", "chau "
+            "el cronista", "cronista.com", "qué significa", "que significa", "atención", "atencion",
+            "sorpresa", "el truco", "cómo saber", "como saber", "anses", "jubilados", "feriado",
+            "horóscopo", "horoscopo", "quiniela", "a cuánto cotiza", "a cuanto cotiza", "minuto a minuto",
+            "en vivo:", "imperdible", "alerta", "mira ", "mirá ", "por qué todos", "chau ", "adiós a",
+            "adios a", "plazo fijo:", "cuánto gano", "cuanto gano", "billetera virtual", "billeteras virtuales",
+            "cajero automático", "cajeros automáticos", "gurú", "guru", "predicción", "prediccion",
+            "qué hacer con", "que hacer con", "dólar blue hoy", "dolar blue hoy", "euro blue"
         ];
 
-        function evaluarCalidadNoticia(titulo, descripcion) {
-            const texto = `${titulo} ${descripcion}`.toLowerCase();
+        const KEYWORDS_INSTITUCIONALES = [
+            "merval", "byma", "bonos", "soberanos", "globales", "bonares", "al30", "gd30",
+            "riesgo país", "riesgo pais", "ccl", "contado con liqui", "mep", "bcra", "reservas",
+            "lecap", "lecaps", "boncer", "cer", "tamar", "obligaciones negociables", "licitación", "licitacion",
+            "tesoro", "fmi", "superávit", "superavit", "inflación", "inflacion", "indec",
+            "wall street", "s&p 500", "s&p500", "nasdaq", "dow jones", "reserva federal", "fed",
+            "powell", "tasas de interés", "rendimiento", "treasury", "10 años", "balance",
+            "resultados trimestrales", "acciones", "cedears", "ypf", "galicia", "vista", "pampa",
+            "nvidia", "apple", "microsoft", "alphabet", "amazon", "meta", "tesla", "petróleo", "oro"
+        ];
+
+        function limpiarTituloGoogleNews(tituloRaw) {
+            if (!tituloRaw) return { titulo: "", medio: "Mercado" };
+            const partes = tituloRaw.split(" - ");
+            if (partes.length > 1) {
+                const medio = partes.pop().trim();
+                return { titulo: partes.join(" - ").trim(), medio };
+            }
+            return { titulo: tituloRaw.trim(), medio: "Finanzas" };
+        }
+
+        function evaluarCalidadNoticia(titulo, descripcion, medio) {
+            const textoCompleto = `${titulo} ${descripcion} ${medio}`.toLowerCase();
+            const tituloLower = titulo.toLowerCase();
+
+            for (const pais of KEYWORDS_GEOGRAFIA_EXCLUIDA) {
+                if (textoCompleto.includes(pais)) return -999;
+            }
             for (const badWord of KEYWORDS_CLICKBAIT) {
-                if (texto.includes(badWord)) return -999;
+                if (textoCompleto.includes(badWord)) return -999;
             }
-            if (titulo.startsWith("¿") && !texto.includes("fed") && !texto.includes("bcra")) {
-                return -50;
+            if (tituloLower.includes("?") || tituloLower.includes("¿") || tituloLower.includes("!") || tituloLower.includes("¡")) {
+                return -999;
             }
-            let score = 0;
-            for (const goodWord of KEYWORDS_POSITIVAS) {
-                if (texto.includes(goodWord)) score += 10;
+
+            let matchesTitulo = 0;
+            let matchesTotal = 0;
+            for (const kw of KEYWORDS_INSTITUCIONALES) {
+                if (tituloLower.includes(kw)) matchesTitulo++;
+                if (textoCompleto.includes(kw)) matchesTotal++;
             }
-            if (/\d+%|\$[0-9]|usd|bps|pb/i.test(texto)) score += 15;
+
+            if (matchesTitulo === 0) return -100;
+
+            let score = (matchesTitulo * 15) + (matchesTotal * 5);
+            if (/\d+%|\$[0-9]|usd|us\$|pb|bps|millones/i.test(titulo)) {
+                score += 20;
+            }
             return score;
         }
 
@@ -1121,7 +1166,7 @@
             const temp = document.createElement("div");
             temp.innerHTML = str;
             let limpio = (temp.textContent || temp.innerText || "").replace(/\s+/g, " ").trim();
-            if (limpio.length > 160) limpio = limpio.substring(0, 157).trim() + "...";
+            if (limpio.length > 155) limpio = limpio.substring(0, 152).trim() + "...";
             return limpio;
         }
 
@@ -1135,7 +1180,7 @@
                     <div>
                         <div class="flex items-center justify-between gap-1 mb-2.5">
                             <span class="text-[10px] font-mono font-bold text-cubo-sky bg-cubo-sky/10 px-2 py-0.5 rounded border border-cubo-sky/20">0${index + 1}</span>
-                            <span class="text-[10px] font-mono text-cubo-muted uppercase tracking-wider group-hover:text-cubo-sky transition">${item.fuente || 'Mercado'} ↗</span>
+                            <span class="text-[10px] font-mono text-cubo-muted uppercase tracking-wider group-hover:text-cubo-sky transition truncate max-w-[180px]">${item.fuente || 'Mercado'} ↗</span>
                         </div>
                         <h4 class="font-semibold text-xs text-white group-hover:text-cubo-sky transition leading-snug mb-2">${item.titulo}</h4>
                         <p class="text-[11px] text-cubo-muted leading-relaxed">${item.descripcion}</p>
@@ -1149,14 +1194,14 @@
         }
 
         async function cargarNoticiasDelDia() {
-            renderizarListaNoticias(FALLBACK_NOTICIAS, "Actualizando feeds...");
+            renderizarListaNoticias(FALLBACK_NOTICIAS, "Filtrando feeds...");
 
             try {
                 const promesas = RSS_FEEDS_MERCADO.map(feed =>
                     fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`)
                         .then(r => r.ok ? r.json() : null)
-                        .then(data => ({ fuente: feed.nombre, items: data?.items || [] }))
-                        .catch(() => ({ fuente: feed.nombre, items: [] }))
+                        .then(data => ({ categoria: feed.nombre, items: data?.items || [] }))
+                        .catch(() => ({ categoria: feed.nombre, items: [] }))
                 );
 
                 const resultados = await Promise.all(promesas);
@@ -1164,16 +1209,23 @@
 
                 resultados.forEach(grupo => {
                     grupo.items.forEach(item => {
-                        const titulo = limpiarTextoHTML(item.title);
-                        const descripcion = limpiarTextoHTML(item.description || item.content);
-                        const score = evaluarCalidadNoticia(titulo, descripcion);
+                        const rawTitle = limpiarTextoHTML(item.title);
+                        const { titulo, medio } = limpiarTituloGoogleNews(rawTitle);
+                        let descripcion = limpiarTextoHTML(item.description || item.content);
 
-                        if (score >= 10 && titulo.length > 25) {
+                        if (!descripcion || descripcion.toLowerCase().startsWith(titulo.toLowerCase().slice(0, 25))) {
+                            const fechaNota = item.pubDate ? new Date(item.pubDate).toLocaleDateString('es-AR', { day: '2-digit', month: 'short' }) : 'Hoy';
+                            descripcion = `Cobertura de ${grupo.categoria} · Publicado por ${medio} (${fechaNota}). Hacé clic para leer el informe completo.`;
+                        }
+
+                        const score = evaluarCalidadNoticia(titulo, descripcion, medio);
+
+                        if (score >= 15 && titulo.length >= 30) {
                             candidatas.push({
                                 titulo,
-                                descripcion: descripcion || "Ver nota completa sobre la rueda de mercado.",
+                                descripcion,
                                 link: item.link,
-                                fuente: grupo.fuente,
+                                fuente: `${medio} · ${grupo.categoria}`,
                                 fechaPub: new Date(item.pubDate || Date.now()),
                                 score
                             });
@@ -1184,12 +1236,19 @@
                 candidatas.sort((a, b) => (b.score - a.score) || (b.fechaPub - a.fechaPub));
 
                 const seleccionadas = [];
-                const palabrasVistas = new Set();
+                const raicesVistas = new Set();
 
                 for (const nota of candidatas) {
-                    const clave = nota.titulo.toLowerCase().split(" ").slice(0, 4).join(" ");
-                    if (!palabrasVistas.has(clave)) {
-                        palabrasVistas.add(clave);
+                    const palabrasClaveNota = nota.titulo
+                        .toLowerCase()
+                        .replace(/[^a-záéíóúñ0-9\s]/g, '')
+                        .split(/\s+/)
+                        .filter(w => w.length > 4)
+                        .slice(0, 3)
+                        .join('_');
+
+                    if (!raicesVistas.has(palabrasClaveNota)) {
+                        raicesVistas.add(palabrasClaveNota);
                         seleccionadas.push(nota);
                     }
                     if (seleccionadas.length === 6) break;
@@ -1197,7 +1256,7 @@
 
                 if (seleccionadas.length >= 3) {
                     const hora = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-                    renderizarListaNoticias(seleccionadas, `En vivo · ${hora} hs`);
+                    renderizarListaNoticias(seleccionadas, `AR & NY · ${hora} hs`);
                 } else {
                     renderizarListaNoticias(FALLBACK_NOTICIAS, "Resumen Curado");
                 }
@@ -1321,7 +1380,6 @@
             actualizarVisibilidadActivos();
             inicializarSeccionFundamentales();
 
-            // Leer hash inicial de la URL si existe (#fundamentales, #noticias, etc.)
             const hashInicial = (window.location.hash || '').replace('#', '').toLowerCase();
             if (SECCIONES_VALIDAS.includes(hashInicial)) {
                 cambiarSeccion(hashInicial, false);
@@ -1671,7 +1729,7 @@
         }
 
         // ============================================================
-        // BASE DE DATOS FUNDAMENTAL & HISTÓRICA VERIFICADA
+        // BASE DE DATOS FUNDAMENTAL & HISTÓRICA VERIFICADA (34 ACTIVOS)
         // ============================================================
         const FUNDAMENTALS_DB = {
             "AAPL": {
