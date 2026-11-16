@@ -1,24 +1,12 @@
 {
-    "fecha": "14/11/2026 13:55 hs",
+    "fecha": "16/11/2026 17:53 hs",
     "noticias": [
         {
-            "titulo": "La demanda de pesos que sigue el BCRA cayó en octubre, pero hubo señales positivas: ¿arranca la remonetización?",
-            "descripcion": "Dólar & BCRA • Fuente: Ambito"
+            "titulo": "El riesgo país sube hasta los 840 puntos básicos y los ADRs se hunden hasta casi 7%",
+            "descripcion": "Mercados Locales • Fuente: Ambito"
         },
         {
-            "titulo": "Wall Street elige cuatro acciones tras la caída de Brasil y ve 58% de potencial en un papel argentino",
-            "descripcion": "Mercados Locales • Fuente: El Cronista"
-        },
-        {
-            "titulo": "Asfura agradece respaldo del FMI y busca impulsar inversiones y crecimiento económico en Honduras",
-            "descripcion": "Macro & Finanzas • Fuente: Infobae"
-        },
-        {
-            "titulo": "Nubank se dispara 10% en Wall Street tras reportar utilidad récord; ¿hasta dónde puede subir?",
-            "descripcion": "Wall Street • Fuente: El Cronista"
-        },
-        {
-            "titulo": "¿Derrama?: los proveedores de Vaca Muerta, entre el estrés financiero y la competencia China",
+            "titulo": "Vaca Muerta recibe más de u$s 43.000 millones: del pozo al barco, cómo se arma el nuevo negocio exportador",
             "descripcion": "Energía & Cripto • Fuente: El Cronista"
         }
     ]
