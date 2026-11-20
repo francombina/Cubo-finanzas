@@ -1,24 +1,24 @@
 {
-    "fecha": "19/11/2026 16:27 hs",
+    "fecha": "20/11/2026 16:01 hs",
     "noticias": [
         {
-            "titulo": "El dólar oficial volvió a subir y tocó los $1.565 mientras la brecha con el CCL llegó al 11%",
+            "titulo": "El dólar oficial minorista se acerca a los $1.600, mientras el MEP y CCL aceleran suba y la brecha toca el 13%",
             "descripcion": "Dólar & BCRA • Fuente: Ambito"
         },
         {
-            "titulo": "Tres magnates financieros redoblaron su apuesta sobre Vaca Muerta: en qué acciones invirtieron",
-            "descripcion": "Mercados Locales • Fuente: El Cronista"
+            "titulo": "Tensión en los mercados: el riesgo país salta 10% y supera los 1.000 puntos ante otro desplome de los bonos",
+            "descripcion": "Mercados Locales • Fuente: Ambito"
         },
         {
-            "titulo": "Sheinbaum y Georgieva (FMI) destacan desempeño de la economía mexicana",
+            "titulo": "El riesgo país contagia al dólar: crece la brecha cambiaria y amenaza con encarecer las tasas y golpear a la actividad",
             "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "Récord de Anthropic en Wall Street: qué es una IPO y por qué puede generar grandes ganancias",
+            "titulo": "Una acción tecnológica creció 7% y Wall Street le ve más de 30% de potencial de suba",
             "descripcion": "Wall Street • Fuente: El Cronista"
         },
         {
-            "titulo": "El oro pierde su lugar como refugio: se desplomó un tercio desde su récord",
+            "titulo": "Vaca Muerta llena la balanza, pero no el bolsillo",
             "descripcion": "Energía & Cripto • Fuente: El Cronista"
         }
     ]
