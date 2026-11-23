@@ -1,25 +1,25 @@
 {
-    "fecha": "22/11/2026 15:23 hs",
+    "fecha": "23/11/2026 19:30 hs",
     "noticias": [
         {
-            "titulo": "Participe en el debate \"¿Creés que la brecha entre el dólar MEP y el CCL seguirá ampliándose?\"",
+            "titulo": "Dólar blue hoy: a cuánto cotiza este lunes 23 de noviembre con el MEP y el CCL",
             "descripcion": "Dólar & BCRA • Fuente: El Cronista"
         },
         {
-            "titulo": "Por qué Wall Street recorta su apuesta por acciones argentinas",
-            "descripcion": "Mercados Locales • Fuente: iProfesional"
+            "titulo": "Acciones argentinas acumulan fuertes caídas: ¿llegaron a un precio de compra?",
+            "descripcion": "Mercados Locales • Fuente: El Cronista"
         },
         {
-            "titulo": "La mejora de los bonos de EEUU y los rindes del trigo, dos faros para la Argentina en medio del vendaval financiero",
+            "titulo": "¿Es momento de invertir en plazo fijo?: cuánto pagan los bancos por depósitos de $1 millón a 30 días",
             "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "Scott Bessent advirtió que la Fed podría cometer un \"error de política\" y exigió explicaciones a Nvidia por sus ventas a China",
+            "titulo": "El dólar global alcanza máximos de 19 meses y Wall Street rebota hasta 7% por Nvidia",
             "descripcion": "Wall Street • Fuente: Ambito"
         },
         {
-            "titulo": "Vacaciones 2027: estas son las 5 revisiones del auto que conviene hacer antes de un viaje largo",
-            "descripcion": "Energía & Cripto • Fuente: El Cronista"
+            "titulo": "¿Es momento de comprar acciones argentinas?",
+            "descripcion": "Energía & Cripto • Fuente: Ambito"
         }
     ]
 }
