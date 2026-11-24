@@ -1,25 +1,25 @@
 {
-    "fecha": "23/11/2026 19:30 hs",
+    "fecha": "24/11/2026 18:03 hs",
     "noticias": [
         {
-            "titulo": "Dólar blue hoy: a cuánto cotiza este lunes 23 de noviembre con el MEP y el CCL",
-            "descripcion": "Dólar & BCRA • Fuente: El Cronista"
+            "titulo": "Dólar blue hoy: a cuánto cerró este lunes 23 de noviembre",
+            "descripcion": "Dólar & BCRA • Fuente: Ambito"
         },
         {
-            "titulo": "Acciones argentinas acumulan fuertes caídas: ¿llegaron a un precio de compra?",
-            "descripcion": "Mercados Locales • Fuente: El Cronista"
+            "titulo": "El riesgo país trepa 7,2% y ya supera los 1.100 puntos, mientras la sangría de los bonos no se detiene",
+            "descripcion": "Mercados Locales • Fuente: Ambito"
         },
         {
-            "titulo": "¿Es momento de invertir en plazo fijo?: cuánto pagan los bancos por depósitos de $1 millón a 30 días",
+            "titulo": "El FMI aprueba un nuevo crédito para Ecuador por 703 millones de dólares",
             "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "El dólar global alcanza máximos de 19 meses y Wall Street rebota hasta 7% por Nvidia",
-            "descripcion": "Wall Street • Fuente: Ambito"
+            "titulo": "Wall Street en modo pánico: el bear market del Nasdaq que duró apenas 24 horas",
+            "descripcion": "Wall Street • Fuente: El Cronista"
         },
         {
-            "titulo": "¿Es momento de comprar acciones argentinas?",
-            "descripcion": "Energía & Cripto • Fuente: Ambito"
+            "titulo": "YPF avanza con su plan para el norte de Vaca Muerta y suma un nuevo proyecto al RIGI",
+            "descripcion": "Energía & Cripto • Fuente: El Cronista"
         }
     ]
 }
