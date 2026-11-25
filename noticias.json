@@ -1,24 +1,24 @@
 {
-    "fecha": "24/11/2026 18:03 hs",
+    "fecha": "25/11/2026 17:25 hs",
     "noticias": [
         {
-            "titulo": "Dólar blue hoy: a cuánto cerró este lunes 23 de noviembre",
-            "descripcion": "Dólar & BCRA • Fuente: Ambito"
+            "titulo": "La apuesta del BCRA para que un nuevo shock externo no vuelva a poner al dólar en el centro de la tormenta",
+            "descripcion": "Dólar & BCRA • Fuente: El Cronista"
         },
         {
-            "titulo": "El riesgo país trepa 7,2% y ya supera los 1.100 puntos, mientras la sangría de los bonos no se detiene",
+            "titulo": "El riesgo país se da vuelta y cae debajo de los 1.100 puntos, mientras los ADRs rebotan hasta 5%",
             "descripcion": "Mercados Locales • Fuente: Ambito"
         },
         {
-            "titulo": "El FMI aprueba un nuevo crédito para Ecuador por 703 millones de dólares",
+            "titulo": "El FMI cierra con Bolivia la primera revisión del acuerdo del Servicio Ampliado del Fondo por 193 millones",
             "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "Wall Street en modo pánico: el bear market del Nasdaq que duró apenas 24 horas",
+            "titulo": "Una empresa de salud se disparó 40% en Wall Street: qué oportunidades ofrece el sector para invertir",
             "descripcion": "Wall Street • Fuente: El Cronista"
         },
         {
-            "titulo": "YPF avanza con su plan para el norte de Vaca Muerta y suma un nuevo proyecto al RIGI",
+            "titulo": "Un peso pesado de Vaca Muerta crece 33%, pero se aleja de los máximos: qué recomiendan hacer los analistas",
             "descripcion": "Energía & Cripto • Fuente: El Cronista"
         }
     ]
