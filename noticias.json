@@ -1,24 +1,24 @@
 {
-    "fecha": "26/11/2026 17:03 hs",
+    "fecha": "27/11/2026 16:52 hs",
     "noticias": [
         {
-            "titulo": "Dólar MEP y Contado con liquidación: qué mira el mercado para saber a cuánto se irán",
-            "descripcion": "Dólar & BCRA • Fuente: El Cronista"
+            "titulo": "Reforma del BCRA: ¿qué cambia con la nueva Carta Orgánica que aprobó el Congreso?",
+            "descripcion": "Dólar & BCRA • Fuente: Ambito"
         },
         {
-            "titulo": "J.P. Morgan advirtió que los bonos argentinos ya descuentan 50% de chances de un triunfo opositor en 2027",
+            "titulo": "El riesgo país se desploma más del 10% y logra perforar el piso de los 1.000 puntos",
             "descripcion": "Mercados Locales • Fuente: Ambito"
         },
         {
-            "titulo": "El mapa de Ingresos Brutos y tasas municipales: cuál es la ciudad donde una empresa paga el doble",
-            "descripcion": "Macro & Finanzas • Fuente: El Cronista"
+            "titulo": "Bolivia accede a un segundo desembolso del FMI por 212 millones de dólares",
+            "descripcion": "Macro & Finanzas • Fuente: Infobae"
         },
         {
-            "titulo": "Wall Street apuesta por dos Cedear tras el castigo: cuánto pueden subir y qué necesitan para lograrlo",
+            "titulo": "Por qué Wall Street felicita a la Argentina pero “no pone un dólar”, según Fausto Spotorno",
             "descripcion": "Wall Street • Fuente: El Cronista"
         },
         {
-            "titulo": "Explosiva auditoría de la AGN: el oro argentino está en Inglaterra y no se constató que su envío esté asegurado",
+            "titulo": "Lo que no se sabe de la guerra entre el Banco Central y la AGN por el oro argentino",
             "descripcion": "Energía & Cripto • Fuente: Ambito"
         }
     ]
